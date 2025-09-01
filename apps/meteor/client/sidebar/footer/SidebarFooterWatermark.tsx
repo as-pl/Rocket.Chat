@@ -1,13 +1,9 @@
-import { Box } from '@rocket.chat/fuselage';
 import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useLicense, useLicenseName } from '../../hooks/useLicense';
 import { links } from '../../lib/links';
 
 export const SidebarFooterWatermark = (): ReactElement | null => {
-	const { t } = useTranslation();
-
 	const response = useLicense();
 
 	const licenseName = useLicenseName();
@@ -26,16 +22,5 @@ export const SidebarFooterWatermark = (): ReactElement | null => {
 		return null;
 	}
 
-	return (
-		<Box pi={16} pbe={8}>
-			<Box is='a' href={links.rocketChat} target='_blank' rel='noopener noreferrer'>
-				<Box fontScale='micro' color='hint' pbe={4}>
-					{t('Powered_by_RocketChat')}
-				</Box>
-				<Box fontScale='micro' color='pure-white' pbe={4}>
-					{licenseName.data}
-				</Box>
-			</Box>
-		</Box>
-	);
+	return <></>;
 };
