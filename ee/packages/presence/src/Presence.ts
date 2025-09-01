@@ -7,7 +7,7 @@ import { Users, UsersSessions } from '@rocket.chat/models';
 import { PresenceReaper } from './lib/PresenceReaper';
 import { processPresenceAndStatus } from './lib/processConnectionStatus';
 
-const MAX_CONNECTIONS = 200;
+const MAX_CONNECTIONS = 1000;
 
 export class Presence extends ServiceClass implements IPresence {
 	protected name = 'presence';
