@@ -19,7 +19,8 @@ export const createSettings = async (): Promise<void> => {
 		enterprise: false,
 		public: true,
 		invalidValue: 'none',
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -31,7 +32,8 @@ export const createSettings = async (): Promise<void> => {
 		enableQuery: [{ _id: 'Livechat_abandoned_rooms_action', value: 'close' }, omnichannelEnabledQuery],
 		enterprise: false,
 		invalidValue: '',
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 	});
 
 	await settingsRegistry.add('Omnichannel_max_fallback_forward_depth', 3, {
@@ -41,7 +43,8 @@ export const createSettings = async (): Promise<void> => {
 		i18nLabel: 'Omnichannel_max_fallback_forward_depth',
 		enterprise: false,
 		invalidValue: 0,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -51,7 +54,8 @@ export const createSettings = async (): Promise<void> => {
 		section: 'Routing',
 		enterprise: false,
 		invalidValue: false,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -73,7 +77,8 @@ export const createSettings = async (): Promise<void> => {
 				i18nLabel: 'Livechat_business_hour_type',
 				enterprise: false,
 				invalidValue: 'Single',
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 				enableQuery: [omnichannelEnabledQuery, businessHoursEnabled],
 			});
 		});
@@ -86,7 +91,8 @@ export const createSettings = async (): Promise<void> => {
 				i18nLabel: 'Waiting_queue',
 				enterprise: false,
 				invalidValue: false,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 				enableQuery: omnichannelEnabledQuery,
 				public: true,
 			});
@@ -100,7 +106,8 @@ export const createSettings = async (): Promise<void> => {
 				enableQuery: [{ _id: 'Livechat_waiting_queue', value: true }, omnichannelEnabledQuery],
 				enterprise: false,
 				invalidValue: '',
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 			});
 
 			await this.add('Livechat_maximum_chats_per_agent', 0, {
@@ -112,7 +119,8 @@ export const createSettings = async (): Promise<void> => {
 				enableQuery: [{ _id: 'Livechat_waiting_queue', value: true }, omnichannelEnabledQuery],
 				enterprise: false,
 				invalidValue: 0,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 			});
 
 			await this.add('Omnichannel_calculate_dispatch_service_queue_statistics', true, {
@@ -123,7 +131,8 @@ export const createSettings = async (): Promise<void> => {
 				enableQuery: [{ _id: 'Livechat_waiting_queue', value: true }, omnichannelEnabledQuery],
 				enterprise: false,
 				invalidValue: false,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 			});
 
 			await this.add('Livechat_number_most_recent_chats_estimate_wait_time', 100, {
@@ -135,7 +144,8 @@ export const createSettings = async (): Promise<void> => {
 				enableQuery: [{ _id: 'Livechat_waiting_queue', value: true }, omnichannelEnabledQuery],
 				enterprise: false,
 				invalidValue: 100,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 			});
 
 			await this.add('Livechat_max_queue_wait_time', -1, {
@@ -147,7 +157,8 @@ export const createSettings = async (): Promise<void> => {
 				i18nDescription: 'Livechat_maximum_queue_wait_time_description',
 				enterprise: false,
 				invalidValue: -1,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 			});
 
 			await this.add('Omnichannel_sorting_mechanism', 'Timestamp', {
@@ -163,7 +174,8 @@ export const createSettings = async (): Promise<void> => {
 				enableQuery: [omnichannelEnabledQuery],
 				enterprise: false,
 				public: true,
-				modules: ['livechat-enterprise'],
+				// modules: ['livechat-enterprise'],
+				modules: [],
 				invalidValue: '',
 			});
 		});
@@ -179,7 +191,8 @@ export const createSettings = async (): Promise<void> => {
 		i18nLabel: 'Livechat_AdditionalWidgetScripts',
 		i18nDescription: 'Livechat_AdditionalWidgetScripts_Description',
 		enableQuery: [omnichannelEnabledQuery],
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 	});
 
 	await settingsRegistry.add('Livechat_WidgetLayoutClasses', '', {
@@ -192,7 +205,8 @@ export const createSettings = async (): Promise<void> => {
 		i18nLabel: 'Livechat_WidgetLayoutClasses',
 		i18nDescription: 'Livechat_WidgetLayoutClasses_Description',
 		enableQuery: [omnichannelEnabledQuery],
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 	});
 
 	await settingsRegistry.add('Livechat_widget_position', 'right', {
@@ -207,7 +221,8 @@ export const createSettings = async (): Promise<void> => {
 		],
 		enterprise: false,
 		invalidValue: 'right',
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -220,7 +235,8 @@ export const createSettings = async (): Promise<void> => {
 		public: true,
 		enterprise: false,
 		invalidValue: '',
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -233,7 +249,8 @@ export const createSettings = async (): Promise<void> => {
 		i18nDescription: 'Livechat_hide_watermark_description',
 		enterprise: false,
 		sorter: 999,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 	});
 
 	await settingsRegistry.add('Omnichannel_contact_manager_routing', true, {
@@ -242,7 +259,8 @@ export const createSettings = async (): Promise<void> => {
 		section: 'Routing',
 		enterprise: false,
 		invalidValue: false,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -252,7 +270,8 @@ export const createSettings = async (): Promise<void> => {
 		section: 'Sessions',
 		enterprise: false,
 		invalidValue: 0,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -263,7 +282,8 @@ export const createSettings = async (): Promise<void> => {
 		enableQuery: [{ _id: 'Livechat_auto_close_on_hold_chats_timeout', value: { $gte: 1 } }, omnichannelEnabledQuery],
 		enterprise: false,
 		invalidValue: '',
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 	});
 
 	await settingsRegistry.add('Livechat_allow_manual_on_hold', false, {
@@ -273,7 +293,8 @@ export const createSettings = async (): Promise<void> => {
 		enterprise: false,
 		invalidValue: false,
 		public: true,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -284,7 +305,8 @@ export const createSettings = async (): Promise<void> => {
 		enterprise: false,
 		invalidValue: false,
 		public: true,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: { _id: 'Livechat_allow_manual_on_hold', value: true },
 	});
 
@@ -295,7 +317,8 @@ export const createSettings = async (): Promise<void> => {
 		i18nDescription: 'Livechat_auto_transfer_chat_timeout_description',
 		enterprise: false,
 		invalidValue: 0,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enableQuery: omnichannelEnabledQuery,
 	});
 
@@ -310,7 +333,8 @@ export const createSettings = async (): Promise<void> => {
 		group: 'Omnichannel',
 		section: 'Livechat',
 		enterprise: false,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		invalidValue: ['uj', 'ul', 'livechat-close'],
 		public: true,
 		values: [
@@ -337,7 +361,8 @@ export const createSettings = async (): Promise<void> => {
 		section: 'Livechat',
 		i18nDescription: 'Livechat_hide_expand_chat_description',
 		invalidValue: false,
-		modules: ['livechat-enterprise'],
+		// modules: ['livechat-enterprise'],
+		modules: [],
 		enterprise: false,
 		public: false,
 		enableQuery: omnichannelEnabledQuery,
