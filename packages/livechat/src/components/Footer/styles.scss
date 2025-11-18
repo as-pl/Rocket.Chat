@@ -9,12 +9,13 @@
 	flex-direction: column;
 	flex: 0 0 auto;
 
+	margin-top: auto;
 	width: 100%;
 	padding: 4px 8px;
 
 	color: colors.$color-text-grey;
 
-	background-color: colors.$bg-color-white;
+	background-color: transparent;
 
 	font-size: 0.625rem;
 	align-items: stretch;

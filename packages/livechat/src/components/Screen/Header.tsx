@@ -95,20 +95,23 @@ const ScreenHeader = ({
 				{agent?.email && <Header.SubTitle>{agent.email}</Header.SubTitle>}
 				{agent?.phone && <Header.CustomField>{agent.phone}</Header.CustomField>}
 			</Header.Content>
+
 			<Tooltip.Container>
 				<Header.Actions>
-					<Tooltip.Trigger content={notificationsEnabled ? t('sound_is_on') : t('sound_is_off')} placement='bottom-left'>
-						<Header.Action
-							aria-label={notificationsEnabled ? t('disable_notifications') : t('enable_notifications')}
-							onClick={notificationsEnabled ? onDisableNotifications : onEnableNotifications}
-						>
-							{notificationsEnabled ? (
-								<NotificationsEnabledIcon width={20} height={20} />
-							) : (
-								<NotificationsDisabledIcon width={20} height={20} />
-							)}
-						</Header.Action>
-					</Tooltip.Trigger>
+					{title && (
+						<Tooltip.Trigger content={notificationsEnabled ? t('sound_is_on') : t('sound_is_off')} placement='bottom-left'>
+							<Header.Action
+								aria-label={notificationsEnabled ? t('disable_notifications') : t('enable_notifications')}
+								onClick={notificationsEnabled ? onDisableNotifications : onEnableNotifications}
+							>
+								{notificationsEnabled ? (
+									<NotificationsEnabledIcon width={20} height={20} />
+								) : (
+									<NotificationsDisabledIcon width={20} height={20} />
+								)}
+							</Header.Action>
+						</Tooltip.Trigger>
+					)}
 					{(expanded || !windowed) && (
 						<Tooltip.Trigger content={minimized ? t('restore_chat') : t('minimize_chat')}>
 							<Header.Action aria-label={minimized ? t('restore_chat') : t('minimize_chat')} onClick={minimized ? onRestore : onMinimize}>
@@ -116,7 +119,7 @@ const ScreenHeader = ({
 							</Header.Action>
 						</Tooltip.Trigger>
 					)}
-					{!hideExpandChat && !expanded && !windowed && (
+					{!hideExpandChat && !expanded && !windowed && title && (
 						<Tooltip.Trigger content={t('expand_chat')} placement='bottom-left'>
 							<Header.Action aria-label={t('expand_chat')} onClick={onOpenWindow}>
 								<OpenWindowIcon width={20} height={20} />

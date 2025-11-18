@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'preact/hooks';
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
 import { Button } from '../Button';
-import { Footer, FooterContent, PoweredBy } from '../Footer';
+import { Footer, FooterContent } from '../Footer';
 import { PopoverContainer } from '../Popover';
 import { Sound } from '../Sound';
 import { ChatButton } from './ChatButton';
@@ -16,15 +16,12 @@ export const ScreenContent = ({ children, nopadding, triggered = false, full = f
 );
 
 export const ScreenFooter = ({ children, options, limit }) => {
-	const { hideWatermark } = useContext(ScreenContext);
-
 	return (
 		<Footer>
 			{children && <FooterContent>{children}</FooterContent>}
 			<FooterContent>
 				{options}
 				{limit}
-				{!hideWatermark && <PoweredBy />}
 			</FooterContent>
 		</Footer>
 	);

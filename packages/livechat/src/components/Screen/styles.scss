@@ -19,12 +19,18 @@ $max-lines: 12;
 	.screen__inner {
 		margin-bottom: $screen-padding;
 
+		background-color: #f6f6f7;
 		box-shadow: $screen-box-shadow;
+		border-radius: 15px;
+		transform-origin: 100% 100%;
+		animation: 0.5s ease-in-out both popup-screen;
 	}
 
 	.screen__chat-button {
+		border-radius: 25px;
 		background-size: cover !important;
 		box-shadow: $screen-box-shadow;
+		display: none;
 	}
 
 	.screen__chat-close-button {
@@ -43,9 +49,19 @@ $max-lines: 12;
 	}
 
 	&--minimized {
+		.screen__inner {
+			transform-origin: 100% calc(100% + 54px);
+
+			animation: 0.3s ease-out both screen-off-overlay;
+		}
+
 		.screen__inner,
 		.screen__chat-close-button {
 			display: none;
+		}
+		.screen__chat-button {
+			display: block;
+			animation: 0.4s ease-in-out both popup-btn;
 		}
 	}
 
@@ -69,7 +85,7 @@ $max-lines: 12;
 	&--triggered {
 		padding: 16px;
 
-		border-radius: 4px;
+		border-radius: 15px;
 
 		.screen__inner {
 			margin-bottom: 16px;
@@ -137,4 +153,40 @@ $max-lines: 12;
 
 .screen__agent-email {
 	margin: 5px;
+}
+
+@keyframes popup-btn {
+	0% {
+		transform: translateY(100px) scale(0.2);
+	}
+	100% {
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes popup-screen {
+	0% {
+		transform: scale(0.01);
+		content-visibility: hidden;
+	}
+
+	100% {
+		transform: scale(1);
+		content-visibility: visible;
+	}
+}
+
+@keyframes screen-off-overlay {
+	0% {
+		transform: scale(1) translateY(54px);
+		display: block;
+		content-visibility: hidden;
+	}
+
+	100% {
+		transform: scale(0.1) translateY(54px);
+		opacity: 0;
+		display: none;
+		content-visibility: hidden;
+	}
 }
