@@ -36,8 +36,8 @@ export const Header = ({
 		style={style || backgroundColor || color ? { ...(style || {}), backgroundColor, color } : undefined}
 		{...props}
 	>
-		{children}
 		{post}
+		{children}
 	</header>
 );
 

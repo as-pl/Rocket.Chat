@@ -1,7 +1,28 @@
-@use '../mixins';
+// @use '../mixins';
 
 .textarea-input {
-	resize: none;
+	// resize: none;
 
-	@include mixins.form__input-box;
+	// @include mixins.form__input-box;
+
+	width: 100%;
+	min-height: 120px;
+	padding: 12px 16px;
+	font-size: 16px;
+	border-radius: 12px;
+	border: 1px solid #ccc;
+	outline: none;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	resize: none;
+	transition: all 0.3s ease;
+	font-family: 'Helvetica Neue', sans-serif;
+
+	&:focus {
+		border-color: #414141;
+		box-shadow: 0 0 8px rgba(49, 49, 49, 0.3);
+	}
+
+	&::placeholder {
+		color: #aaa;
+	}
 }

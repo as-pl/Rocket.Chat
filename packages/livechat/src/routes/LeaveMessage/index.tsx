@@ -30,7 +30,7 @@ const LeaveMessage: FunctionalComponent<{ path: string }> = () => {
 			theme: { offlineTitle: title, offlineColor },
 			settings: { displayOfflineForm },
 		},
-		iframe,
+		// iframe,
 		loading,
 		dispatch,
 		alerts,
@@ -46,7 +46,7 @@ const LeaveMessage: FunctionalComponent<{ path: string }> = () => {
 		control,
 	} = useForm({ mode: 'onChange' });
 
-	const customOfflineTitle = iframe?.theme?.offlineTitle;
+	// const customOfflineTitle = iframe?.theme?.offlineTitle;
 
 	type FormValues = { name: string; email: string; department?: string; message: string };
 
@@ -80,19 +80,20 @@ const LeaveMessage: FunctionalComponent<{ path: string }> = () => {
 		}
 	};
 
-	const defaultTitle = t('leave_a_message');
-	const defaultMessage = t('we_are_not_online_right_now_please_leave_a_message');
+	// const defaultTitle = t('leave_a_message'); // To narazie wywale
+	const defaultMessage = t('we_are_not_online_right_now_please_leave_a_message'); // To narazie wywale
 	const defaultUnavailableMessage = t('offline_form_not_available');
 
 	return (
-		<Screen title={customOfflineTitle || title || defaultTitle} color={offlineColor} className={createClassName(styles, 'leave-message')}>
+		<Screen title={''} color={offlineColor} className={createClassName(styles, 'leave-message')}>
 			{displayOfflineForm ? (
 				<FormScrollShadow topRef={topRef} bottomRef={bottomRef}>
 					<Screen.Content full>
 						<div id='top' ref={topRef} style={{ height: '1px', width: '100%' }} />
 
 						<div className={createClassName(styles, 'leave-message__main-message')}>
-							<MarkdownBlock text={offlineMessage || defaultMessage} />
+							{/* <MarkdownBlock text={offlineMessage || defaultMessage} /> */}
+							{defaultMessage && <div className={createClassName(styles, 'offline_msg')}>{defaultMessage}</div>}
 						</div>
 
 						<Form
@@ -170,7 +171,7 @@ const LeaveMessage: FunctionalComponent<{ path: string }> = () => {
 			<Screen.Footer>
 				{displayOfflineForm ? (
 					<Button loading={loading} form='leaveMessage' submit full disabled={!isDirty || !isValid || loading || isSubmitting}>
-						{t('send')}
+						<b>{t('send')}</b>
 					</Button>
 				) : null}
 			</Screen.Footer>
