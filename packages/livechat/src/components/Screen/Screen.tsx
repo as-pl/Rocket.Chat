@@ -3,6 +3,7 @@ import { useContext } from 'preact/hooks';
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
 import { Button } from '../Button';
+import { Footer, FooterContent } from '../Footer';
 import { PopoverContainer } from '../Popover';
 import { Sound } from '../Sound';
 import { ChatButton } from './ChatButton';
@@ -11,17 +12,20 @@ import ScreenHeader from './Header';
 import { ScreenContext } from './ScreenProvider';
 import styles from './styles.scss';
 
-export type ScreenProps = {
-	title: string;
-	color?: string;
-	agent?: any;
-	children?: any;
-	className?: string;
-	unread?: number;
-	triggered?: boolean;
-	queueInfo?: any;
-	onSoundStop?: () => void;
-	ref?: any; // FIXME: remove this
+export const ScreenContent = ({ children, nopadding, triggered = false, full = false }) => (
+	<main className={createClassName(styles, 'screen__main', { nopadding, triggered, full })}>{children}</main>
+);
+
+export const ScreenFooter = ({ children, options, limit }) => {
+	return (
+		<Footer>
+			{children && <FooterContent>{children}</FooterContent>}
+			<FooterContent>
+				{options}
+				{limit}
+			</FooterContent>
+		</Footer>
+	);
 };
 
 const Screen = ({ title, color, agent, children, className, unread, triggered = false, queueInfo, onSoundStop }: ScreenProps) => {
