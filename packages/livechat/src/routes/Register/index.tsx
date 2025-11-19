@@ -124,7 +124,7 @@ export const Register: FunctionalComponent<{ path: string }> = () => {
 	}, [user?._id]);
 
 	return (
-		<Screen title={title || defaultTitle} className={createClassName(styles, 'register')}>
+		<Screen title={''} className={createClassName(styles, 'register')}>
 			<FormScrollShadow topRef={topRef} bottomRef={bottomRef}>
 				<Screen.Content full>
 					<Form
