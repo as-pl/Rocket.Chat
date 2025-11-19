@@ -95,6 +95,12 @@ export class App extends Component<AppProps, AppState> {
 
 			setInitCookies();
 
+			// return route('/gdpr');
+			// return route('/leave-message');
+			// return route('/register');
+			// return route('/chat-finished');/switch-department
+			// return route('/switch-department');
+
 			if (gdprRequired && !gdprAccepted) {
 				route('/gdpr');
 				return;

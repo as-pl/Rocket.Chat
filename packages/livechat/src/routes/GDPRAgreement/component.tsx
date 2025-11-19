@@ -24,35 +24,40 @@ class GDPR extends Component<GDPRProps> {
 	};
 
 	render = ({ title, consentText, instructions, t }: GDPRProps) => (
-		<Screen title={title} className={createClassName(styles, 'gdpr')}>
-			<ScreenContent>
-				{consentText ? (
-					<p className={createClassName(styles, 'gdpr__consent-text')}>
-						<MarkdownBlock text={consentText} />
-					</p>
-				) : (
-					<p className={createClassName(styles, 'gdpr__consent-text')}>
-						<Trans i18nKey='the_controller_of_your_personal_data_is_company_na' />
-					</p>
-				)}
-				{instructions ? (
-					<p className={createClassName(styles, 'gdpr__instructions')}>
-						<MarkdownBlock text={instructions} />
-					</p>
-				) : (
-					<p className={createClassName(styles, 'gdpr__instructions')}>
-						<Trans i18nKey='go_to_menu_options_forget_remove_my_personal_data'>
-							Go to <strong>menu options → Forget/Remove my personal data</strong> to request the immediate removal of your data.
-						</Trans>
-					</p>
-				)}
-				<ButtonGroup>
-					<Button onClick={this.handleClick} stack>
-						{t('i_agree')}
-					</Button>
-				</ButtonGroup>
-			</ScreenContent>
-			<ScreenFooter />
+		<Screen title={''} className={createClassName(styles, 'gdpr')}>
+			<Screen.Content>
+				<div className={createClassName(styles, 'gdpr__wrapper')}>
+					{title && <strong>{title}</strong>}
+					{consentText ? (
+						<p className={createClassName(styles, 'gdpr__consent-text')}>
+							<MarkdownBlock text={consentText} />
+						</p>
+					) : (
+						<p className={createClassName(styles, 'gdpr__consent-text')}>
+							<Trans i18nKey='the_controller_of_your_personal_data_is_company_na' />
+						</p>
+					)}
+					{instructions ? (
+						<p className={createClassName(styles, 'gdpr__instructions')}>
+							<MarkdownBlock text={instructions} />
+						</p>
+					) : (
+						<p className={createClassName(styles, 'gdpr__instructions')}>
+							<Trans i18nKey='go_to_menu_options_forget_remove_my_personal_data'>
+								Go to <strong>menu options → Forget/Remove my personal data</strong> to request the immediate removal of your data.
+							</Trans>
+						</p>
+					)}
+					<div className={createClassName(styles, 'gdpr__btn')}>
+						<ButtonGroup>
+							<Button onClick={this.handleClick} stack>
+								<b>{t('i_agree')}</b>
+							</Button>
+						</ButtonGroup>
+					</div>
+				</div>
+			</Screen.Content>
+			<Screen.Footer />
 		</Screen>
 	);
 }
