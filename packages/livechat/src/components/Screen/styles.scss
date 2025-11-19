@@ -3,6 +3,7 @@
 
 $screen-padding: 16px;
 $screen-box-shadow: 0 (math.div($screen-padding, 2) - 1) $screen-padding 0 rgba(0, 0, 0, 0.1);
+// $screen-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 $max-lines: 12;
 
 .screen {
@@ -20,7 +21,9 @@ $max-lines: 12;
 		margin-bottom: $screen-padding;
 
 		background-color: #f6f6f7;
-		box-shadow: $screen-box-shadow;
+		box-shadow:
+			rgba(0, 0, 0, 0.05) 0px 0.48px 2.41px -0.38px,
+			rgba(0, 0, 0, 0.17) 0px 4px 20px -0.75px;
 		border-radius: 15px;
 		transform-origin: 100% 100%;
 		animation: 0.4s ease-in-out both popup-screen;
