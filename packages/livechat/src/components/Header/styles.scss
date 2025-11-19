@@ -113,6 +113,8 @@ $header-action-active-displacement: 2px;
 		position: absolute;
 		z-index: 10;
 		top: 15px;
+		// top: $header-height;
+
 		// right: 50%;
 		// left: 50%;
 		// transform: translate(-50%, -50%);
@@ -124,7 +126,27 @@ $header-action-active-displacement: 2px;
 		align-items: center;
 		width: 100%;
 	}
-	&__post > * {
+
+	&__post_t {
+		position: absolute;
+		z-index: 10;
+		// top: 15px;
+		top: $header-height;
+
+		// right: 50%;
+		// left: 50%;
+		// transform: translate(-50%, -50%);
+		display: flex;
+		pointer-events: none;
+		flex-direction: column;
+		gap: 10px;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+	}
+
+	&__post > *,
+	&__post_t > * {
 		pointer-events: auto;
 	}
 

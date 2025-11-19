@@ -1,25 +1,25 @@
-// @use '../mixins';
-
-// .text-input {
-// 	@include mixins.form__input-box;
-// }
+@use '../mixins';
 
 .text-input {
-	width: 100%;
-	padding: 12px 16px;
-	font-size: 16px;
-	border: 1px solid #ccc;
-	border-radius: 12px;
-	outline: none;
-	transition: all 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-	&:focus {
-		border-color: #414141;
-		box-shadow: 0 0 8px rgba(49, 49, 49, 0.3);
-	}
-
-	&::placeholder {
-		color: #aaa;
-	}
+	@include mixins.form__input-box;
 }
+
+// .text-input {
+// 	width: 100%;
+// 	padding: 12px 16px;
+// 	font-size: 16px;
+// 	border: 1px solid #ccc;
+// 	border-radius: 12px;
+// 	outline: none;
+// 	transition: all 0.3s ease;
+// 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+// 	&:focus {
+// 		border-color: #414141;
+// 		box-shadow: 0 0 8px rgba(49, 49, 49, 0.3);
+// 	}
+
+// 	&::placeholder {
+// 		color: #aaa;
+// 	}
+// }

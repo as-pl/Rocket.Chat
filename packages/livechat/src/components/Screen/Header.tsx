@@ -84,7 +84,7 @@ const ScreenHeader = ({
 		<Header
 			ref={headerRef}
 			post={
-				<HeaderPost>
+				<Header.Post isTitle={!!title}>
 					{alerts?.map((alert) => (
 						<Alert key={alert.id} {...alert} onDismiss={onDismissAlert}>
 							{alert.children}
