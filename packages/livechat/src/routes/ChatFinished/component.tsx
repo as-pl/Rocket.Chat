@@ -15,7 +15,7 @@ type ChatFinishedProps = {
 	t: (s: string) => string;
 };
 
-const ChatFinished = ({ title, greeting, message, onRedirectChat, t }: ChatFinishedProps) => {
+const ChatFinished = ({ greeting, message, onRedirectChat, t }: ChatFinishedProps) => {
 	const handleClick = () => {
 		onRedirectChat?.();
 		Triggers.callbacks?.emit('chat-visitor-registered');
@@ -25,16 +25,20 @@ const ChatFinished = ({ title, greeting, message, onRedirectChat, t }: ChatFinis
 	const defaultMessage = t('if_you_have_any_other_questions_just_press_the_but');
 
 	return (
-		<Screen title={title} className={createClassName(styles, 'chat-finished')}>
+		<Screen title={''} className={createClassName(styles, 'chat-finished')}>
 			<Screen.Content>
-				<p className={createClassName(styles, 'chat-finished__greeting')}>{greeting || defaultGreeting}</p>
-				<p className={createClassName(styles, 'chat-finished__message')}>{message || defaultMessage}</p>
+				<div className={createClassName(styles, 'chat-finished__container')}>
+					<p className={createClassName(styles, 'chat-finished__greeting')}>{greeting || defaultGreeting}</p>
+					<p className={createClassName(styles, 'chat-finished__message')}>{message || defaultMessage}</p>
 
-				<ButtonGroup>
-					<Button onClick={handleClick} stack>
-						{t('new_chat')}
-					</Button>
-				</ButtonGroup>
+					<div className={createClassName(styles, 'chat-finished__btn')}>
+						<ButtonGroup>
+							<Button onClick={handleClick} stack>
+								{t('new_chat')}
+							</Button>
+						</ButtonGroup>
+					</div>
+				</div>
 			</Screen.Content>
 			<Screen.Footer />
 		</Screen>
