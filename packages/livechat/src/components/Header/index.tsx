@@ -20,6 +20,7 @@ type HeaderProps = {
 type HeaderComponentProps = {
 	children?: ComponentChildren;
 	className?: string;
+	isTitle?: boolean;
 };
 
 export const Header = ({
@@ -88,7 +89,7 @@ export const Action = ({ children, className = undefined, ...props }: HeaderComp
 );
 
 export const Post = ({ children, className = undefined, ...props }: HeaderComponentProps) => (
-	<div className={createClassName(styles, 'header__post', {}, [className])} {...props}>
+	<div className={createClassName(styles, props.isTitle ? 'header__post_t' : 'header__post', {}, [className])} {...props}>
 		{children}
 	</div>
 );
