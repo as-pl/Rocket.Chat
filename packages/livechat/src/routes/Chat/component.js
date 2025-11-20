@@ -178,31 +178,32 @@ class Chat extends Component {
 							</Suspense>
 						)}
 					</div>
-				</ScreenContent>
-				<ScreenFooter
-					options={
-						options && !registrationRequired ? (
-							<FooterOptions>
-								<MenuGroup>
-									{onChangeDepartment && (
-										<MenuItem onClick={onChangeDepartment} icon={ChangeIcon}>
-											{t('change_department')}
-										</MenuItem>
-									)}
-									{onRemoveUserData && (
-										<MenuItem onClick={onRemoveUserData} icon={RemoveIcon}>
-											{t('forget_remove_my_data')}
-										</MenuItem>
-									)}
-									{onFinishChat && (
-										<MenuItem danger onClick={onFinishChat} icon={FinishIcon}>
-											{t('finish_this_chat')}
-										</MenuItem>
-									)}
-								</MenuGroup>
-							</FooterOptions>
-						) : null
-					}
+				</Screen.Content>
+				<Screen.Footer
+					// options={
+					// 	options && !registrationRequired ? (
+					// 		<FooterOptions>
+					// 			{/* TODO: to przenieść */}
+					// 			<Menu.Group>
+					// 				{onChangeDepartment && (
+					// 					<Menu.Item onClick={onChangeDepartment} icon={ChangeIcon}>
+					// 						{t('change_department')}
+					// 					</Menu.Item>
+					// 				)}
+					// 				{onRemoveUserData && (
+					// 					<Menu.Item onClick={onRemoveUserData} icon={RemoveIcon}>
+					// 						{t('forget_remove_my_data')}
+					// 					</Menu.Item>
+					// 				)}
+					// 				{onFinishChat && (
+					// 					<Menu.Item danger onClick={onFinishChat} icon={FinishIcon}>
+					// 						{t('finish_this_chat')}
+					// 					</Menu.Item>
+					// 				)}
+					// 			</Menu.Group>
+					// 		</FooterOptions>
+					// 	) : null
+					// }
 					limit={limitTextLength ? <CharCounter limitTextLength={limitTextLength} textLength={text.length} /> : null}
 				>
 					{registrationRequired ? (

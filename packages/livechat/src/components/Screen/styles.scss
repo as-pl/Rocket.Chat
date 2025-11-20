@@ -25,8 +25,13 @@ $max-lines: 12;
 			rgba(0, 0, 0, 0.05) 0px 0.48px 2.41px -0.38px,
 			rgba(0, 0, 0, 0.17) 0px 4px 20px -0.75px;
 		border-radius: 15px;
-		transform-origin: 100% 100%;
-		animation: 0.4s ease-in-out both popup-screen;
+	}
+
+	&--animate-open {
+		.screen__inner {
+			transform-origin: 100% 100%;
+			animation: 0.4s ease-in-out both popup-screen;
+		}
 	}
 
 	.screen__chat-button {
@@ -101,6 +106,16 @@ $max-lines: 12;
 		}
 	}
 }
+
+// .screen.animate-minimize .screen__inner {
+// 	animation: screen-off-overlay 0.3s ease-out both;
+// }
+
+// .screen.minimized .screen__inner {
+// 	transform: translateY(100%);
+// 	opacity: 0;
+// 	animation: none !important;
+// }
 
 .screen__inner {
 	display: flex;
@@ -186,6 +201,9 @@ $max-lines: 12;
 		content-visibility: hidden;
 	}
 
+	70% {
+		opacity: 1;
+	}
 	100% {
 		transform: scale(0.1) translateY(54px);
 		opacity: 0;

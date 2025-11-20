@@ -46,7 +46,19 @@ export type ScreenContextValue = {
 	onOpenWindow: () => unknown;
 	onDismissAlert: () => unknown;
 	dismissNotification: () => void;
-	theme: ScreenTheme;
+	setWasMinimized: (value: boolean) => void;
+	theme?: {
+		color?: string;
+		fontColor?: string;
+		iconColor?: string;
+		position?: 'left' | 'right';
+		guestBubbleBackgroundColor?: string;
+		agentBubbleBackgroundColor?: string;
+		background?: string;
+		hideGuestAvatar?: boolean;
+		hideAgentAvatar?: boolean;
+		hideExpandChat?: boolean;
+	};
 };
 
 export const ScreenContext = createContext<ScreenContextValue>({
@@ -93,6 +105,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 	} = iframe.theme || {};
 
 	const [poppedOut, setPopedOut] = useState(false);
+	const [wasMinimized, setWasMinimized] = useState<boolean>(true);
 
 	const position = customPosition || configPosition || 'right';
 
@@ -111,6 +124,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 	const handleMinimize = () => {
 		parentCall('minimizeWindow');
 		dispatch({ minimized: true });
+		setWasMinimized(true);
 	};
 
 	const handleRestore = async () => {
@@ -124,7 +138,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		}
 
 		dispatch({ minimized: false, undocked: false });
-
+		setWasMinimized(true);
 		Triggers.callbacks?.emit('chat-opened-by-visitor');
 	};
 
@@ -180,6 +194,8 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		onOpenWindow: handleOpenWindow,
 		onDismissAlert: handleDismissAlert,
 		dismissNotification,
+		wasMinimized,
+		setWasMinimized,
 	};
 
 	return <ScreenContext.Provider value={screenProps}>{children}</ScreenContext.Provider>;

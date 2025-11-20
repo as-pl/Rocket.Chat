@@ -16,7 +16,7 @@ $avatar-status-indicator-size-large: 14px;
 	width: $avatar-size-medium;
 	height: $avatar-size-medium;
 
-	border-radius: variables.$default-border-radius;
+	border-radius: 50%;
 	background-color: #000000;
 	background-image: url(./profile.png);
 	background-repeat: no-repeat;
@@ -28,7 +28,7 @@ $avatar-status-indicator-size-large: 14px;
 		height: 100%;
 
 		color: transparent;
-		border-radius: variables.$default-border-radius;
+		border-radius: 50%;
 		object-fit: cover;
 	}
 

@@ -1,4 +1,4 @@
-import { useContext } from 'preact/hooks';
+import { useContext, useLayoutEffect, useEffect, useState } from 'preact/hooks';
 
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
@@ -28,7 +28,59 @@ export const ScreenFooter = ({ children, options, limit }) => {
 	);
 };
 
-const Screen = ({ title, color, agent, children, className, unread, triggered = false, queueInfo, onSoundStop }: ScreenProps) => {
+const CssVar = ({ theme }) => {
+	useEffect(() => {
+		if (window.CSS && CSS.supports('color', 'var(--color)')) {
+			return;
+		}
+		let mounted = true;
+		(async () => {
+			const { default: cssVars } = await import('css-vars-ponyfill');
+			if (!mounted) {
+				return;
+			}
+			cssVars({
+				variables: {
+					'--color': theme.color,
+					'--font-color': theme.fontColor,
+					'--icon-color': theme.iconColor,
+				},
+			});
+		})();
+		return () => {
+			mounted = false;
+		};
+	}, [theme]);
+
+	return (
+		<style>{`
+		.${styles.screen} {
+			${theme.color ? `--color: ${theme.color};` : ''}
+			${theme.fontColor ? `--font-color: ${theme.fontColor};` : ''}
+			${theme.iconColor ? `--icon-color: ${theme.iconColor};` : ''}
+			${theme.guestBubbleBackgroundColor ? `--sender-bubble-background-color: ${theme.guestBubbleBackgroundColor};` : ''}
+			${theme.agentBubbleBackgroundColor ? `--receiver-bubble-background-color: ${theme.agentBubbleBackgroundColor};` : ''}
+			${theme.background ? `--message-list-background: ${theme.background};` : ''}
+		}
+	`}</style>
+	);
+};
+
+/** @type {{ (props: any) => JSX.Element; Content: (props: any) => JSX.Element; Footer: (props: any) => JSX.Element }} */
+export const Screen = ({
+	title,
+	color,
+	agent,
+	children,
+	className,
+	unread,
+	triggered = false,
+	queueInfo,
+	onSoundStop,
+	onChangeDepartment,
+	onFinishChat,
+	onRemoveUserData,
+}) => {
 	const {
 		theme,
 		livechatLogo,
@@ -46,7 +98,21 @@ const Screen = ({ title, color, agent, children, className, unread, triggered = 
 		onRestore,
 		onOpenWindow,
 		dismissNotification,
+		wasMinimized,
+		setWasMinimized,
 	} = useContext(ScreenContext);
+	// const [animateOpen, setAnimateOpen] = useState(false);
+
+	useEffect(() => {
+		console.log('minimized', minimized);
+	}, [minimized]);
+
+	useLayoutEffect(() => {
+		if (wasMinimized && !minimized) {
+			const timeout = setTimeout(() => setWasMinimized(false), 400);
+			return () => clearTimeout(timeout);
+		}
+	}, [minimized, wasMinimized, setWasMinimized]);
 
 	return (
 		<div
@@ -56,6 +122,7 @@ const Screen = ({ title, color, agent, children, className, unread, triggered = 
 				windowed,
 				triggered,
 				'position-left': theme.position === 'left',
+				'animate-open': wasMinimized,
 			})}
 		>
 			<CssVar theme={{ ...theme, color: color || theme.color }} />
@@ -83,6 +150,9 @@ const Screen = ({ title, color, agent, children, className, unread, triggered = 
 							onOpenWindow={onOpenWindow}
 							queueInfo={queueInfo}
 							hideExpandChat={theme.hideExpandChat}
+							onChangeDepartment={onChangeDepartment}
+							onFinishChat={onFinishChat}
+							onRemoveUserData={onRemoveUserData}
 						/>
 					)}
 
