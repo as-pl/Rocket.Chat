@@ -187,29 +187,30 @@ class Chat extends Component {
 					</div>
 				</Screen.Content>
 				<Screen.Footer
-					options={
-						options && !registrationRequired ? (
-							<FooterOptions>
-								<Menu.Group>
-									{onChangeDepartment && (
-										<Menu.Item onClick={onChangeDepartment} icon={ChangeIcon}>
-											{t('change_department')}
-										</Menu.Item>
-									)}
-									{onRemoveUserData && (
-										<Menu.Item onClick={onRemoveUserData} icon={RemoveIcon}>
-											{t('forget_remove_my_data')}
-										</Menu.Item>
-									)}
-									{onFinishChat && (
-										<Menu.Item danger onClick={onFinishChat} icon={FinishIcon}>
-											{t('finish_this_chat')}
-										</Menu.Item>
-									)}
-								</Menu.Group>
-							</FooterOptions>
-						) : null
-					}
+					// options={
+					// 	options && !registrationRequired ? (
+					// 		<FooterOptions>
+					// 			{/* TODO: to przenieść */}
+					// 			<Menu.Group>
+					// 				{onChangeDepartment && (
+					// 					<Menu.Item onClick={onChangeDepartment} icon={ChangeIcon}>
+					// 						{t('change_department')}
+					// 					</Menu.Item>
+					// 				)}
+					// 				{onRemoveUserData && (
+					// 					<Menu.Item onClick={onRemoveUserData} icon={RemoveIcon}>
+					// 						{t('forget_remove_my_data')}
+					// 					</Menu.Item>
+					// 				)}
+					// 				{onFinishChat && (
+					// 					<Menu.Item danger onClick={onFinishChat} icon={FinishIcon}>
+					// 						{t('finish_this_chat')}
+					// 					</Menu.Item>
+					// 				)}
+					// 			</Menu.Group>
+					// 		</FooterOptions>
+					// 	) : null
+					// }
 					limit={limitTextLength ? <CharCounter limitTextLength={limitTextLength} textLength={text.length} /> : null}
 				>
 					{registrationRequired ? (

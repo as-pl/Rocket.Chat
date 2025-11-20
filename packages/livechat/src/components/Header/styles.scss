@@ -100,12 +100,15 @@ $header-action-active-displacement: 2px;
 			outline: none;
 			background: none;
 			justify-content: center;
-
-			:hover {
-				background-color: #acacac;
-			}
+			padding: 0.5rem;
+			align-items: center;
 
 			@include helpers.pressable-button($header-action-active-displacement, 0);
+
+			&:hover {
+				background-color: #e7e7e7;
+				border-radius: 25px;
+			}
 		}
 	}
 
