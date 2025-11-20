@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'preact/hooks';
+import { useContext, useLayoutEffect, useEffect, useState } from 'preact/hooks';
 
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
@@ -66,7 +66,20 @@ const CssVar = ({ theme }) => {
 };
 
 /** @type {{ (props: any) => JSX.Element; Content: (props: any) => JSX.Element; Footer: (props: any) => JSX.Element }} */
-export const Screen = ({ title, color, agent, children, className, unread, triggered = false, queueInfo, onSoundStop }) => {
+export const Screen = ({
+	title,
+	color,
+	agent,
+	children,
+	className,
+	unread,
+	triggered = false,
+	queueInfo,
+	onSoundStop,
+	onChangeDepartment,
+	onFinishChat,
+	onRemoveUserData,
+}) => {
 	const {
 		theme = {},
 		livechatLogo,
@@ -84,7 +97,21 @@ export const Screen = ({ title, color, agent, children, className, unread, trigg
 		onRestore,
 		onOpenWindow,
 		dismissNotification,
+		wasMinimized,
+		setWasMinimized,
 	} = useContext(ScreenContext);
+	// const [animateOpen, setAnimateOpen] = useState(false);
+
+	useEffect(() => {
+		console.log('minimized', minimized);
+	}, [minimized]);
+
+	useLayoutEffect(() => {
+		if (wasMinimized && !minimized) {
+			const timeout = setTimeout(() => setWasMinimized(false), 400);
+			return () => clearTimeout(timeout);
+		}
+	}, [minimized, wasMinimized, setWasMinimized]);
 
 	return (
 		<div
@@ -94,6 +121,7 @@ export const Screen = ({ title, color, agent, children, className, unread, trigg
 				windowed,
 				triggered,
 				'position-left': theme.position === 'left',
+				'animate-open': wasMinimized,
 			})}
 		>
 			<CssVar theme={{ ...theme, color: color || theme.color }} />
@@ -121,6 +149,9 @@ export const Screen = ({ title, color, agent, children, className, unread, trigg
 							onOpenWindow={onOpenWindow}
 							queueInfo={queueInfo}
 							hideExpandChat={theme.hideExpandChat}
+							onChangeDepartment={onChangeDepartment}
+							onFinishChat={onFinishChat}
+							onRemoveUserData={onRemoveUserData}
 						/>
 					)}
 

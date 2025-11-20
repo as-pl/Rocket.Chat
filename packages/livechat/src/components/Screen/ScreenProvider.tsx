@@ -30,6 +30,7 @@ export type ScreenContextValue = {
 	onOpenWindow: () => unknown;
 	onDismissAlert: () => unknown;
 	dismissNotification: () => void;
+	setWasMinimized: (value: boolean) => void;
 	theme?: {
 		color?: string;
 		fontColor?: string;
@@ -84,6 +85,7 @@ export const ScreenProvider: FunctionalComponent = ({ children }) => {
 	} = iframe.theme || {};
 
 	const [poppedOut, setPopedOut] = useState(false);
+	const [wasMinimized, setWasMinimized] = useState<boolean>(true);
 
 	const position = customPosition || configPosition || 'right';
 
@@ -102,6 +104,7 @@ export const ScreenProvider: FunctionalComponent = ({ children }) => {
 	const handleMinimize = () => {
 		parentCall('minimizeWindow');
 		dispatch({ minimized: true });
+		setWasMinimized(true);
 	};
 
 	const handleRestore = async () => {
@@ -115,7 +118,7 @@ export const ScreenProvider: FunctionalComponent = ({ children }) => {
 		}
 
 		dispatch({ minimized: false, undocked: false });
-
+		setWasMinimized(true);
 		Triggers.callbacks?.emit('chat-opened-by-visitor');
 	};
 
@@ -171,6 +174,8 @@ export const ScreenProvider: FunctionalComponent = ({ children }) => {
 		onOpenWindow: handleOpenWindow,
 		onDismissAlert: handleDismissAlert,
 		dismissNotification,
+		wasMinimized,
+		setWasMinimized,
 	};
 
 	return <ScreenContext.Provider value={screenProps}>{children}</ScreenContext.Provider>;
