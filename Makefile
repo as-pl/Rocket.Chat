@@ -1,5 +1,5 @@
 packages-build:
-	yarn turbo build
+	yarn turbo build --no-cache
 
 
 app-build:
@@ -33,3 +33,13 @@ rebuild-publish:
 	$(MAKE) docker-build
 	$(MAKE) docker-push
 
+
+
+
+test-local-build:
+
+	$(MAKE) packages-build
+	$(MAKE) app-build
+	$(MAKE) docker-build
+	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
+	
