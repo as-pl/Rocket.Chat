@@ -48,13 +48,21 @@ export const FilesDropTarget = ({
 	const handleDrop = (event: TargetedEvent<HTMLElement, DragEvent>) => {
 		event.preventDefault();
 
-		if (dragLevel === 0 || !event?.dataTransfer?.files?.length) {
+		setDragLevel(0);
+
+		// if (dragLevel === 0 || !event?.dataTransfer?.files?.length) {
+		// 	return;
+		// }
+
+		const { dataTransfer } = event;
+		if (!dataTransfer) {
 			return;
 		}
 
-		setDragLevel(0);
-
-		handleUpload(event?.dataTransfer?.files);
+		const { files } = dataTransfer;
+		if (files && files.length > 0) {
+			handleUpload(files);
+		}
 	};
 
 	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
