@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useEffect, useState } from 'preact/hooks';
+import { useContext, useLayoutEffect, useEffect } from 'preact/hooks';
 
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
