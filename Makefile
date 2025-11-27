@@ -35,11 +35,29 @@ rebuild-publish:
 
 
 
+# TESTING MOCK BUILD
+test-local-build-first-run:
+	yarn install
+	docker network create rc-test || true
+	docker rm -f mongo || true
+	docker run -d --name mongo --network rc-test mongo:6 --replSet rs0 --oplogSize 128
+	sleep 5
+	docker exec mongo mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"mongo:27017"}]})' || true
+	$(MAKE) packages-build
+	$(MAKE) app-build
+	$(MAKE) docker-build
+	docker run -it --rm \
+		--network rc-test \
+		-p 3000:3000 \
+		-e ROOT_URL="http://localhost:3000" \
+		-e MONGO_URL="mongodb://mongo:27017/rocketchat?replicaSet=rs0" \
+		-e MONGO_OPLOG_URL="mongodb://mongo:27017/local?replicaSet=rs0" \
+		arturkmera/custom-rc
+
 
 test-local-build:
-
+	yarn install
 	$(MAKE) packages-build
 	$(MAKE) app-build
 	$(MAKE) docker-build
 	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
-	
