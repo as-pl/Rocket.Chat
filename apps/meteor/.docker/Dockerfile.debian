@@ -29,7 +29,9 @@ ENV DEPLOY_METHOD=docker \
     Accounts_AvatarStorePath=/app/uploads
 
 RUN aptMark="$(apt-mark showmanual)" \
+    && apt-get update \
     && apt-get install -y --no-install-recommends g++ make python3 ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
     && apt-mark auto '.*' > /dev/null \
     && apt-mark manual $aptMark > /dev/null
 

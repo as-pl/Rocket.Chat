@@ -40,7 +40,7 @@ test-local-build-first-run:
 	yarn install
 	docker network create rc-test || true
 	docker rm -f mongo || true
-	docker run -d --name mongo --network rc-test mongo:6 --replSet rs0 --oplogSize 128
+	docker run -d --name mongo --network rc-test mongo:7 --replSet rs0 --oplogSize 128
 	sleep 5
 	docker exec mongo mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"mongo:27017"}]})' || true
 	$(MAKE) packages-build
