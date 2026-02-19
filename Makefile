@@ -19,6 +19,22 @@ docker-push:
 prepare:
 	yarn install
 
+clean-meteor-db:
+	rm -rf apps/meteor/.meteor/local/db
+
+dsv-no-cloud:
+	OVERWRITE_SETTING_Cloud_Workspace_Client_Id=local-dev \
+	OVERWRITE_SETTING_Cloud_Workspace_Client_Secret=local-dev \
+	OVERWRITE_SETTING_Show_Setup_Wizard=completed \
+	yarn dsv
+
+dsv-local-mongo:
+	MONGO_URL='mongodb://localhost:27017/rocketchat?replicaSet=rs0' \
+	MONGO_OPLOG_URL='mongodb://localhost:27017/local?replicaSet=rs0' \
+	ROOT_URL='http://localhost:3000' \
+	OVERWRITE_SETTING_Show_Setup_Wizard=completed \
+	yarn dsv
+
 
 all-build:
 	$(MAKE) prepare
