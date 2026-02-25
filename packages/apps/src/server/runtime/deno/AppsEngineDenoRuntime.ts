@@ -219,7 +219,6 @@ export class DenoRuntimeSubprocessController extends EventEmitter implements IRu
 
 			const options = [
 				'run',
-				'--unstable-detect-cjs',
 				'--cached-only',
 				`--config=${this.denoEphemeralConfigPath}`,
 				`--allow-read=${allowedDirs.join(',')}`,
