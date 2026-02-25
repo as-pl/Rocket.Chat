@@ -149,6 +149,7 @@ export class DenoRuntimeSubprocessController extends EventEmitter implements IRu
 			const denoWrapperPath = getDenoWrapperPath();
 			// During development, the appsEngineDir is enough to run the deno process
 			const appsEngineDir = path.dirname(path.join(denoWrapperPath, '..'));
+			const denoConfigPath = path.join(appsEngineDir, 'deno-runtime', 'deno.jsonc');
 			const DENO_DIR = process.env.DENO_DIR ?? path.join(appsEngineDir, '.deno-cache');
 			// When running in production, we're likely inside a node_modules which the Deno
 			// process must be able to read in order to include files that use NPM packages
@@ -163,7 +164,8 @@ export class DenoRuntimeSubprocessController extends EventEmitter implements IRu
 
 			const options = [
 				'run',
-				'--cached-only',
+				`--config=${denoConfigPath}`,
+				'--no-lock',
 				`--allow-read=${allowedDirs.join(',')}`,
 				`--allow-env=${ALLOWED_ENVIRONMENT_VARIABLES.join(',')}`,
 				denoWrapperPath,
