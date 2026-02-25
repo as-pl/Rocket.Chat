@@ -8,12 +8,12 @@ app-build:
 
 
 docker-build:
-	docker build -t arturkmera/custom-rc -f apps/meteor/.docker/Dockerfile.debian ./custom-build
+	docker build -t arturkmera/custom-rc:8.1.5 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
 
 
 
 docker-push:
-	docker push arturkmera/custom-rc
+	docker push arturkmera/custom-rc:8.1.5
 
 
 prepare:
