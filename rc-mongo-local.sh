@@ -69,33 +69,33 @@ const db = db.getSiblingDB('rocketchat');
 
 db.rocketchat_settings.updateOne(
   { _id: 'Show_Setup_Wizard' },
-  { $set: { value: 'completed', packageValue: 'completed', valueSource: 'value' } },
+  { \$set: { value: 'completed', packageValue: 'completed', valueSource: 'value' } },
   { upsert: true }
 );
 
 db.rocketchat_settings.updateOne(
   { _id: 'Site_Url' },
-  { $set: { value: '$ROOT_URL', packageValue: '$ROOT_URL', valueSource: 'value' } },
+  { \$set: { value: '$ROOT_URL', packageValue: '$ROOT_URL', valueSource: 'value' } },
   { upsert: true }
 );
 
 // Custom OAuth (ASPL)
 db.rocketchat_settings.updateOne(
   { _id: 'Accounts_OAuth_Custom-Aspl' },
-  { $set: { value: true } },
+  { \$set: { value: true } },
   { upsert: true }
 );
 
 db.rocketchat_settings.updateOne(
   { _id: 'Accounts_OAuth_Custom-Aspl-url' },
-  { $set: { value: '$OAUTH_BACKEND_URL' } },
+  { \$set: { value: '$OAUTH_BACKEND_URL' } },
   { upsert: true }
 );
 
 // Ensure login service config uses local backend
 db.meteor_accounts_loginServiceConfiguration.updateOne(
   { service: 'aspl' },
-  { $set: { serverURL: '$OAUTH_BACKEND_URL', custom: true } },
+  { \$set: { serverURL: '$OAUTH_BACKEND_URL', custom: true } },
   { upsert: true }
 );
 
