@@ -18,6 +18,7 @@ import { isWidget } from '../../../../api/server/helpers/isWidget';
 import { loadMessageHistory } from '../../../../lib/server/functions/loadMessageHistory';
 import { settings } from '../../../../settings/server';
 import { normalizeMessageFileUpload } from '../../../../utils/server/functions/normalizeMessageFileUpload';
+import { rememberLivechatRoomAutoTranslateLanguage, requestMissingAgentMessagesTranslationsForLivechat } from '../../lib/autoTranslate';
 import { updateMessage, deleteMessage, sendMessage } from '../../lib/messages';
 import { findGuest, findRoom, normalizeHttpHeaderData } from '../lib/livechat';
 
@@ -198,7 +199,7 @@ API.v1.addRoute(
 	{
 		async get() {
 			const { offset } = await getPaginationItems(this.queryParams);
-			const { token } = this.queryParams;
+			const { token, targetLanguage } = this.queryParams;
 			const { rid } = this.urlParams;
 
 			if (!token) {
@@ -214,6 +215,8 @@ API.v1.addRoute(
 			if (!room) {
 				throw new Error('invalid-room');
 			}
+
+			rememberLivechatRoomAutoTranslateLanguage(rid, targetLanguage);
 
 			let ls = undefined;
 			if (this.queryParams.ls) {
@@ -239,6 +242,7 @@ API.v1.addRoute(
 				offset,
 			});
 
+			requestMissingAgentMessagesTranslationsForLivechat(history.messages, targetLanguage);
 			const messages = await Promise.all(history.messages.map((message) => normalizeMessageFileUpload(message)));
 
 			return API.v1.success({ messages });
