@@ -3,6 +3,7 @@ import { withTranslation } from 'react-i18next';
 
 import { getAttachmentUrl } from '../../../helpers/baseUrl';
 import { normalizeTransferHistoryMessage } from '../../../helpers/normalizeTransferHistoryMessage';
+import { prepareMessageForAutoTranslate } from '../../../lib/autotranslate';
 import { default as AudioAttachment } from '../AudioAttachment';
 import { FileAttachment } from '../FileAttachment';
 import { ImageAttachment } from '../ImageAttachment';
@@ -90,24 +91,38 @@ const Message = ({
 	t,
 	hideAvatar,
 	...message
-}) => (
-	<MessageContainer id={message._id} compact={compact} reverse={me} use={use} className={className} style={style} system={!!message.type}>
-		{!message.type && !hideAvatar && <MessageAvatars avatarResolver={avatarResolver} usernames={getMessageUsernames(compact, message)} />}
-		<MessageContent reverse={me}>
-			{renderContent({
-				text: message.type ? getSystemMessageText(message, t) : message.msg,
-				system: !!message.type,
-				me,
-				attachments: message.attachments,
-				blocks: message.blocks,
-				mid: message._id,
-				rid: message.rid,
-				attachmentResolver,
-			})}
-		</MessageContent>
+}) => {
+	const renderedMessage = message.type ? message : prepareMessageForAutoTranslate(message);
 
-		{!compact && !message.type && <MessageTime normal={!me} inverse={me} ts={message.ts} />}
-	</MessageContainer>
-);
+	return (
+		<MessageContainer
+			id={renderedMessage._id}
+			compact={compact}
+			reverse={me}
+			use={use}
+			className={className}
+			style={style}
+			system={!!renderedMessage.type}
+		>
+			{!renderedMessage.type && !hideAvatar && (
+				<MessageAvatars avatarResolver={avatarResolver} usernames={getMessageUsernames(compact, renderedMessage)} />
+			)}
+			<MessageContent reverse={me}>
+				{renderContent({
+					text: renderedMessage.type ? getSystemMessageText(renderedMessage, t) : renderedMessage.msg,
+					system: !!renderedMessage.type,
+					me,
+					attachments: renderedMessage.attachments,
+					blocks: renderedMessage.blocks,
+					mid: renderedMessage._id,
+					rid: renderedMessage.rid,
+					attachmentResolver,
+				})}
+			</MessageContent>
+
+			{!compact && !renderedMessage.type && <MessageTime normal={!me} inverse={me} ts={renderedMessage.ts} />}
+		</MessageContainer>
+	);
+};
 
 export default withTranslation()(memo(Message));
