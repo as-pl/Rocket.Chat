@@ -2703,6 +2703,7 @@ type GETLivechatMessagesHistoryRidParams = PaginatedRequest<{
 	ls?: string;
 	end?: string;
 	limit?: number;
+	targetLanguage?: string;
 }>;
 
 const GETLivechatMessagesHistoryRidParamsSchema = {
@@ -2737,6 +2738,10 @@ const GETLivechatMessagesHistoryRidParamsSchema = {
 		},
 		limit: {
 			type: 'number',
+			nullable: true,
+		},
+		targetLanguage: {
+			type: 'string',
 			nullable: true,
 		},
 	},

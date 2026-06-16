@@ -14,6 +14,7 @@ import './hooks/saveLastMessageToInquiry';
 import './hooks/afterUserActions';
 import './hooks/afterAgentRemoved';
 import './hooks/afterSaveOmnichannelMessage';
+import './hooks/autoTranslateAgentMessages';
 import './methods/sendMessageLivechat';
 import './methods/sendFileLivechatMessage';
 import './lib/QueueManager';

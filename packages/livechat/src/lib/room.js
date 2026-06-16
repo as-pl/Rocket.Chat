@@ -7,6 +7,7 @@ import { setCookies } from '../helpers/cookies';
 import { upsert } from '../helpers/upsert';
 import { store, initialState } from '../store';
 import { normalizeAgent } from './api';
+import { getAutoTranslateLanguage } from './autotranslate';
 import Commands from './commands';
 import { loadConfig, processUnread } from './main';
 import { parentCall } from './parentCall';
@@ -248,7 +249,8 @@ export const loadMessages = async () => {
 	const previousMessages = getGreetingMessages(storedMessages);
 	await store.setState({ loading: true });
 
-	const rawMessages = (await Livechat.loadMessages(rid)) ?? [];
+	const targetLanguage = getAutoTranslateLanguage();
+	const rawMessages = (await Livechat.loadMessages(rid, targetLanguage ? { targetLanguage } : undefined)) ?? [];
 
 	if (rawMessages?.length < 20) {
 		const triggers = previousMessages.length === 0 ? renderedTriggers : previousMessages;
@@ -286,7 +288,8 @@ export const loadMoreMessages = async () => {
 
 	await store.setState({ loading: true });
 
-	const rawMessages = await Livechat.loadMessages(rid, { limit: messages.length + 10 });
+	const targetLanguage = getAutoTranslateLanguage();
+	const rawMessages = await Livechat.loadMessages(rid, { limit: messages.length + 10, ...(targetLanguage && { targetLanguage }) });
 	const moreMessages = (await normalizeMessages(rawMessages)).map(transformAgentInformationOnMessage);
 
 	const newNoMoreMessages = messages.length + 10 > moreMessages.length;
