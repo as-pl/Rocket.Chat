@@ -59,6 +59,7 @@ class Triggers {
 			token,
 			config: { triggers },
 		} = store.state;
+		Livechat.token = token;
 		Livechat.credentials.token = token;
 
 		if (!(triggers && triggers.length > 0)) {

@@ -11,6 +11,11 @@ type PoweredByProps = {
 export const PoweredBy = ({ className, ...props }: PoweredByProps) => {
 	const { t } = useTranslation();
 
+	const b = true;
+	if (b) {
+		return <></>;
+	}
+
 	return (
 		<h3 data-qa='livechat-watermark' className={createClassName(styles, 'powered-by', {}, [className])} {...props}>
 			{t('powered_by_rocket_chat').split('Rocket.Chat')[0]}

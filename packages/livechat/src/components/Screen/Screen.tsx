@@ -3,7 +3,6 @@ import { useContext, useLayoutEffect, useEffect } from 'preact/hooks';
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
 import { Button } from '../Button';
-import { Footer, FooterContent } from '../Footer';
 import { PopoverContainer } from '../Popover';
 import { Sound } from '../Sound';
 import { ChatButton } from './ChatButton';
@@ -11,60 +10,6 @@ import CssVar from './CssVar';
 import ScreenHeader from './Header';
 import { ScreenContext } from './ScreenProvider';
 import styles from './styles.scss';
-
-export const ScreenContent = ({ children, nopadding, triggered = false, full = false }) => (
-	<main className={createClassName(styles, 'screen__main', { nopadding, triggered, full })}>{children}</main>
-);
-
-export const ScreenFooter = ({ children, options, limit }) => {
-	return (
-		<Footer>
-			{children && <FooterContent>{children}</FooterContent>}
-			<FooterContent>
-				{options}
-				{limit}
-			</FooterContent>
-		</Footer>
-	);
-};
-
-const CssVar = ({ theme }) => {
-	useEffect(() => {
-		if (window.CSS && CSS.supports('color', 'var(--color)')) {
-			return;
-		}
-		let mounted = true;
-		(async () => {
-			const { default: cssVars } = await import('css-vars-ponyfill');
-			if (!mounted) {
-				return;
-			}
-			cssVars({
-				variables: {
-					'--color': theme.color,
-					'--font-color': theme.fontColor,
-					'--icon-color': theme.iconColor,
-				},
-			});
-		})();
-		return () => {
-			mounted = false;
-		};
-	}, [theme]);
-
-	return (
-		<style>{`
-		.${styles.screen} {
-			${theme.color ? `--color: ${theme.color};` : ''}
-			${theme.fontColor ? `--font-color: ${theme.fontColor};` : ''}
-			${theme.iconColor ? `--icon-color: ${theme.iconColor};` : ''}
-			${theme.guestBubbleBackgroundColor ? `--sender-bubble-background-color: ${theme.guestBubbleBackgroundColor};` : ''}
-			${theme.agentBubbleBackgroundColor ? `--receiver-bubble-background-color: ${theme.agentBubbleBackgroundColor};` : ''}
-			${theme.background ? `--message-list-background: ${theme.background};` : ''}
-		}
-	`}</style>
-	);
-};
 
 /** @type {{ (props: any) => JSX.Element; Content: (props: any) => JSX.Element; Footer: (props: any) => JSX.Element }} */
 export const Screen = ({

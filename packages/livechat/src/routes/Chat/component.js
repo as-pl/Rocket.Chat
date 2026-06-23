@@ -178,8 +178,8 @@ class Chat extends Component {
 							</Suspense>
 						)}
 					</div>
-				</Screen.Content>
-				<Screen.Footer
+				</ScreenContent>
+				<ScreenFooter
 					// options={
 					// 	options && !registrationRequired ? (
 					// 		<FooterOptions>

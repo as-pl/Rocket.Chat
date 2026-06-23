@@ -38,6 +38,7 @@ export const updateBusinessUnit = async (newBusinessUnit) => {
 export const loadConfig = async () => {
 	const { renderedTriggers, token, businessUnit = null, iframe: { guest: { department } = {} } = {} } = store.state;
 
+	Livechat.token = token;
 	Livechat.credentials.token = token;
 
 	const {

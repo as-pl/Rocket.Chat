@@ -2,7 +2,7 @@ import type { ComponentChildren } from 'preact';
 import { useRef } from 'preact/hooks';
 import { useTranslation, withTranslation } from 'react-i18next';
 
-import Menu, { PopoverMenu } from '../Menu';
+import { MenuGroup, MenuItem, MenuPopover } from '../Menu';
 import type { ScreenContextValue } from './ScreenProvider';
 import type { Agent } from '../../definitions/agents';
 import MinimizeIcon from '../../icons/arrowDown.svg';
@@ -16,8 +16,8 @@ import OpenWindowIcon from '../../icons/newWindow.svg';
 import RemoveIcon from '../../icons/remove.svg';
 import Alert from '../Alert';
 import { Avatar } from '../Avatar';
-import Header from '../Header';
-import Tooltip from '../Tooltip';
+import { Header, HeaderAction, HeaderActions, HeaderContent, HeaderCustomField, HeaderPicture, HeaderPost, HeaderSubTitle, HeaderTitle } from '../Header';
+import { TooltipContainer, TooltipTrigger } from '../Tooltip';
 
 type ScreenHeaderProps = {
 	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
@@ -85,7 +85,7 @@ const ScreenHeader = ({
 		<Header
 			ref={headerRef}
 			post={
-				<Header.Post isTitle={!!title}>
+				<HeaderPost>
 					{alerts?.map((alert) => (
 						<Alert key={alert.id} {...alert} onDismiss={onDismissAlert}>
 							{alert.children}
@@ -101,17 +101,17 @@ const ScreenHeader = ({
 				</HeaderPicture>
 			)}
 
-			<Header.Content>
-				<Header.Title>{headerTitle()}</Header.Title>
-				{agent?.email && <Header.SubTitle>{agent.email}</Header.SubTitle>}
-				{agent?.phone && <Header.CustomField>{agent.phone}</Header.CustomField>}
-			</Header.Content>
+			<HeaderContent>
+				<HeaderTitle>{headerTitle()}</HeaderTitle>
+				{agent?.email && <HeaderSubTitle>{agent.email}</HeaderSubTitle>}
+				{agent?.phone && <HeaderCustomField>{agent.phone}</HeaderCustomField>}
+			</HeaderContent>
 
-			<Tooltip.Container>
-				<Header.Actions>
+			<TooltipContainer>
+				<HeaderActions>
 					{/* {title && (
-						<Tooltip.Trigger content={notificationsEnabled ? t('sound_is_on') : t('sound_is_off')} placement='bottom-left'>
-							<Header.Action
+						<TooltipTrigger content={notificationsEnabled ? t('sound_is_on') : t('sound_is_off')} placement='bottom-left'>
+							<HeaderAction
 								aria-label={notificationsEnabled ? t('disable_notifications') : t('enable_notifications')}
 								onClick={notificationsEnabled ? onDisableNotifications : onEnableNotifications}
 							>
@@ -120,62 +120,62 @@ const ScreenHeader = ({
 								) : (
 									<NotificationsDisabledIcon width={20} height={20} />
 								)}
-							</Header.Action>
-						</Tooltip.Trigger>
+							</HeaderAction>
+						</TooltipTrigger>
 					)} */}
 
 					{title && (
-						<Tooltip.Trigger content={t('options')} placement='bottom-left'>
-							<PopoverMenu
+						<TooltipTrigger content={t('options')} placement='bottom-left'>
+							<MenuPopover
 								trigger={(pop) => (
-									<Header.Action aria-label={t('options')} onClick={pop.pop}>
+									<HeaderAction aria-label={t('options')} onClick={pop.pop}>
 										<KebabIcon width={20} height={20} />
-									</Header.Action>
+									</HeaderAction>
 								)}
 								overlayed
 							>
-								<Menu.Group>
-									<Menu.Item
+								<MenuGroup>
+									<MenuItem
 										onClick={notificationsEnabled ? onDisableNotifications : onEnableNotifications}
 										icon={notificationsEnabled ? NotificationsEnabledIcon : NotificationsDisabledIcon}
 									>
 										{notificationsEnabled ? t('disable_notifications') : t('enable_notifications')}
-									</Menu.Item>
+									</MenuItem>
 
 									{!hideExpandChat && !expanded && !windowed && (
-										<Menu.Item onClick={onOpenWindow} icon={OpenWindowIcon}>
+										<MenuItem onClick={onOpenWindow} icon={OpenWindowIcon}>
 											{t('expand_chat')}
-										</Menu.Item>
+										</MenuItem>
 									)}
 
 									{onChangeDepartment && (
-										<Menu.Item onClick={onChangeDepartment} icon={ChangeIcon}>
+										<MenuItem onClick={onChangeDepartment} icon={ChangeIcon}>
 											{t('change_department')}
-										</Menu.Item>
+										</MenuItem>
 									)}
 
 									{onRemoveUserData && (
-										<Menu.Item onClick={onRemoveUserData} icon={RemoveIcon}>
+										<MenuItem onClick={onRemoveUserData} icon={RemoveIcon}>
 											{t('forget_remove_my_data')}
-										</Menu.Item>
+										</MenuItem>
 									)}
 									{onFinishChat && (
-										<Menu.Item danger onClick={onFinishChat} icon={FinishIcon}>
+										<MenuItem danger onClick={onFinishChat} icon={FinishIcon}>
 											{t('finish_this_chat')}
-										</Menu.Item>
+										</MenuItem>
 									)}
-								</Menu.Group>
-							</PopoverMenu>
-						</Tooltip.Trigger>
+								</MenuGroup>
+							</MenuPopover>
+						</TooltipTrigger>
 					)}
 
 					{/** Open in window */}
 					{/* {!hideExpandChat && !expanded && !windowed && (
-						<Tooltip.Trigger content={t('expand_chat')} placement='bottom-left'>
-							<Header.Action aria-label={t('expand_chat')} onClick={onOpenWindow}>
+						<TooltipTrigger content={t('expand_chat')} placement='bottom-left'>
+							<HeaderAction aria-label={t('expand_chat')} onClick={onOpenWindow}>
 								<OpenWindowIcon width={20} height={20} />
-							</Header.Action>
-						</Tooltip.Trigger>
+							</HeaderAction>
+						</TooltipTrigger>
 					)} */}
 
 					{/** minimize chat */}
@@ -186,8 +186,8 @@ const ScreenHeader = ({
 							</HeaderAction>
 						</TooltipTrigger>
 					)}
-				</Header.Actions>
-			</Tooltip.Container>
+				</HeaderActions>
+			</TooltipContainer>
 		</Header>
 	);
 };
