@@ -26,7 +26,7 @@ const ChatFinished = ({ greeting, message, onRedirectChat, t }: ChatFinishedProp
 
 	return (
 		<Screen title={''} className={createClassName(styles, 'chat-finished')}>
-			<Screen.Content>
+			<ScreenContent>
 				<div className={createClassName(styles, 'chat-finished__container')}>
 					<p className={createClassName(styles, 'chat-finished__greeting')}>{greeting || defaultGreeting}</p>
 					<p className={createClassName(styles, 'chat-finished__message')}>{message || defaultMessage}</p>
@@ -39,8 +39,8 @@ const ChatFinished = ({ greeting, message, onRedirectChat, t }: ChatFinishedProp
 						</ButtonGroup>
 					</div>
 				</div>
-			</Screen.Content>
-			<Screen.Footer />
+			</ScreenContent>
+			<ScreenFooter />
 		</Screen>
 	);
 };

@@ -25,7 +25,7 @@ class GDPR extends Component<GDPRProps> {
 
 	render = ({ title, consentText, instructions, t }: GDPRProps) => (
 		<Screen title={''} className={createClassName(styles, 'gdpr')}>
-			<Screen.Content>
+			<ScreenContent>
 				<div className={createClassName(styles, 'gdpr__wrapper')}>
 					{title && <strong>{title}</strong>}
 					{consentText ? (
@@ -56,8 +56,8 @@ class GDPR extends Component<GDPRProps> {
 						</ButtonGroup>
 					</div>
 				</div>
-			</Screen.Content>
-			<Screen.Footer />
+			</ScreenContent>
+			<ScreenFooter />
 		</Screen>
 	);
 }

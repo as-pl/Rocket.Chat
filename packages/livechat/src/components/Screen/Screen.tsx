@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useEffect } from 'preact/hooks';
+import { useContext, useLayoutEffect } from 'preact/hooks';
 
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
@@ -11,7 +11,6 @@ import ScreenHeader from './Header';
 import { ScreenContext } from './ScreenProvider';
 import styles from './styles.scss';
 
-/** @type {{ (props: any) => JSX.Element; Content: (props: any) => JSX.Element; Footer: (props: any) => JSX.Element }} */
 export const Screen = ({
 	title,
 	color,
@@ -47,10 +46,6 @@ export const Screen = ({
 		setWasMinimized,
 	} = useContext(ScreenContext);
 	// const [animateOpen, setAnimateOpen] = useState(false);
-
-	useEffect(() => {
-		console.log('minimized', minimized);
-	}, [minimized]);
 
 	useLayoutEffect(() => {
 		if (wasMinimized && !minimized) {
