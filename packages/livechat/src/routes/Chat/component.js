@@ -151,6 +151,12 @@ class Chat extends Component {
 			<FilesDropTarget inputRef={this.inputRef} overlayed overlayText={t('drop_here_to_upload_a_file')} onUpload={onUpload}>
 				<ScreenContent nopadding>
 					<div className={createClassName(styles, 'chat__messages', { atBottom, loading })}>
+						{!props.room?._id && !messages?.length && !registrationRequired && (
+							<div className={createClassName(styles, 'chat__prestart-message')}>
+								<div>{t('pre_chat_message_greeting')}</div>
+								{t('pre_chat_message_body')}
+							</div>
+						)}
 						<MessageList
 							ref={this.handleMessagesContainerRef}
 							avatarResolver={avatarResolver}

@@ -8,6 +8,8 @@
     "department_switched": "Avdeling skiftet",
     "no": "Nei",
     "options": "Egenskaper",
+    "pre_chat_message_greeting": "Hei!",
+    "pre_chat_message_body": "Du er koblet til AS-PL support. Skriv hva saken gjelder - ordre, produkt, reklamasjon, tilgjengelighet eller teknisk spørsmål - så sender vi den til riktig person.",
     "user_joined": "Bruker ble med",
     "user_left": "Bruker igjen",
     "we_are_not_online_right_now_please_leave_a_message": "Vi er ikke online akkurat nå. Legg igjen en beskjed.",

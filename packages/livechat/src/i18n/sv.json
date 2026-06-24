@@ -69,6 +69,8 @@
     "offline_form_not_available": "Offlineformulär inte tillgängligt",
     "ok": "OK",
     "options": "Inställningar",
+    "pre_chat_message_greeting": "Hej!",
+    "pre_chat_message_body": "Du är ansluten till AS-PL support. Skriv vad ärendet gäller - beställning, produkt, reklamation, tillgänglighet eller teknisk fråga - så skickar vi det till rätt person.",
     "please_tell_us_some_information_to_start_the_chat": "Vänligen ange information för att starta chat",
     "please_wait_for_the_next_available_agent": "Vänligen vänta på nästa tillgängliga agent..",
     "powered_by_rocket_chat": "Powered by Rocket.Chat",

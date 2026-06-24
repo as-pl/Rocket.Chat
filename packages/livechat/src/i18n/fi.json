@@ -5,6 +5,8 @@
     "department_switched": "Osasto vaihdettu",
     "no": "Ei",
     "options": "Valinnat",
+    "pre_chat_message_greeting": "Hei!",
+    "pre_chat_message_body": "Olet yhteydessä AS-PL-tukeen. Kirjoita, mitä asiasi koskee - tilausta, tuotetta, reklamaatiota, saatavuutta tai teknistä asiaa - niin ohjaamme sen oikealle henkilölle.",
     "send": "Lähetä",
     "user_joined": "Käyttäjä liittyi",
     "user_left": "Käyttäjä poistui",

@@ -8,6 +8,8 @@
     "department_switched": "Departamento comutado",
     "no": "Não",
     "options": "Opções",
+    "pre_chat_message_greeting": "Bom dia!",
+    "pre_chat_message_body": "Está ligado ao suporte AS-PL. Escreva sobre o que é o seu pedido - encomenda, produto, reclamação, disponibilidade ou questão técnica - e encaminhá-lo-emos para a pessoa certa.",
     "send": "Enviar",
     "user_joined": "Utilizador entrou",
     "user_left": "O utilizador saiu",

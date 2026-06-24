@@ -48,6 +48,8 @@
     "no": "Нет",
     "no_available_agents_to_transfer": "Нет доступных операторов для передачи",
     "options": "Параметры",
+    "pre_chat_message_greeting": "Здравствуйте!",
+    "pre_chat_message_body": "Вы подключены к поддержке AS-PL. Напишите, к чему относится вопрос - заказ, продукт, рекламация, наличие или техническая проблема - и мы направим его нужному специалисту.",
     "please_tell_us_some_information_to_start_the_chat": "Пожалуйста, расскажите о себе прежде чем, начать чат",
     "please_wait_for_the_next_available_agent": "Пожалуйста, подождите пока освободится следующий оператор...",
     "powered_by_rocket_chat": "Работает на Rocket.Chat",

@@ -47,6 +47,8 @@
     "new_chat": "Nouvelle Conversation",
     "no": "Non",
     "no_available_agents_to_transfer": "Aucun agent disponible pour un transfert",
+    "pre_chat_message_greeting": "Bonjour !",
+    "pre_chat_message_body": "Vous êtes connecté au support AS-PL. Indiquez le sujet de votre demande - commande, produit, réclamation, disponibilité ou question technique - et nous la transmettrons à la bonne personne.",
     "please_tell_us_some_information_to_start_the_chat": "Veuillez nous donner quelques informations pour démarrer la conversation",
     "please_wait_for_the_next_available_agent": "Veuillez patienter, attente d'un agent disponible...",
     "powered_by_rocket_chat": "Propulsé par Rocket.Chat",

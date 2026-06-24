@@ -6,6 +6,8 @@
     "department_switched": "Du har skiftet afdeling",
     "no": "Nej",
     "options": "Indstillinger",
+    "pre_chat_message_greeting": "Goddag!",
+    "pre_chat_message_body": "Du er forbundet med AS-PL support. Skriv, hvad sagen drejer sig om - ordre, produkt, reklamation, tilgængelighed eller teknisk spørgsmål - så sender vi den videre til den rette person.",
     "user_joined": "Brugeren sluttede sig til",
     "user_left": "Brugeren tog sin afsked",
     "we_are_not_online_right_now_please_leave_a_message": "Vi er ikke online lige nu. Efterlad en besked til os.",

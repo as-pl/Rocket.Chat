@@ -48,6 +48,8 @@
     "no": "Nein",
     "no_available_agents_to_transfer": "Keine verfügbaren Mitarbeiter/innen zum Übertragen",
     "options": "Optionen",
+    "pre_chat_message_greeting": "Guten Tag!",
+    "pre_chat_message_body": "Sie sind mit dem AS-PL-Support verbunden. Schreiben Sie, worum es geht - Bestellung, Produkt, Reklamation, Verfügbarkeit oder technisches Anliegen - und wir leiten es an die richtige Person weiter.",
     "please_tell_us_some_information_to_start_the_chat": "Bitte nennen Sie uns ein paar Informationen, um den Chat zu beginnen",
     "please_wait_for_the_next_available_agent": "Bitte haben Sie etwas Geduld. Wir sind in Kürze für Sie da ...",
     "restore_chat": "Chat wiederaufnehmen",

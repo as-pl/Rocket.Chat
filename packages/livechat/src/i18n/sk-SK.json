@@ -5,6 +5,8 @@
     "department_switched": "Oddelenie bolo prepnuté",
     "no": "Žiadny",
     "options": "Možnosti",
+    "pre_chat_message_greeting": "Dobrý deň!",
+    "pre_chat_message_body": "Ste pripojení k podpore AS-PL. Napíšte, čoho sa vaša záležitosť týka - objednávky, produktu, reklamácie, dostupnosti alebo technickej otázky - a nasmerujeme ju na správnu osobu.",
     "send": "Odoslať",
     "user_joined": "Používateľ sa pripojil",
     "user_left": "Používateľ odišiel",

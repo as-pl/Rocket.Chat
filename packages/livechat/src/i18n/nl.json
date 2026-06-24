@@ -53,6 +53,8 @@
     "no": "Nee",
     "no_available_agents_to_transfer": "Er zijn geen beschikbare medewerkers om naar over te dragen",
     "options": "Opties",
+    "pre_chat_message_greeting": "Goedendag!",
+    "pre_chat_message_body": "Je bent verbonden met AS-PL support. Schrijf waar je vraag over gaat - bestelling, product, klacht, beschikbaarheid of technisch probleem - en wij sturen deze door naar de juiste persoon.",
     "please_tell_us_some_information_to_start_the_chat": "Vertel ons wat informatie om de chat te starten",
     "please_wait_for_the_next_available_agent": "Wacht alstublieft op de volgende beschikbare medewerker..",
     "restore_chat": "Chat herstellen",

@@ -9,6 +9,8 @@
     "department_switched": "Departamentul a fost schimbat",
     "no": "Nu",
     "options": "Opțiuni",
+    "pre_chat_message_greeting": "Bună ziua!",
+    "pre_chat_message_body": "Ești conectat la suportul AS-PL. Scrie despre ce este vorba - comandă, produs, reclamație, disponibilitate sau problemă tehnică - iar noi o vom direcționa către persoana potrivită.",
     "send": "Trimite",
     "user_joined": "utilizator s-a alăturat",
     "user_left": "stânga utilizator",

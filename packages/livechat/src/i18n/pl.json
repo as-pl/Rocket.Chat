@@ -44,6 +44,8 @@
     "no": "Nie",
     "no_available_agents_to_transfer": "Żaden konsultant nie jest dostępny",
     "options": "Opcje",
+    "pre_chat_message_greeting": "Dzień dobry!",
+    "pre_chat_message_body": "Jesteś połączony ze wsparciem AS-PL. Napisz, czego dotyczy sprawa - zamówienie, produkt, reklamacja, dostępność lub kwestia techniczna - a skierujemy ją do odpowiedniej osoby.",
     "please_tell_us_some_information_to_start_the_chat": "Wyślij wiadomość, aby rozpocząć rozmowę",
     "please_wait_for_the_next_available_agent": "Proszę zaczekać na konsultanta..",
     "restore_chat": "Przywróć rozmowę",

@@ -48,6 +48,8 @@
     "new_chat": "Nuevo Chat",
     "no_available_agents_to_transfer": "No hay agentes disponibles para transferir",
     "options": "Opciones",
+    "pre_chat_message_greeting": "¡Buenos días!",
+    "pre_chat_message_body": "Estás conectado con el soporte de AS-PL. Escribe de qué trata tu consulta - pedido, producto, reclamación, disponibilidad o cuestión técnica - y la dirigiremos a la persona adecuada.",
     "please_tell_us_some_information_to_start_the_chat": "Por favor, ingrese alguna información para iniciar el chat",
     "please_wait_for_the_next_available_agent": "Por favor, espere al próximo agente disponible.",
     "restore_chat": "Restaurar chat",
