@@ -60,7 +60,7 @@ export const createRateLimitSettings = () =>
 				type: 'boolean',
 				enableQuery: { _id: 'API_Enable_Rate_Limiter', value: true },
 			});
-			await this.add('API_Enable_Rate_Limiter_Limit_Calls_Default', 10, {
+			await this.add('API_Enable_Rate_Limiter_Limit_Calls_Default', 30, {
 				type: 'int',
 				enableQuery: { _id: 'API_Enable_Rate_Limiter', value: true },
 			});

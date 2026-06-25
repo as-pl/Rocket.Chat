@@ -17,6 +17,8 @@ import { handleTranscript } from './transcript';
 import Triggers from './triggers';
 
 const commands = new Commands();
+const loadMessagesDedupeTTL = 1500;
+let lastLoadMessagesRequest;
 
 export const closeChat = async ({ transcriptRequested } = {}) => {
 	if (!transcriptRequested) {
@@ -246,35 +248,70 @@ export const loadMessages = async () => {
 	}
 
 	const { _id: rid } = room;
-	const previousMessages = getGreetingMessages(storedMessages);
-	await store.setState({ loading: true });
-
 	const targetLanguage = getAutoTranslateLanguage();
-	const rawMessages = (await Livechat.loadMessages(rid, targetLanguage ? { targetLanguage } : undefined)) ?? [];
+	const requestKey = `${rid}:${targetLanguage || ''}`;
+	const now = Date.now();
 
-	if (rawMessages?.length < 20) {
-		const triggers = previousMessages.length === 0 ? renderedTriggers : previousMessages;
-		rawMessages.push(...triggers.reverse());
+	if (
+		lastLoadMessagesRequest?.key === requestKey &&
+		(!lastLoadMessagesRequest.settledAt || now - lastLoadMessagesRequest.settledAt < loadMessagesDedupeTTL)
+	) {
+		return lastLoadMessagesRequest.promise;
 	}
 
-	const messages = (await normalizeMessages(rawMessages)).map(transformAgentInformationOnMessage);
+	const promise = (async () => {
+		const previousMessages = getGreetingMessages(storedMessages);
+		await store.setState({ loading: true });
 
-	await initRoom();
-	await store.setState({ messages: (messages || []).reverse(), noMoreMessages: false, loading: false });
+		const rawMessages = (await Livechat.loadMessages(rid, targetLanguage ? { targetLanguage } : undefined)) ?? [];
 
-	const latestCallMessage = getLatestCallMessage(messages);
-	if (!latestCallMessage) {
-		return;
-	}
-	const videoConfJoinBlock = getVideoConfMessageData(latestCallMessage);
-	if (videoConfJoinBlock) {
-		await store.setState({
-			incomingCallAlert: {
-				show: false,
-				callProvider: latestCallMessage.t,
-				url: videoConfJoinBlock.url,
-			},
-		});
+		if (rawMessages?.length < 20) {
+			const triggers = previousMessages.length === 0 ? renderedTriggers : previousMessages;
+			rawMessages.push(...triggers.reverse());
+		}
+
+		const messages = (await normalizeMessages(rawMessages)).map(transformAgentInformationOnMessage);
+
+		await initRoom();
+		await store.setState({ messages: (messages || []).reverse(), noMoreMessages: false, loading: false });
+
+		const latestCallMessage = getLatestCallMessage(messages);
+		if (!latestCallMessage) {
+			return;
+		}
+		const videoConfJoinBlock = getVideoConfMessageData(latestCallMessage);
+		if (videoConfJoinBlock) {
+			await store.setState({
+				incomingCallAlert: {
+					show: false,
+					callProvider: latestCallMessage.t,
+					url: videoConfJoinBlock.url,
+				},
+			});
+		}
+	})();
+
+	const request = {
+		key: requestKey,
+		promise,
+		settledAt: 0,
+	};
+	lastLoadMessagesRequest = request;
+
+	try {
+		return await promise;
+	} catch (error) {
+		if (lastLoadMessagesRequest === request) {
+			lastLoadMessagesRequest = undefined;
+		}
+		throw error;
+	} finally {
+		request.settledAt = Date.now();
+		setTimeout(() => {
+			if (lastLoadMessagesRequest === request && Date.now() - request.settledAt >= loadMessagesDedupeTTL) {
+				lastLoadMessagesRequest = undefined;
+			}
+		}, loadMessagesDedupeTTL);
 	}
 };
 
