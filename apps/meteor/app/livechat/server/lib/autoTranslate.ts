@@ -40,6 +40,18 @@ const shouldTranslateAgentMessageForLivechat = (message: IMessage, targetLanguag
 	return !hasTranslation(message, targetLanguage);
 };
 
+const shouldTranslateVisitorMessageForAgent = (message: IMessage, targetLanguage?: string): targetLanguage is string => {
+	if (!targetLanguage || !settings.get('AutoTranslate_Enabled')) {
+		return false;
+	}
+
+	if (!message._id || !message.rid || !message.msg || message.t || !isMessageFromVisitor(message)) {
+		return false;
+	}
+
+	return !hasTranslation(message, targetLanguage);
+};
+
 export const rememberLivechatRoomAutoTranslateLanguage = (rid: string, targetLanguage?: string): void => {
 	if (!targetLanguage) {
 		return;
@@ -80,4 +92,24 @@ export const requestAgentMessageTranslationForLivechat = (message: IMessage, tar
 
 export const requestMissingAgentMessagesTranslationsForLivechat = (messages: IMessage[], targetLanguage?: string): void => {
 	messages.forEach((message) => requestAgentMessageTranslationForLivechat(message, targetLanguage));
+};
+
+export const requestVisitorMessageTranslationForAgent = (message: IMessage, targetLanguage?: string): void => {
+	if (!shouldTranslateVisitorMessageForAgent(message, targetLanguage)) {
+		return;
+	}
+
+	const key = `${message._id}:${targetLanguage}`;
+	if (pendingLivechatTranslations.has(key)) {
+		return;
+	}
+
+	pendingLivechatTranslations.add(key);
+	void translateMessage(targetLanguage, message).catch(() => pendingLivechatTranslations.delete(key));
+	const timeout = setTimeout(() => pendingLivechatTranslations.delete(key), livechatTranslationPendingTimeout);
+	unrefTimer(timeout);
+};
+
+export const requestMissingVisitorMessagesTranslationsForAgent = (messages: IMessage[], targetLanguage?: string): void => {
+	messages.forEach((message) => requestVisitorMessageTranslationForAgent(message, targetLanguage));
 };

@@ -30,6 +30,7 @@ import {
 	Subscriptions,
 	Users,
 	LivechatContacts,
+	Messages,
 } from '@rocket.chat/models';
 import { removeEmpty, validateEmail as validatorFunc } from '@rocket.chat/tools';
 import { Match, check } from 'meteor/check';
@@ -39,6 +40,7 @@ import { ObjectId } from 'mongodb';
 
 import { queueInquiry, saveQueueInquiry } from './QueueManager';
 import { RoutingManager } from './RoutingManager';
+import { requestMissingVisitorMessagesTranslationsForAgent } from './autoTranslate';
 import { isVerifiedChannelInSource } from './contacts/isVerifiedChannelInSource';
 import { migrateVisitorIfMissingContact } from './contacts/migrateVisitorIfMissingContact';
 import { afterRoomQueued, beforeNewRoom } from './hooks';
@@ -261,6 +263,43 @@ export const createLivechatInquiry = async ({
 	return result;
 };
 
+const getLivechatAgentAutoTranslateLanguage = (agentUser?: Pick<IUser, 'settings' | 'language'> | null): string | undefined => {
+	if (!settings.get<boolean>('AutoTranslate_Enabled')) {
+		return;
+	}
+
+	const workspaceLanguage = String(settings.get('Language') || '');
+	const configuredAgentLanguage = agentUser?.settings?.preferences?.language || agentUser?.language;
+	const agentLanguage = typeof configuredAgentLanguage === 'string' ? configuredAgentLanguage : undefined;
+
+	if (!agentLanguage || agentLanguage === 'default') {
+		return workspaceLanguage || undefined;
+	}
+
+	return agentLanguage;
+};
+
+const requestExistingVisitorMessagesTranslations = async (rid: string, targetLanguage?: string): Promise<void> => {
+	if (!targetLanguage) {
+		return;
+	}
+
+	const messages = await Messages.findVisibleByRoomId(rid, { sort: { ts: 1 } }).toArray();
+	requestMissingVisitorMessagesTranslationsForAgent(messages, targetLanguage);
+};
+
+const enableLivechatAgentAutoTranslate = async (subscriptionId: string, targetLanguage?: string): Promise<void> => {
+	if (!targetLanguage) {
+		return;
+	}
+
+	await Promise.all([
+		Subscriptions.updateAutoTranslateById(subscriptionId, true),
+		Subscriptions.updateAutoTranslateLanguageById(subscriptionId, targetLanguage),
+	]);
+	void notifyOnSubscriptionChangedById(subscriptionId);
+};
+
 export const createLivechatSubscription = async (
 	rid: string,
 	name: string,
@@ -286,8 +325,15 @@ export const createLivechatSubscription = async (
 		}),
 	);
 
+	const agentUser = await Users.findOneById<Pick<IUser, 'settings' | 'language'>>(agent.agentId, {
+		projection: { settings: 1, language: 1 },
+	});
+	const autoTranslateLanguage = getLivechatAgentAutoTranslateLanguage(agentUser);
+
 	const existingSubscription = await Subscriptions.findOneByRoomIdAndUserId(rid, agent.agentId);
 	if (existingSubscription?._id) {
+		await enableLivechatAgentAutoTranslate(existingSubscription._id, autoTranslateLanguage);
+		void requestExistingVisitorMessagesTranslations(rid, autoTranslateLanguage);
 		return existingSubscription;
 	}
 
@@ -317,6 +363,7 @@ export const createLivechatSubscription = async (
 			status,
 		},
 		ts: new Date(),
+		...(autoTranslateLanguage && { autoTranslate: true, autoTranslateLanguage }),
 		...(department && { department }),
 	} as InsertionModel<ISubscription>;
 
@@ -324,6 +371,7 @@ export const createLivechatSubscription = async (
 
 	if (response?.insertedId) {
 		void notifyOnSubscriptionChangedById(response.insertedId, 'inserted');
+		void requestExistingVisitorMessagesTranslations(rid, autoTranslateLanguage);
 	}
 
 	return response;
