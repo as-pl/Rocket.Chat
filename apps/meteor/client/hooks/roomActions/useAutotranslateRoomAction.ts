@@ -15,7 +15,7 @@ export const useAutotranslateRoomAction = () => {
 
 		return {
 			id: 'autotranslate',
-			groups: ['channel', 'group', 'direct', 'direct_multiple', 'team'],
+			groups: ['channel', 'group', 'direct', 'direct_multiple', 'live', 'team'],
 			title: 'Auto_Translate',
 			icon: 'language',
 			tabComponent: AutoTranslate,
