@@ -14,3 +14,4 @@ import './msTranslate';
 import './methods/getProviderUiMetadata';
 
 export { TranslationProviderRegistry };
+export type { TranslateMessageOptions } from './autotranslate';

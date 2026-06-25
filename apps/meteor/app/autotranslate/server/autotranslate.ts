@@ -23,6 +23,10 @@ const translationLogger = new Logger('AutoTranslate');
 const Providers = Symbol('Providers');
 const Provider = Symbol('Provider');
 
+export type TranslateMessageOptions = {
+	context?: string;
+};
+
 /**
  * This class allows translation providers to
  * register,load and also returns the active provider.
@@ -68,7 +72,12 @@ export class TranslationProviderRegistry {
 		return TranslationProviderRegistry.enabled ? TranslationProviderRegistry.getActiveProvider()?.getSupportedLanguages(target) : undefined;
 	}
 
-	static async translateMessage(message: IMessage, room: IRoom, targetLanguage?: string): Promise<IMessage | null> {
+	static async translateMessage(
+		message: IMessage,
+		room: IRoom,
+		targetLanguage?: string,
+		options?: TranslateMessageOptions,
+	): Promise<IMessage | null> {
 		if (!TranslationProviderRegistry.enabled) {
 			return null;
 		}
@@ -78,7 +87,7 @@ export class TranslationProviderRegistry {
 			return null;
 		}
 
-		return provider.translateMessage(message, { room, targetLanguage });
+		return provider.translateMessage(message, { room, targetLanguage, ...options });
 	}
 
 	static getProviders(): AutoTranslate[] {
@@ -296,7 +305,10 @@ export abstract class AutoTranslate {
 	 * @param {object} targetLanguage
 	 * @returns {object} unmodified message object.
 	 */
-	async translateMessage(message: IMessage, { room, targetLanguage }: { room: IRoom; targetLanguage?: string }): Promise<IMessage | null> {
+	async translateMessage(
+		message: IMessage,
+		{ room, targetLanguage, context }: { room: IRoom; targetLanguage?: string } & TranslateMessageOptions,
+	): Promise<IMessage | null> {
 		let targetLanguages: string[];
 		if (targetLanguage) {
 			targetLanguages = [targetLanguage];
@@ -309,7 +321,7 @@ export abstract class AutoTranslate {
 				targetMessage.html = escapeHTML(String(targetMessage.msg));
 				targetMessage = this.tokenize(targetMessage);
 
-				const translations = await this._translateMessage(targetMessage, targetLanguages);
+				const translations = await this._translateMessage(targetMessage, targetLanguages, { context });
 				if (!_.isEmpty(translations)) {
 					await Messages.addTranslations(message._id, translations, TranslationProviderRegistry[Provider] || '');
 					this.notifyTranslatedMessage(message._id);
@@ -371,7 +383,7 @@ export abstract class AutoTranslate {
 	 * @param {object} targetLanguages
 	 * @return {object}
 	 */
-	abstract _translateMessage(message: IMessage, targetLanguages: string[]): Promise<ITranslationResult>;
+	abstract _translateMessage(message: IMessage, targetLanguages: string[], options?: TranslateMessageOptions): Promise<ITranslationResult>;
 
 	/**
 	 * Performs the actual translation of an attachment (precisely its description),

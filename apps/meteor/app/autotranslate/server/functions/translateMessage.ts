@@ -1,9 +1,9 @@
 import type { IMessage } from '@rocket.chat/core-typings';
 import { Rooms } from '@rocket.chat/models';
 
-import { TranslationProviderRegistry } from '..';
+import { TranslationProviderRegistry, type TranslateMessageOptions } from '..';
 
-export const translateMessage = async (targetLanguage?: string, message?: IMessage) => {
+export const translateMessage = async (targetLanguage?: string, message?: IMessage, options?: TranslateMessageOptions) => {
 	if (!TranslationProviderRegistry.enabled) {
 		return;
 	}
@@ -15,7 +15,7 @@ export const translateMessage = async (targetLanguage?: string, message?: IMessa
 	let translatedMessage;
 
 	if (message && room) {
-		translatedMessage = await TranslationProviderRegistry.translateMessage(message, room, targetLanguage);
+		translatedMessage = await TranslationProviderRegistry.translateMessage(message, room, targetLanguage, options);
 	}
 
 	if (!translatedMessage) {

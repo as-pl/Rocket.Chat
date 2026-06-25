@@ -6,7 +6,7 @@ import type { IMessage, MessageAttachment, IProviderMetadata, ITranslationResult
 import { serverFetch as fetch } from '@rocket.chat/server-fetch';
 import _ from 'underscore';
 
-import { TranslationProviderRegistry, AutoTranslate } from './autotranslate';
+import { TranslationProviderRegistry, AutoTranslate, type TranslateMessageOptions } from './autotranslate';
 import { i18n } from '../../../server/lib/i18n';
 import { SystemLogger } from '../../../server/lib/logger/system';
 import { settings } from '../../settings/server';
@@ -133,7 +133,7 @@ class DeeplAutoTranslate extends AutoTranslate {
 	 * @param {object} targetLanguages
 	 * @returns {object} translations: Translated messages for each language
 	 */
-	async _translateMessage(message: IMessage, targetLanguages: string[]): Promise<ITranslationResult> {
+	async _translateMessage(message: IMessage, targetLanguages: string[], options?: TranslateMessageOptions): Promise<ITranslationResult> {
 		const translations: { [k: string]: string } = {};
 		const msgs = message.msg.split('\n');
 		const supportedLanguages = await this.getSupportedLanguages('en');
@@ -145,12 +145,17 @@ class DeeplAutoTranslate extends AutoTranslate {
 				// SECURITY: the URL is a default hardcoded value or an envvar/setting set by an admin. It's safe to disable this check.
 				const result = await fetch(this.apiEndPointUrl, {
 					ignoreSsrfValidation: true,
-					params: { target_lang: language, text: msgs },
+					params: {
+						target_lang: language,
+						text: msgs,
+						...(options?.context && { context: options.context }),
+					},
 					headers: {
 						Authorization: `DeepL-Auth-Key ${this.apiKey}`,
 					},
 					method: 'POST',
 				});
+				console.log('context', options?.context && { context: options.context });
 
 				if (!result.ok) {
 					throw new Error(result.statusText);
