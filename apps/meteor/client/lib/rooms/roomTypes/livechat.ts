@@ -9,17 +9,21 @@ import { roomCoordinator } from '../roomCoordinator';
 
 const truncateLivechatName = (name: string): string => (name.length > 20 ? name.slice(0, 20) + '...' : name);
 
-const getLivechatDisplayName = (room: { name?: string; fname?: string }): string | undefined => room.name || room.fname || (room as any).label;
+const getLivechatDisplayName = (room: { name?: string; fname?: string }): string | undefined =>
+	room.name || room.fname || (room as any).label;
 
-const getLivechatWarehouse = (room: { customFields?: Record<string, unknown>; livechatData?: Record<string, unknown> }): string | undefined => {
-	const warehouse = room.customFields?.warehouse ?? room.livechatData?.warehouse;
+const getLivechatCustomField = (
+	room: { customFields?: Record<string, unknown>; livechatData?: Record<string, unknown> },
+	fieldName: string,
+): string | undefined => {
+	const value = room.customFields?.[fieldName] ?? room.livechatData?.[fieldName];
 
-	if (typeof warehouse !== 'string') {
+	if (typeof value !== 'string') {
 		return;
 	}
 
-	const trimmedWarehouse = warehouse.trim();
-	return trimmedWarehouse || undefined;
+	const trimmedValue = value.trim();
+	return trimmedValue || undefined;
 };
 
 export const LivechatRoomType = getLivechatRoomType(roomCoordinator);
@@ -45,13 +49,18 @@ roomCoordinator.add(
 
 		roomName(room) {
 			const name = getLivechatDisplayName(room);
-			const warehouse = getLivechatWarehouse(room);
+			const warehouse = getLivechatCustomField(room, 'warehouse');
+			const fullName = getLivechatCustomField(room, 'full_name');
 
 			if (!warehouse || !name) {
 				return name;
 			}
 
-			return '[' + warehouse + '] ' + truncateLivechatName(name);
+			if (!fullName) {
+				return '[' + warehouse + '] ' + name;
+			}
+
+			return '[' + warehouse + '] ' + name + ' (' + truncateLivechatName(fullName) + ')';
 		},
 
 		getUiText(context) {
