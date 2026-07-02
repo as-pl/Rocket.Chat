@@ -1,7 +1,7 @@
 import type { ILivechatInquiryRecord, IRoom } from '@rocket.chat/core-typings';
 import { create } from 'zustand';
 
-export type LivechatInquiryLocalRecord = ILivechatInquiryRecord & { alert?: boolean };
+export type LivechatInquiryLocalRecord = ILivechatInquiryRecord & { alert?: boolean; livechatData?: Record<string, unknown> };
 
 export const useLivechatInquiryStore = create<{
 	records: LivechatInquiryLocalRecord[];

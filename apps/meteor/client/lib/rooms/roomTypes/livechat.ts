@@ -7,15 +7,19 @@ import { getLivechatRoomType } from '../../../../lib/rooms/roomTypes/livechat';
 import { Rooms, Subscriptions } from '../../../stores';
 import { roomCoordinator } from '../roomCoordinator';
 
-const truncateLivechatName = (name: string): string => (name.length > 20 ? name.slice(0, 20) + '...' : name);
+const truncateLivechatName = (name: string): string => (name.length > 20 ? `${name.slice(0, 20)}...` : name);
 
-const getLivechatDisplayName = (room: { name?: string; fname?: string }): string | undefined =>
-	room.name || room.fname || (room as any).label;
+type LivechatNameSource = {
+	name?: string;
+	fname?: string;
+	label?: string;
+	customFields?: Record<string, unknown>;
+	livechatData?: Record<string, unknown>;
+};
 
-const getLivechatCustomField = (
-	room: { customFields?: Record<string, unknown>; livechatData?: Record<string, unknown> },
-	fieldName: string,
-): string | undefined => {
+const getLivechatDisplayName = (room: LivechatNameSource): string | undefined => room.name || room.fname || room.label;
+
+const getLivechatCustomField = (room: LivechatNameSource, fieldName: string): string | undefined => {
 	const value = room.customFields?.[fieldName] ?? room.livechatData?.[fieldName];
 
 	if (typeof value !== 'string') {
@@ -57,10 +61,10 @@ roomCoordinator.add(
 			}
 
 			if (!fullName) {
-				return '[' + warehouse + '] ' + name;
+				return `[${warehouse}] ${name}`;
 			}
 
-			return '[' + warehouse + '] ' + name + ' (' + truncateLivechatName(fullName) + ')';
+			return `[${warehouse}] ${name} (${truncateLivechatName(fullName)})`;
 		},
 
 		getUiText(context) {
@@ -81,7 +85,7 @@ roomCoordinator.add(
 				return '';
 			}
 
-			return getAvatarURL({ username: '@' + name }) || '';
+			return getAvatarURL({ username: `@${name}` }) || '';
 		},
 
 		findRoom(identifier) {

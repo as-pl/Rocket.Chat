@@ -6,7 +6,7 @@ import {
 } from '@rocket.chat/core-typings';
 import { useSafely } from '@rocket.chat/fuselage-hooks';
 import { createComparatorFromSort } from '@rocket.chat/mongo-adapter';
-import { useUser, useSetting, usePermission, useEndpoint, useStream, useCustomSound } from '@rocket.chat/ui-contexts';
+import { useUser, useSetting, usePermission, useEndpoint, useStream, useCustomSound, useMethod } from '@rocket.chat/ui-contexts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { useState, useEffect, useMemo, memo, useRef } from 'react';
@@ -52,6 +52,7 @@ const OmnichannelProvider = ({ children }: OmnichannelProviderProps) => {
 	);
 
 	const lastQueueSize = useRef(0);
+	const queueRoomRequests = useRef(new Set<string>());
 
 	const loggerRef = useRef(new ClientLogger('OmnichannelProvider'));
 	const hasAccess = usePermission('view-l-room');
@@ -61,6 +62,7 @@ const OmnichannelProvider = ({ children }: OmnichannelProviderProps) => {
 	const agentAvailable = user?.statusLivechat === 'available';
 
 	const getRoutingConfig = useEndpoint('GET', '/v1/livechat/config/routing');
+	const getRoomByTypeAndName = useMethod('getRoomByTypeAndName');
 
 	const [routeConfig, setRouteConfig] = useSafely(useState<OmichannelRoutingConfig | undefined>(undefined));
 
@@ -110,7 +112,7 @@ const OmnichannelProvider = ({ children }: OmnichannelProviderProps) => {
 				const { config } = await getRoutingConfig();
 				setRouteConfig(config);
 			} catch (error) {
-				loggerRef.current.error(`update() error in routeConfig ${error}`);
+				loggerRef.current.error(`update() error in routeConfig ${String(error)}`);
 			}
 		};
 
@@ -151,6 +153,32 @@ const OmnichannelProvider = ({ children }: OmnichannelProviderProps) => {
 				.slice(...(omnichannelPoolMaxIncoming > 0 ? [0, omnichannelPoolMaxIncoming] : []));
 		}),
 	);
+
+	useEffect(() => {
+		if (!queue?.length) {
+			return;
+		}
+
+		queue.forEach((inquiry) => {
+			if (inquiry.livechatData || queueRoomRequests.current.has(inquiry.rid)) {
+				return;
+			}
+
+			queueRoomRequests.current.add(inquiry.rid);
+
+			void getRoomByTypeAndName('l', inquiry.rid)
+				.then((roomData) => {
+					if (!roomData?.livechatData) {
+						return;
+					}
+
+					useLivechatInquiryStore.getState().merge({ ...inquiry, livechatData: roomData.livechatData });
+				})
+				.catch((error) => {
+					loggerRef.current.error(`Failed to preload queued livechat room data: ${String(error)}`);
+				});
+		});
+	}, [getRoomByTypeAndName, queue]);
 
 	useEffect(() => {
 		if (lastQueueSize.current < (queue?.length ?? 0)) {
