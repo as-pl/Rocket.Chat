@@ -92,7 +92,7 @@ const Message = ({
 	hideAvatar,
 	...message
 }) => {
-	const renderedMessage = message.type ? message : prepareMessageForAutoTranslate(message);
+	const renderedMessage = message.type || me ? message : prepareMessageForAutoTranslate(message);
 
 	return (
 		<MessageContainer
