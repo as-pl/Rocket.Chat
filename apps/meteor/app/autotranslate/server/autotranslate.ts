@@ -25,6 +25,7 @@ const Provider = Symbol('Provider');
 
 export type TranslateMessageOptions = {
 	context?: string;
+	source_lang?: string;
 };
 
 /**

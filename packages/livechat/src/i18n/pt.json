@@ -2,6 +2,7 @@
   "translation": {
     "are_you_sure_you_want_to_switch_the_department": "Tem certeza que deseja trocar de departamento?",
     "cancel": "Cancelar",
+    "chat_started": "Chat iniciado",
     "conversation_finished": "Chat encerrado",
     "count_new_messages_since_since_one": "Uma nova mensagem desde {{val, datetime}}",
     "count_new_messages_since_since_other": "{{count}} novas mensagens desde {{val, datetime}}",

@@ -1,6 +1,7 @@
 {
   "translation": {
     "cancel": "Peruuta",
+    "chat_started": "Keskustelu aloitettu",
     "conversation_finished": "Keskustelu päättynyt",
     "department_switched": "Osasto vaihdettu",
     "livechat_title": "AS-PL tekninen asiakastuki",

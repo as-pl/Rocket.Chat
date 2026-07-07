@@ -19,6 +19,11 @@ interface IDeepLTranslation {
 	text: string;
 }
 
+const normalizeSourceLanguage = (language?: string): string | undefined => {
+	const [languageCode] = language?.split(/[-_]/) ?? [];
+	return languageCode?.toUpperCase();
+};
+
 /**
  * DeepL translation service provider class representation.
  * Encapsulates the service provider settings and information.
@@ -136,6 +141,7 @@ class DeeplAutoTranslate extends AutoTranslate {
 	async _translateMessage(message: IMessage, targetLanguages: string[], options?: TranslateMessageOptions): Promise<ITranslationResult> {
 		const translations: { [k: string]: string } = {};
 		const msgs = message.msg.split('\n');
+		const sourceLanguage = normalizeSourceLanguage(options?.source_lang);
 		const supportedLanguages = await this.getSupportedLanguages('en');
 		for (let language of targetLanguages) {
 			if (language.indexOf('-') !== -1 && !_.findWhere(supportedLanguages, { language })) {
@@ -148,6 +154,7 @@ class DeeplAutoTranslate extends AutoTranslate {
 					params: {
 						target_lang: language,
 						text: msgs,
+						...(sourceLanguage && { source_lang: sourceLanguage }),
 						...(options?.context && { context: options.context }),
 					},
 					headers: {
