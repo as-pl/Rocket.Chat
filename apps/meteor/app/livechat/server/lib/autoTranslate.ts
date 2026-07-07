@@ -12,6 +12,7 @@ const livechatRoomAutoTranslateLanguageTimeouts = new Map<string, ReturnType<typ
 const livechatRoomAutoTranslateLanguageTimeout = 24 * 60 * 60 * 1000;
 const livechatTranslationContextMessageLimit = 5;
 const livechatTranslationContextMaxLength = 3000;
+const livechatAgentMessageSourceLanguage = 'PL';
 
 type LivechatTranslationOptions = TranslateMessageOptions & {
 	contextMessages?: IMessage[];
@@ -23,10 +24,14 @@ const unrefTimer = (timer: ReturnType<typeof setTimeout>): void => {
 	}
 };
 
+const getBaseLanguage = (language: string): string => language.split(/[-_]/)[0].toLowerCase();
+
 const getLanguageCandidates = (language: string): string[] => {
-	const [baseLanguage] = language.split(/[-_]/);
+	const baseLanguage = getBaseLanguage(language);
 	return [...new Set([language, baseLanguage].filter(Boolean))];
 };
+
+const isSameBaseLanguage = (sourceLanguage: string, targetLanguage: string): boolean => getBaseLanguage(sourceLanguage) === getBaseLanguage(targetLanguage);
 
 const hasTranslation = (message: IMessage, language: string): boolean => {
 	if (!isTranslatedMessage(message)) {
@@ -109,6 +114,10 @@ const shouldTranslateAgentMessageForLivechat = (message: IMessage, targetLanguag
 		return false;
 	}
 
+	if (isSameBaseLanguage(livechatAgentMessageSourceLanguage, targetLanguage)) {
+		return false;
+	}
+
 	return !hasTranslation(message, targetLanguage);
 };
 
@@ -163,7 +172,7 @@ export const requestAgentMessageTranslationForLivechat = (
 	pendingLivechatTranslations.add(key);
 	void (async () => {
 		const context = options?.context ?? (await getLivechatTranslationContext(message, options?.contextMessages));
-		await translateMessage(targetLanguage, message, { context });
+		await translateMessage(targetLanguage, message, { context, source_lang: livechatAgentMessageSourceLanguage });
 	})().catch(() => pendingLivechatTranslations.delete(key));
 	const timeout = setTimeout(() => pendingLivechatTranslations.delete(key), livechatTranslationPendingTimeout);
 	unrefTimer(timeout);
