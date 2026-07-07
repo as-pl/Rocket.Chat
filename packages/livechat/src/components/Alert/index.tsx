@@ -13,6 +13,7 @@ type AlertProps = {
 	success?: boolean;
 	warning?: boolean;
 	error?: boolean;
+	info?: boolean;
 	color?: string;
 	hideCloseButton?: boolean;
 	className?: string;
@@ -27,6 +28,7 @@ const Alert = ({
 	success,
 	warning,
 	error,
+	info,
 	color,
 	hideCloseButton = false,
 	className,
@@ -50,7 +52,7 @@ const Alert = ({
 	return (
 		<div
 			role='alert'
-			className={createClassName(styles, 'alert', { success, warning, error }, [className])}
+			className={createClassName(styles, 'alert', { success, warning, error, info }, [className])}
 			style={{
 				...style,
 				...(color && { backgroundColor: color }),

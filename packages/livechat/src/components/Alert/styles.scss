@@ -9,6 +9,7 @@ $alert-background-color: colors.$bg-color-darker;
 $alert-success-background-color: colors.$color-green;
 $alert-warning-background-color: colors.$color-yellow;
 $alert-error-background-color: colors.$color-red;
+$alert-info-background-color: #175cc4;
 $screen-box-shadow: 0 (math.div(16px, 2) - 1) 16px 0 rgba(0, 0, 0, 0.1);
 
 .alert {
@@ -73,5 +74,9 @@ $screen-box-shadow: 0 (math.div(16px, 2) - 1) 16px 0 rgba(0, 0, 0, 0.1);
 
 	&--error {
 		background-color: $alert-error-background-color;
+	}
+
+	&--info {
+		background-color: $alert-info-background-color;
 	}
 }

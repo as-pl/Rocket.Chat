@@ -325,7 +325,7 @@ class ChatContainer extends Component {
 			alerts.push({
 				id: connectingAgentAlertId,
 				children: message || i18n.t('please_wait_for_the_next_available_agent'),
-				warning: true,
+				info: true,
 				hideCloseButton: true,
 				timeout: 0,
 			});
