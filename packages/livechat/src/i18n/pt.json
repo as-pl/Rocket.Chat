@@ -6,6 +6,7 @@
     "count_new_messages_since_since_one": "Uma nova mensagem desde {{val, datetime}}",
     "count_new_messages_since_since_other": "{{count}} novas mensagens desde {{val, datetime}}",
     "department_switched": "Departamento comutado",
+    "livechat_title": "Apoio ao Cliente AS-PL",
     "no": "Não",
     "options": "Opções",
     "pre_chat_message_greeting": "Bom dia!",
