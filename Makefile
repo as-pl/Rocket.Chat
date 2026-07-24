@@ -80,3 +80,11 @@ test-local-build:
 	$(MAKE) app-build
 	$(MAKE) docker-build
 	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
+
+
+# w razie czego  cd packages/livechat && yarn build
+livechat:
+	. "$$HOME/.nvm/nvm.sh" && nvm use 22.22.3 && ( \
+		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' yarn dsv -- -- --port 3100 & \
+		( cd packages/livechat && LIVECHAT_PORT=8180 ROCKET_CHAT_URL='http://localhost:3100' yarn start ) \
+	)

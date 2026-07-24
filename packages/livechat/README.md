@@ -11,7 +11,7 @@ Those widgets, at Rocket.Chat, are called **LiveChat**.
 
 ## Running a development environment
 
-With your **Rocket.chat** running locally at http://localhost:3000
+With your **Rocket.chat** running locally at http://localhost:3100
 <br />
 
 1. Install all node dependencies.
@@ -24,7 +24,7 @@ yarn
 yarn dev
 ```
 
-3. In another terminal, run webpack with hot reload at http://localhost:8080
+3. In another terminal, run webpack with hot reload at http://localhost:8180
 ``` bash
 yarn start
 ```
@@ -43,7 +43,7 @@ To select a different host on your local widget, check this configuration at `/s
 ``` javascript
 const host = window.SERVER_URL
 	|| queryString.parse(window.location.search).serverUrl
-	|| (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : null);
+	|| (process.env.NODE_ENV === 'development' ? 'http://localhost:3100' : null);
 ```
 
 Here, you can change to your new configuration.
@@ -60,7 +60,7 @@ const host = window.SERVER_URL
 # install dependencies
 yarn
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at localhost:8180
 yarn start
 
 # build preact application to "build" folder

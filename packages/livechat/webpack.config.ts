@@ -7,6 +7,9 @@ import webpack from 'webpack';
 import { supportedLocales } from './src/supportedLocales';
 import 'webpack-dev-server';
 
+const livechatPort = Number(process.env.LIVECHAT_PORT ?? 8180);
+const rocketChatUrl = process.env.ROCKET_CHAT_URL ?? 'http://localhost:3100';
+
 // Helper to use absolute paths in the webpack config
 const _ = (p: string) => path.resolve(__dirname, p);
 
@@ -132,6 +135,7 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 			}) as unknown as webpack.WebpackPluginInstance,
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify(args.mode === 'production' ? 'production' : 'development'),
+				'process.env.ROCKET_CHAT_URL': JSON.stringify(rocketChatUrl),
 			}),
 			new HtmlWebpackPlugin({
 				title: 'Livechat - Rocket.Chat',
@@ -142,7 +146,7 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 		],
 		devServer: {
 			hot: true,
-			port: 8080,
+			port: livechatPort,
 			host: '0.0.0.0',
 			allowedHosts: 'all',
 			open: true,
