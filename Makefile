@@ -1,43 +1,21 @@
 packages-build:
 	yarn turbo build --no-cache
 
-
 app-build:
 	cd apps/meteor && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build --server-only --directory ../../custom-build
-
-
 
 docker-build:
 	docker build -t arturkmera/custom-rc:8.1.5 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
 
-
-
 docker-push:
 	docker push arturkmera/custom-rc:8.1.5
-
 
 prepare:
 	yarn install
 
+# clean test meteor db
 clean-meteor-db:
 	rm -rf apps/meteor/.meteor/local/db
-
-dsv-no-cloud:
-	OVERWRITE_SETTING_Cloud_Workspace_Client_Id=local-dev \
-	OVERWRITE_SETTING_Cloud_Workspace_Client_Secret=local-dev \
-	OVERWRITE_SETTING_Show_Setup_Wizard=completed \
-	ADMIN_USERNAME=Admin \
-	ADMIN_PASS='Adminpassword!123' \
-	yarn dsv
-
-dsv-local-mongo:
-	MONGO_URL='mongodb://localhost:27017/rocketchat?replicaSet=rs0' \
-	MONGO_OPLOG_URL='mongodb://localhost:27017/local?replicaSet=rs0' \
-	ROOT_URL='http://localhost:3000' \
-	NODE_EXTRA_CA_CERTS='/home/as/projects/as-pl-monorepo/certs/rootCA.pem' \
-	OVERWRITE_SETTING_Show_Setup_Wizard=completed \
-	yarn dsv
-
 
 all-build:
 	$(MAKE) prepare
@@ -45,14 +23,11 @@ all-build:
 	$(MAKE) app-build
 	$(MAKE) docker-build
 
-
 rebuild-publish:
 	$(MAKE) packages-build
 	$(MAKE) app-build
 	$(MAKE) docker-build
 	$(MAKE) docker-push
-
-
 
 # TESTING MOCK BUILD
 test-local-build-first-run:
@@ -73,7 +48,6 @@ test-local-build-first-run:
 		-e MONGO_OPLOG_URL="mongodb://mongo:27017/local?replicaSet=rs0" \
 		arturkmera/custom-rc
 
-
 test-local-build:
 	yarn install
 	$(MAKE) packages-build
@@ -81,9 +55,8 @@ test-local-build:
 	$(MAKE) docker-build
 	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
 
-
 # w razie czego  cd packages/livechat && yarn build
-livechat:
+start:
 	. "$$HOME/.nvm/nvm.sh" && nvm use 22.22.3 && ( \
 		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' yarn dsv -- -- --port 3100 & \
 		( cd packages/livechat && LIVECHAT_PORT=8180 ROCKET_CHAT_URL='http://localhost:3100' yarn start ) \
