@@ -9,7 +9,6 @@ import 'webpack-dev-server';
 
 const livechatPort = Number(process.env.LIVECHAT_PORT ?? 8180);
 const rocketChatUrl = process.env.ROCKET_CHAT_URL ?? 'http://localhost:3100';
-const embeddedLivechat = process.env.LIVECHAT_EMBEDDED === 'true';
 
 // Helper to use absolute paths in the webpack config
 const _ = (p: string) => path.resolve(__dirname, p);
@@ -146,9 +145,7 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 			new webpack.ContextReplacementPlugin(/date-fns[/\\]locale/, new RegExp(`(${supportedLocales.join('|')})\\.js$`)),
 		],
 		devServer: {
-			hot: !embeddedLivechat,
-			liveReload: !embeddedLivechat,
-			client: embeddedLivechat ? false : { logging: 'verbose' },
+			hot: true,
 			port: livechatPort,
 			host: '0.0.0.0',
 			allowedHosts: 'all',
@@ -156,6 +153,9 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 			devMiddleware: {
 				publicPath: args.mode === 'production' ? 'livechat/' : '/',
 				stats: 'normal',
+			},
+			client: {
+				logging: 'verbose',
 			},
 			static: {
 				directory: _('./src'),
@@ -168,17 +168,12 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 	},
 	{
 		...common(args),
-		optimization: {
-			sideEffects: false,
-			splitChunks: embeddedLivechat ? false : { chunks: 'all' },
-			emitOnErrors: false,
-		},
 		entry: {
 			'rocketchat-livechat.min': _('./src/widget.ts'),
 		} as webpack.Entry,
 		output: {
 			path: _('./dist'),
-			publicPath: args.mode === 'production' ? 'livechat/' : embeddedLivechat ? `http://localhost:${livechatPort}/` : '/',
+			publicPath: args.mode === 'production' ? 'livechat/' : '/',
 			filename: '[name].js',
 		},
 		module: {

@@ -56,16 +56,11 @@ test-local-build:
 	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
 
 # w razie czego  cd packages/livechat && yarn build
-.PHONY: start start-original start-dev
+.PHONY: start
 
-start: LIVECHAT_EMBEDDED=true
-start: start-dev
-
-start-original: LIVECHAT_EMBEDDED=false
-start-original: start-dev
-
-start-dev:
+start:
 	. "$$HOME/.nvm/nvm.sh" && nvm use 22.22.3 && ( \
-		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' OVERWRITE_SETTING_API_Enable_CORS='$(LIVECHAT_EMBEDDED)' OVERWRITE_SETTING_API_CORS_Origin='http://localhost:8180' yarn dsv -- -- --port 3100 & \
-		( cd packages/livechat && LIVECHAT_EMBEDDED='$(LIVECHAT_EMBEDDED)' LIVECHAT_PORT=8180 ROCKET_CHAT_URL='http://localhost:3100' yarn start ) \
+		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' OVERWRITE_SETTING_API_Enable_CORS='false' OVERWRITE_SETTING_API_CORS_Origin='http://localhost:8180' yarn dsv -- -- --port 3100 & \
+		( cd packages/livechat && LIVECHAT_EMBEDDED='false' LIVECHAT_PORT=8180 ROCKET_CHAT_URL='http://localhost:3100' yarn start ) & \
+		( cd packages/livechat && yarn dlx http-server -p 8181 ) \
 	)
