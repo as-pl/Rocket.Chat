@@ -2,26 +2,27 @@ import type { ComponentChildren } from 'preact';
 import { useRef } from 'preact/hooks';
 import { useTranslation, withTranslation } from 'react-i18next';
 
+import styles from './styles.scss';
 import { MenuGroup, MenuItem, MenuPopover } from '../Menu';
 import type { ScreenContextValue } from './ScreenProvider';
 import type { Agent } from '../../definitions/agents';
-import MinimizeIcon from '../../icons/arrowDown.svg';
+import { createClassName } from '../../helpers/createClassName';
 import RestoreIcon from '../../icons/arrowUp.svg';
 import NotificationsEnabledIcon from '../../icons/bell.svg';
 import NotificationsDisabledIcon from '../../icons/bellOff.svg';
 import ChangeIcon from '../../icons/change.svg';
+import CloseIcon from '../../icons/close.svg';
 import FinishIcon from '../../icons/finish.svg';
 import KebabIcon from '../../icons/kebab.svg';
 import OpenWindowIcon from '../../icons/newWindow.svg';
 import RemoveIcon from '../../icons/remove.svg';
 import Alert from '../Alert';
-import { Avatar } from '../Avatar';
-import { Header, HeaderAction, HeaderActions, HeaderContent, HeaderCustomField, HeaderPicture, HeaderPost, HeaderSubTitle, HeaderTitle } from '../Header';
+import { Header, HeaderAction, HeaderActions, HeaderContent, HeaderPicture, HeaderPost, HeaderSubTitle, HeaderTitle } from '../Header';
 import { TooltipContainer, TooltipTrigger } from '../Tooltip';
 
 type ScreenHeaderProps = {
 	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
-	agent: Agent;
+	agent?: Agent | null;
 	notificationsEnabled: boolean;
 	minimized: boolean;
 	expanded: boolean;
@@ -65,21 +66,28 @@ const ScreenHeader = ({
 	const { t } = useTranslation();
 	const headerRef = useRef<HTMLElement>(null);
 
-	const largeHeader = () => {
-		return !!(agent?.email && agent.phone);
+	const headerTitle = () => {
+		return title || t('livechat_title');
 	};
 
-	const headerTitle = () => {
-		if (agent?.name) {
-			return agent.name;
-		}
-
-		if (queueInfo?.spot && queueInfo.spot > 0) {
+	const waiting = !!(queueInfo?.spot && queueInfo.spot > 0);
+	const offline = agent?.status === 'offline';
+	const getStatus = () => {
+		if (waiting) {
 			return t('waiting_queue');
 		}
 
-		return title;
+		if (offline) {
+			return t('livechat_is_not_connected');
+		}
+
+		if (agent) {
+			return t('livechat_connected');
+		}
+
+		return t('please_wait_for_the_next_available_agent');
 	};
+	const status = getStatus();
 
 	return (
 		<Header
@@ -93,18 +101,24 @@ const ScreenHeader = ({
 					))}
 				</HeaderPost>
 			}
-			large={largeHeader()}
+			large={false}
 		>
-			{agent?.avatar && (
-				<HeaderPicture>
-					<Avatar src={agent.avatar.src} description={agent.avatar.description} status={agent.status} large={largeHeader()} />
-				</HeaderPicture>
-			)}
+			<HeaderPicture>
+				<span className={createClassName(styles, 'screen__brand-mark')} aria-hidden='true'>
+					AS
+				</span>
+			</HeaderPicture>
 
 			<HeaderContent>
 				<HeaderTitle>{headerTitle()}</HeaderTitle>
-				{agent?.email && <HeaderSubTitle>{agent.email}</HeaderSubTitle>}
-				{agent?.phone && <HeaderCustomField>{agent.phone}</HeaderCustomField>}
+				<HeaderSubTitle>
+					<span className={createClassName(styles, 'screen__status')}>
+						<span className={createClassName(styles, 'screen__status-dot', { waiting, offline })} aria-hidden='true' />
+						<span className={createClassName(styles, 'screen__status-copy')}>
+							{t('as_pl_support_team')} · {status}
+						</span>
+					</span>
+				</HeaderSubTitle>
 			</HeaderContent>
 
 			<TooltipContainer>
@@ -169,20 +183,19 @@ const ScreenHeader = ({
 						</TooltipTrigger>
 					)}
 
-					{/** Open in window */}
-					{/* {!hideExpandChat && !expanded && !windowed && (
+					{!hideExpandChat && !expanded && !windowed && (
 						<TooltipTrigger content={t('expand_chat')} placement='bottom-left'>
 							<HeaderAction aria-label={t('expand_chat')} onClick={onOpenWindow}>
 								<OpenWindowIcon width={20} height={20} />
 							</HeaderAction>
 						</TooltipTrigger>
-					)} */}
+					)}
 
 					{/** minimize chat */}
 					{(expanded || !windowed) && (
 						<TooltipTrigger content={minimized ? t('restore_chat') : t('minimize_chat')}>
 							<HeaderAction aria-label={minimized ? t('restore_chat') : t('minimize_chat')} onClick={minimized ? onRestore : onMinimize}>
-								{minimized ? <RestoreIcon width={20} height={20} /> : <MinimizeIcon width={20} height={20} />}
+								{minimized ? <RestoreIcon width={20} height={20} /> : <CloseIcon width={20} height={20} />}
 							</HeaderAction>
 						</TooltipTrigger>
 					)}

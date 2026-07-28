@@ -32,7 +32,6 @@ export const ChatConnector = ({ ref, t }: ChatConnectorProps) => {
 				visitorsCanCloseChat,
 			},
 			messages: { conversationFinishedMessage },
-			theme: { title = '' } = {},
 			departments = {},
 		},
 		iframe: { theme: { title: customTitle = '' } = {}, guest = {} },
@@ -58,7 +57,7 @@ export const ChatConnector = ({ ref, t }: ChatConnectorProps) => {
 	return (
 		<ChatContainer
 			ref={ref}
-			title={customTitle || title || t('livechat_title') || t('need_help')}
+			title={customTitle || t('livechat_title') || t('need_help')}
 			sound={sound}
 			token={token}
 			user={user}

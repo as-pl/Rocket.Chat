@@ -4,7 +4,8 @@
 .uikit-context-block {
 	display: flex;
 
-	margin: 0 4px 8px;
+	margin: 0;
+	padding: 8px 12px;
 
 	letter-spacing: 0.2px;
 
@@ -17,7 +18,7 @@
 	flex-wrap: wrap;
 
 	&__item {
-		margin: 0 4px 8px;
+		margin: 0 8px 0 0;
 
 		border: none;
 		background: none;

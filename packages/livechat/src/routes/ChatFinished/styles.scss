@@ -5,7 +5,7 @@
 
 	&__greeting {
 		margin: 0.5rem 0;
-		text-align: center;
+		text-align: left;
 		letter-spacing: 0;
 
 		font-size: 1.375rem;
@@ -21,17 +21,17 @@
 		color: colors.$color-text-grey;
 
 		font-size: 1rem;
-		font-weight: 500;
+		font-weight: 400;
 		line-height: 1.5rem;
 	}
 
 	&__container {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		height: 99%;
 		width: 100%;
-		text-align: center;
+		text-align: left;
 		gap: 20px;
 	}
 
@@ -39,7 +39,14 @@
 		width: 100%;
 	}
 
-	&__btn {
-		margin-top: auto;
+	&__new-chat {
+		padding: 4px 0;
+
+		text-transform: lowercase;
+		color: #8995a8;
+
+		font-family: monospace;
+		font-size: 10px;
+		gap: 6px;
 	}
 }

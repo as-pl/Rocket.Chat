@@ -10,6 +10,7 @@ body {
 	padding: 0;
 
 	color: #444444;
+	background: transparent;
 
 	font-family: variables.$font-family;
 	font-weight: 400;
@@ -22,17 +23,17 @@ body {
 }
 
 *::-webkit-scrollbar {
-	width: 5px;
-	height: 5px;
+	width: 6px;
+	height: 6px;
 
 	&-thumb {
-		border-radius: 5px;
-		background: colors.$color-text-grey;
+		border-radius: 0;
+		background: #b8c0cc;
 	}
 
 	&-track {
-		border-radius: 5px;
-		background: colors.$color-text-light;
+		border-radius: 0;
+		background: #f3f4f6;
 	}
 }
 

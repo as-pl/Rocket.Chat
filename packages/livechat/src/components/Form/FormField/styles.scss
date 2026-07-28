@@ -19,7 +19,7 @@ $form-field-error-border-color: colors.$color-red;
 	display: flex;
 
 	width: 100%;
-	margin: 5px 0;
+	margin: 8px 0;
 	flex-flow: column nowrap;
 
 	&__label-wrapper {
@@ -46,7 +46,7 @@ $form-field-error-border-color: colors.$color-red;
 		color: $form-field-label-color;
 
 		font-size: $form-field-label-font-size;
-		font-weight: $form-field-label-font-weight;
+		font-weight: 700;
 		line-height: $form-field-label-line-height;
 	}
 

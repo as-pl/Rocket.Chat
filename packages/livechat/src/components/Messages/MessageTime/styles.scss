@@ -2,38 +2,47 @@
 @use '../../../styles/colors';
 @use '../../../styles/variables';
 
-$message-time-margin: 0 math.div(variables.$default-gap, 2);
+$message-time-margin: 0;
 $message-time-font-size: 0.625rem;
-$message-time-line-height: 1rem;
+$message-time-line-height: 0.875rem;
 $message-time-color: colors.$color-text-grey;
 
 .message-time {
-	position: absolute;
-
 	margin: $message-time-margin;
 
 	user-select: none;
 	white-space: nowrap;
+	letter-spacing: 0.2px;
 
 	color: $message-time-color;
 
 	font-size: $message-time-font-size;
 	line-height: $message-time-line-height;
-	justify-self: end;
 
 	&-wrapper {
-		position: relative;
+		display: flex;
+		width: 100%;
+		margin-top: 1px;
 
-		& > .message-time {
-			bottom: -16px;
+		color: $message-time-color;
 
-			&--normal {
-				right: 0;
-			}
+		font-family: monospace;
+		font-size: $message-time-font-size;
+		line-height: $message-time-line-height;
+		align-items: center;
+		gap: 6px;
 
-			&--inverted {
-				left: 0;
-			}
+		&--inverse {
+			justify-content: flex-end;
 		}
+	}
+
+	&__label {
+		overflow: hidden;
+
+		max-width: 220px;
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 }

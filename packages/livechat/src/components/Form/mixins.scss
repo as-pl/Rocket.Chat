@@ -2,16 +2,16 @@
 @use '../../styles/variables';
 @use '../../styles/colors';
 
-$form-input-border-width: variables.$default-border;
-$form-input-border-radius: variables.$default-border-radius;
+$form-input-border-width: 1px;
+$form-input-border-radius: 2px;
 $form-input-padding: (0.75 * variables.$default-gap - variables.$default-border);
 $form-input-small-padding: (0.25 * variables.$default-gap - math.div(variables.$default-border, 2))
 	(0.75 * variables.$default-gap - variables.$default-border);
 $form-input-color: colors.$color-text-dark;
 $form-input-placeholder-color: colors.$color-text-light;
-$form-input-background-color: colors.$bg-color-white;
-$form-input-border-color: colors.$bg-color-grey;
-$form-input-focus-border-color: colors.$color-text-dark;
+$form-input-background-color: #f7f8f9;
+$form-input-border-color: #d7dce3;
+$form-input-focus-border-color: #292d38;
 $form-input-hover-border-color: colors.$color-text-light;
 $form-input-disabled-background-color: colors.$bg-color-grey;
 $form-input-disabled-color: colors.$color-text-light;
@@ -49,6 +49,8 @@ $form-input-disabled-opacity: variables.$disabled-opacity;
 
 	&:focus {
 		border-color: $form-input-focus-border-color;
+		background-color: #ffffff;
+		box-shadow: 0 0 0 1px rgba(41, 45, 56, 0.08);
 	}
 
 	// &:hover {

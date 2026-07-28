@@ -168,7 +168,7 @@ class Chat extends Component {
 							handleEmojiClick={this.handleEmojiClick}
 							dispatch={dispatch}
 							hideSenderAvatar={theme?.hideGuestAvatar}
-							hideReceiverAvatar={theme?.hideAgentAvatar}
+							hideReceiverAvatar
 							onScrollTo={this.handleScrollTo}
 						/>
 						{this.state.emojiPickerActive && (
@@ -210,7 +210,7 @@ class Chat extends Component {
 					// 		</FooterOptions>
 					// 	) : null
 					// }
-					limit={limitTextLength ? <CharCounter limitTextLength={limitTextLength} textLength={text.length} /> : null}
+					limit={<CharCounter limitTextLength={limitTextLength || 2000} textLength={text.length} />}
 				>
 					{registrationRequired ? (
 						<Button loading={loading} disabled={loading} onClick={onRegisterUser} stack>
@@ -229,26 +229,37 @@ class Chat extends Component {
 							handleEmojiClick={this.handleEmojiClick}
 							pre={
 								<ComposerActions>
-									<ComposerAction className={createClassName(styles, 'emoji-picker-icon')} onClick={this.toggleEmojiPickerState}>
+									<ComposerAction
+										text={t('Frequently_Used')}
+										className={createClassName(styles, 'emoji-picker-icon')}
+										onClick={this.toggleEmojiPickerState}
+									>
 										<EmojiIcon width={20} height={20} />
 									</ComposerAction>
 								</ComposerActions>
 							}
 							post={
 								<ComposerActions>
-									{text.length === 0 && uploads && (
-										<ComposerAction onClick={this.handleUploadClick}>
+									{uploads && (
+										<ComposerAction
+											text={t('drop_here_to_upload_a_file')}
+											className={createClassName(styles, 'chat__composer-upload')}
+											onClick={this.handleUploadClick}
+										>
 											<PlusIcon width={20} height={20} />
 										</ComposerAction>
 									)}
-									{text.length > 0 && (
-										<ComposerAction onClick={this.handleSendClick}>
-											<SendIcon width={20} height={20} />
-										</ComposerAction>
-									)}
+									<ComposerAction
+										text={t('send')}
+										className={createClassName(styles, 'chat__composer-send')}
+										onClick={this.handleSendClick}
+										disabled={text.length === 0}
+									>
+										<SendIcon width={20} height={20} />
+									</ComposerAction>
 								</ComposerActions>
 							}
-							limitTextLength={limitTextLength}
+							limitTextLength={limitTextLength || 2000}
 						/>
 					)}
 				</ScreenFooter>

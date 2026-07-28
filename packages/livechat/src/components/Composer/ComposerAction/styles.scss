@@ -1,18 +1,19 @@
 @use '../../../styles/helpers';
 
-$composer-action-margin: 0 6px;
+$composer-action-margin: 0 5px;
 
 .composer__action {
 	flex: 0 0 auto;
 
 	margin: $composer-action-margin;
-	padding: 0;
+	padding: 6px;
 
 	cursor: pointer;
 
 	border: none;
 
 	background: none;
+	color: #697487;
 
 	font-size: 0;
 
@@ -20,6 +21,13 @@ $composer-action-margin: 0 6px;
 		transform: scale(1.05);
 
 		outline: none;
+	}
+
+	&:disabled {
+		cursor: default;
+
+		opacity: 0.45;
+		transform: none;
 	}
 
 	@include helpers.pressable-button(1px);

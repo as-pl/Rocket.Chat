@@ -11,11 +11,12 @@
 
 	margin-top: auto;
 	width: 100%;
-	padding: 4px 8px;
+	padding: 12px 14px 7px;
 
 	color: colors.$color-text-grey;
 
-	background-color: transparent;
+	border-top: 1px solid #e1e4e9;
+	background-color: #ffffff;
 
 	font-size: 0.625rem;
 	align-items: stretch;
@@ -24,7 +25,14 @@
 	&__content {
 		display: flex;
 
-		padding: 4px 8px;
+		padding: 0;
+		align-items: center;
+		justify-content: flex-end;
+
+		&:first-child {
+			width: 100%;
+			margin-bottom: 5px;
+		}
 	}
 
 	&__options {
@@ -54,9 +62,13 @@
 
 	&__remainder {
 		min-width: 100px;
-		margin-left: 10px;
+		margin-left: auto;
 
-		font-weight: bold;
+		text-align: right;
+		letter-spacing: 0.2px;
+
+		font-family: monospace;
+		font-weight: 400;
 
 		&--highlight {
 			transition: color 0.2s;

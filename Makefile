@@ -60,7 +60,7 @@ test-local-build:
 
 start:
 	. "$$HOME/.nvm/nvm.sh" && nvm use 22.22.3 && ( \
-		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' OVERWRITE_SETTING_API_Enable_CORS='false' OVERWRITE_SETTING_API_CORS_Origin='http://localhost:8180' yarn dsv -- -- --port 3100 & \
+		ROOT_URL='http://localhost:3100' OVERWRITE_SETTING_Site_Url='http://localhost:3100' OVERWRITE_SETTING_API_Enable_CORS='true' OVERWRITE_SETTING_API_CORS_Origin='http://localhost:8180' OVERWRITE_SETTING_API_Enable_Rate_Limiter_Dev='false' yarn dsv -- -- --port 3100 & \
 		( cd packages/livechat && LIVECHAT_EMBEDDED='false' LIVECHAT_PORT=8180 ROCKET_CHAT_URL='http://localhost:3100' yarn start ) & \
 		( cd packages/livechat && yarn dlx http-server -p 8181 ) \
 	)

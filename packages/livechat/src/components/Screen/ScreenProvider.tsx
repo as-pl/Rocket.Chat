@@ -88,7 +88,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 	const store = useContext(StoreContext);
 	const { token, dispatch, config, sound, minimized = true, undocked, expanded = false, alerts, modal, iframe, customFieldsQueue } = store;
 	const { department, name, email } = iframe.guest || {};
-	const { color, position: configPosition, background, hideExpandChat } = config.theme || {};
+	const { position: configPosition, hideExpandChat } = config.theme || {};
 	const { livechatLogo, hideWatermark = false } = config.settings || {};
 
 	const {
@@ -164,13 +164,13 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 
 	const screenProps = {
 		theme: {
-			color: customColor || color,
+			color: customColor || '#e30613',
 			fontColor: customFontColor,
 			iconColor: customIconColor,
 			position,
 			guestBubbleBackgroundColor,
 			agentBubbleBackgroundColor,
-			background: customBackground || background,
+			background: customBackground,
 			hideAgentAvatar,
 			hideGuestAvatar,
 			hideExpandChat: customHideExpandChat || hideExpandChat,

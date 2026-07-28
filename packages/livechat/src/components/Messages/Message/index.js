@@ -118,9 +118,15 @@ const Message = ({
 					rid: renderedMessage.rid,
 					attachmentResolver,
 				})}
+				{!compact && !renderedMessage.type && (
+					<MessageTime
+						normal={!me}
+						inverse={me}
+						label={!me ? renderedMessage.alias || renderedMessage.u?.name || renderedMessage.u?.username : undefined}
+						ts={renderedMessage.ts}
+					/>
+				)}
 			</MessageContent>
-
-			{!compact && !renderedMessage.type && <MessageTime normal={!me} inverse={me} ts={renderedMessage.ts} />}
 		</MessageContainer>
 	);
 };

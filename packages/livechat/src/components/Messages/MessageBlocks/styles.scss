@@ -1,7 +1,14 @@
 .message-blocks {
 	display: flex;
 
-	margin: 0;
+	overflow: hidden;
+
+	width: min(580px, 100%);
+	margin: 2px 0 0;
+
+	border: 1px solid #d5dae2;
+	border-radius: 2px;
+	background: #ffffff;
 	align-items: stretch;
 	flex-flow: column nowrap;
 }

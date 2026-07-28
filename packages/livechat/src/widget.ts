@@ -45,8 +45,9 @@ type InitializeParams = {
 	hiddenSystemMessages: StoreState['iframe']['hiddenSystemMessages'];
 };
 
-const WIDGET_OPEN_WIDTH = 365;
-const WIDGET_OPEN_HEIGHT = 525;
+const WIDGET_OPEN_WIDTH = 960;
+const WIDGET_OPEN_HEIGHT = 800;
+const WIDGET_TRIGGER_WIDTH = 365;
 const WIDGET_MINIMIZED_WIDTH = 54;
 const WIDGET_MINIMIZED_HEIGHT = 54;
 const WIDGET_MARGIN = 16;
@@ -60,6 +61,10 @@ let ready = false;
 let smallScreen = false;
 let scrollPosition: number;
 let widgetHeight: number;
+let widgetPosition: 'left' | 'right' = 'right';
+let mobileDocumentStyleActive = false;
+let previousBodyOverflow = '';
+let previousDocumentOverflow = '';
 let popoutWindow: Window | null = null;
 
 export const VALID_CALLBACKS = [
@@ -109,6 +114,31 @@ const formatMessage = (action: keyof HooksWidgetAPI, ...params: Parameters<Hooks
 	args: params,
 });
 
+const enableMobileDocumentStyle = () => {
+	if (mobileDocumentStyleActive) {
+		return;
+	}
+
+	previousBodyOverflow = document.body.style.overflow;
+	previousDocumentOverflow = document.documentElement.style.overflow;
+	document.body.style.overflow = 'hidden';
+	document.documentElement.style.overflow = 'hidden';
+	document.body.classList.add('rc-livechat-mobile-full-screen');
+	mobileDocumentStyleActive = true;
+};
+
+const disableMobileDocumentStyle = () => {
+	if (!mobileDocumentStyleActive) {
+		document.body.classList.remove('rc-livechat-mobile-full-screen');
+		return;
+	}
+
+	document.body.style.overflow = previousBodyOverflow;
+	document.documentElement.style.overflow = previousDocumentOverflow;
+	document.body.classList.remove('rc-livechat-mobile-full-screen');
+	mobileDocumentStyleActive = false;
+};
+
 // hooks
 function callHook(action: keyof HooksWidgetAPI, ...params: Parameters<HooksWidgetAPI[keyof HooksWidgetAPI]>) {
 	if (!ready) {
@@ -144,32 +174,48 @@ const updateWidgetStyle = (isOpened: boolean) => {
 	}
 
 	const isFullscreen = smallScreen && widget.dataset.state !== 'triggered';
+	const isTriggered = widget.dataset.state === 'triggered';
 
 	if (smallScreen && isOpened) {
 		scrollPosition = document.documentElement.scrollTop;
-		document.body.classList.add('rc-livechat-mobile-full-screen');
+		enableMobileDocumentStyle();
 	} else {
-		document.body.classList.remove('rc-livechat-mobile-full-screen');
+		disableMobileDocumentStyle();
 		if (smallScreen) {
 			document.documentElement.scrollTop = scrollPosition;
 		}
 	}
 
 	if (isOpened) {
-		widget.style.left = isFullscreen ? '0' : 'auto';
-
-		/**
-		 * If we use widget.style.height = smallScreen ? '100vh' : ...
-		 * In above case some browser's viewport height is not rendered correctly
-		 * so, as 100vh will resolve to 100% of the current viewport height,
-		 * so fixed it to 100% avoiding problem for some browsers. Similar resolution
-		 * for widget.style.width
-		 */
-
-		widget.style.height = isFullscreen ? '100%' : `${WIDGET_MARGIN + widgetHeight + WIDGET_MARGIN + WIDGET_MINIMIZED_HEIGHT}px`;
-		widget.style.width = isFullscreen ? '100%' : `${WIDGET_MARGIN + WIDGET_OPEN_WIDTH + WIDGET_MARGIN}px`;
+		if (isFullscreen) {
+			widget.style.top = '0';
+			widget.style.right = 'auto';
+			widget.style.bottom = 'auto';
+			widget.style.left = '0';
+			widget.style.width = '100vw';
+			widget.style.height = '100dvh';
+		} else if (isTriggered) {
+			widget.style.top = 'auto';
+			widget.style.bottom = '0';
+			widget.style.left = widgetPosition === 'left' ? '0' : 'auto';
+			widget.style.right = widgetPosition === 'right' ? '0' : 'auto';
+			widget.style.width = `${WIDGET_MARGIN + WIDGET_TRIGGER_WIDTH + WIDGET_MARGIN}px`;
+			widget.style.height = `${WIDGET_MARGIN + widgetHeight + WIDGET_MARGIN + WIDGET_MINIMIZED_HEIGHT}px`;
+		} else {
+			widget.style.top = 'auto';
+			widget.style.bottom = '0';
+			widget.style.left = widgetPosition === 'left' ? '0' : 'auto';
+			widget.style.right = widgetPosition === 'right' ? '0' : 'auto';
+			// The iframe includes 16px of internal spacing on each side, leaving a
+			// maximum visible panel width of 960px.
+			widget.style.width = `min(${WIDGET_OPEN_WIDTH + WIDGET_MARGIN * 2}px, 100vw)`;
+			widget.style.height = '100dvh';
+		}
 	} else {
-		widget.style.left = 'auto';
+		widget.style.top = 'auto';
+		widget.style.bottom = '0';
+		widget.style.left = widgetPosition === 'left' ? '0' : 'auto';
+		widget.style.right = widgetPosition === 'right' ? '0' : 'auto';
 		widget.style.width = `${WIDGET_MARGIN + WIDGET_MINIMIZED_WIDTH + WIDGET_MARGIN}px`;
 		widget.style.height = `${WIDGET_MARGIN + WIDGET_MINIMIZED_HEIGHT + WIDGET_MARGIN}px`;
 	}
@@ -181,7 +227,7 @@ const createWidget = (url: string) => {
 	widget.style.position = 'fixed';
 	widget.style.width = `${WIDGET_MARGIN + WIDGET_MINIMIZED_WIDTH + WIDGET_MARGIN}px`;
 	widget.style.height = `${WIDGET_MARGIN + WIDGET_MINIMIZED_HEIGHT + WIDGET_MARGIN}px`;
-	widget.style.maxHeight = '100vh';
+	widget.style.maxHeight = '100dvh';
 	widget.style.bottom = '0';
 	widget.style.left = '0';
 	widget.style.zIndex = '12345';
@@ -215,7 +261,7 @@ const createWidget = (url: string) => {
 		callHook('setParentUrl', window.location.href);
 	};
 
-	const mediaQueryList = window.matchMedia('screen and (max-device-width: 480px)');
+	const mediaQueryList = window.matchMedia('screen and (max-width: 767px)');
 	mediaQueryList.addListener(handleMediaQueryTest);
 	handleMediaQueryTest(mediaQueryList);
 };
@@ -239,6 +285,14 @@ const openWidget = () => {
 const setWidgetPosition = (position: 'left' | 'right' = 'right') => {
 	if (!widget) {
 		throw new Error('Widget is not initialized');
+	}
+
+	widgetPosition = position;
+
+	if (smallScreen && widget.dataset.state === 'opened') {
+		widget.style.left = '0';
+		widget.style.right = 'auto';
+		return;
 	}
 
 	widget.style.left = position === 'left' ? '0' : 'auto';
@@ -527,11 +581,11 @@ const api: InternalWidgetAPI = {
 	},
 
 	resetDocumentStyle() {
-		document.body.classList.remove('rc-livechat-mobile-full-screen');
+		disableMobileDocumentStyle();
 	},
 
 	setFullScreenDocumentMobile() {
-		smallScreen && document.body.classList.add('rc-livechat-mobile-full-screen');
+		smallScreen && enableMobileDocumentStyle();
 	},
 
 	setWidgetPosition,

@@ -20,17 +20,19 @@ const parseDate = (ts: number, t: TFunction) => {
 type MessageTimeProps = {
 	ts: number;
 	normal?: boolean;
-	inverted?: boolean;
+	inverse?: boolean;
+	label?: string;
 	className?: string;
 	style?: CSSProperties;
 	t: TFunction;
 };
-const MessageTime = ({ ts, normal, inverted, className, style = {}, t }: MessageTimeProps) => {
+const MessageTime = ({ ts, normal, inverse, label, className, style = {}, t }: MessageTimeProps) => {
 	return (
-		<div className={createClassName(styles, 'message-time-wrapper')}>
+		<div className={createClassName(styles, 'message-time-wrapper', { normal, inverse })}>
+			{label && <span className={createClassName(styles, 'message-time__label')}>{label}</span>}
 			<time
 				dateTime={new Date(ts).toISOString()}
-				className={createClassName(styles, 'message-time', { normal, inverted }, [className])}
+				className={createClassName(styles, 'message-time', { normal, inverse }, [className])}
 				style={style}
 			>
 				{parseDate(ts, t)}

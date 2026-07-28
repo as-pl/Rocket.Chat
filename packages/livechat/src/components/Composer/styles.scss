@@ -2,16 +2,16 @@
 @use '../../styles/helpers';
 @use '../../styles/variables';
 
-$composer-padding: 12px 6px;
+$composer-padding: 8px 8px;
 $composer-border-width: variables.$default-border;
 $composer-border-color: colors.$color-text-light;
-$composer-border-radius: variables.$default-border-radius;
-$composer-background-color: colors.$bg-color-white;
+$composer-border-radius: 2px;
+$composer-background-color: #f3f4f6;
 $composer-focused-border-color: colors.$color-text-grey;
 
-$composer-input-min-height: 20px;
+$composer-input-min-height: 36px;
 $composer-input-max-height: 150px;
-$composer-input-padding: 2px 6px;
+$composer-input-padding: 8px 6px;
 $composer-input-color: colors.$bg-color-dark;
 $composer-input-font-size: 0.875rem;
 $composer-input-font-weight: 500;
@@ -22,17 +22,19 @@ $composer-input-placeholder-color: colors.$color-text-light;
 	display: flex;
 
 	width: 100%;
+	min-height: 54px;
 	padding: $composer-padding;
 
 	transition: all variables.$default-time-animation;
 
-	border: $composer-border-width solid $composer-border-color;
+	border: 1px solid #d4d9e1;
 	border-radius: $composer-border-radius;
 	background-color: $composer-background-color;
 	align-items: flex-end;
 
 	&:focus-within {
-		border-color: $composer-focused-border-color;
+		border-color: #9da7b6;
+		box-shadow: 0 0 0 1px rgba(41, 45, 56, 0.08);
 	}
 
 	&__input {
@@ -52,9 +54,10 @@ $composer-input-placeholder-color: colors.$color-text-light;
 
 		border: none;
 		outline: none;
+		background: transparent;
 
 		font-size: $composer-input-font-size;
-		font-weight: $composer-input-font-weight;
+		font-weight: 400;
 		line-height: $composer-input-line-height;
 
 		&:empty::before {

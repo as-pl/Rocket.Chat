@@ -3,6 +3,11 @@ import type { Locale } from 'date-fns';
 import store from '../store';
 import { supportedLocales } from '../supportedLocales';
 
+const languageAliases: Record<string, string> = {
+	gb: 'en',
+	ua: 'uk',
+};
+
 /**
  * To normalize Language String and return language code
  */
@@ -22,6 +27,17 @@ export const normalizeLanguageString = (languageString: string): string => {
 	return countryCode ? `${languageCode}-${countryCode}` : languageCode;
 };
 
+export const normalizeLivechatLanguage = (languageString: string): string => {
+	const normalizedLanguage = normalizeLanguageString(languageString);
+	const [languageCode, countryCode] = normalizedLanguage.split('-');
+	const normalizedLanguageCode = languageAliases[languageCode] || languageCode;
+
+	return countryCode ? `${normalizedLanguageCode}-${countryCode}` : normalizedLanguageCode;
+};
+
+export const haveSameBaseLanguage = (firstLanguage: string, secondLanguage: string): boolean =>
+	normalizeLivechatLanguage(firstLanguage).split('-')[0] === normalizeLivechatLanguage(secondLanguage).split('-')[0];
+
 /**
  * To get browser Language of user
  */
@@ -31,9 +47,9 @@ export const browserLanguage = (): string => navigator.language;
  * This is configured langauge
  */
 export const configLanguage = (): string | undefined => {
-	const { iframe: { language: iframeLanguage } = {} } = store.state;
+	const { conversationLanguage, languageSelectionConfirmed, iframe: { language: iframeLanguage } = {} } = store.state;
 	const language = (store.state.config?.settings as Record<string, unknown> | undefined)?.language as string | undefined;
-	return iframeLanguage || language;
+	return (languageSelectionConfirmed && conversationLanguage) || iframeLanguage || language;
 };
 
 export const getDateFnsLocale = async (): Promise<Locale> => {

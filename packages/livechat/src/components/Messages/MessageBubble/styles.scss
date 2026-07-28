@@ -1,10 +1,10 @@
 @use '../../../styles/colors';
 @use '../../../styles/variables';
 
-$message-bubble-padding: 12px;
-$message-bubble-background-color: colors.$bg-color-white;
+$message-bubble-padding: 11px 14px;
+$message-bubble-background-color: #f1f2f4;
 $message-bubble-color: colors.$color-text-dark;
-$message-bubble-border-radius: variables.$default-border-radius;
+$message-bubble-border-radius: 2px;
 $message-bubble-link-color: colors.$color-blue;
 $message-bubble-me-background-color: colors.$color-blue;
 $message-bubble-me-color: colors.$color-text-lighter;
@@ -23,6 +23,7 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 	padding: $message-bubble-padding;
 
 	color: $message-bubble-color;
+	border-left: 2px solid var(--color, #e30613);
 	border-radius: $message-bubble-border-radius;
 
 	background-color: var(--receiver-bubble-background-color, $message-bubble-background-color);
@@ -36,6 +37,7 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 
 	&--inverse {
 		color: var(--font-color, $message-bubble-me-color);
+		border-left: 0;
 		background-color: var(--sender-bubble-background-color, var(--color, $message-bubble-me-background-color));
 
 		a {
@@ -46,6 +48,7 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 	&--nude {
 		padding: $message-bubble-nude-padding;
 
+		border-left: 0;
 		background-color: transparent;
 	}
 
@@ -66,6 +69,7 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 	}
 
 	&--system {
+		border-left: 0;
 		text-align: center;
 
 		background-color: transparent;
@@ -73,5 +77,9 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 		.message-container {
 			justify-content: center;
 		}
+	}
+
+	&__inner {
+		min-width: 0;
 	}
 }

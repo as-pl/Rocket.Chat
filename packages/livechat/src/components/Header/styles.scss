@@ -3,11 +3,11 @@
 @use '../../styles/helpers';
 @use '../../styles/variables';
 
-$header-background-color: colors.$color-dark-blue;
+$header-background-color: #292d38;
 $header-color: colors.$color-text-lighter;
 $header-padding: variables.$default-padding;
-$header-height: 56px;
-$header-height-large: 77px;
+$header-height: 66px;
+$header-height-large: 66px;
 
 $header-action-active-displacement: 2px;
 
@@ -19,11 +19,11 @@ $header-action-active-displacement: 2px;
 
   width: 100%;
   height: $header-height;
-  padding: 0 math.div($header-padding, 2);
+  padding: 0 14px;
 
-  // color: var(--font-color, $header-color);
-  // background-color: var(--color, $header-background-color);
-  // box-shadow: 0 0 16px colors.$bg-color-grey;
+  color: $header-color;
+  background-color: $header-background-color;
+  box-shadow: none;
 
   font-size: 16px;
   align-items: center;
@@ -32,7 +32,7 @@ $header-action-active-displacement: 2px;
   &__item {
     flex: 0 0 auto;
 
-    margin: 0 math.div($header-padding, 2);
+    margin: 0 6px;
   }
 
   &__picture {
@@ -53,9 +53,11 @@ $header-action-active-displacement: 2px;
 
       text-overflow: ellipsis;
 
+      color: #ffffff;
+
       font-size: 15px;
-      font-weight: 500;
-      line-height: 1.5;
+      font-weight: 700;
+      line-height: 1.35;
     }
 
     .header__subtitle {
@@ -64,11 +66,9 @@ $header-action-active-displacement: 2px;
       letter-spacing: normal;
       text-overflow: ellipsis;
 
-      opacity: 0.7;
-
       font-size: 12px;
-      font-weight: 500;
-      line-height: 1.5;
+      font-weight: 400;
+      line-height: 1.4;
     }
 
     .header__custom-field {
@@ -100,14 +100,22 @@ $header-action-active-displacement: 2px;
       outline: none;
       background: none;
       justify-content: center;
-      padding: 0.5rem;
+      width: 36px;
+      height: 36px;
+      padding: 8px;
       align-items: center;
 
       @include helpers.pressable-button($header-action-active-displacement, 0);
 
       &:hover {
-        background-color: #e7e7e7;
-        border-radius: 25px;
+        color: #ffffff;
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0.09);
+      }
+
+      &:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: -2px;
       }
     }
   }

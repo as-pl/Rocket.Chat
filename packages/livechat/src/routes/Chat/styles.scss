@@ -23,7 +23,7 @@
 			transition: all 0.3s;
 
 			border-radius: 50%;
-			box-shadow: 0 0 1px 1px #cccccc;
+			box-shadow: none;
 		}
 
 		&--atBottom::before {
@@ -57,17 +57,18 @@
 		right: variables.$default-padding;
 		left: variables.$default-padding;
 
-		max-width: 420px;
-		margin: 24px auto 0;
-		padding: 12px 14px;
+		max-width: 620px;
+		margin: 24px 18px 0;
+		padding: 11px 14px;
 
 		pointer-events: none;
 
 		color: colors.$color-text-dark;
-		border: 1px solid colors.$bg-color-grey;
-		border-radius: variables.$default-border-radius;
-		background: colors.$bg-color-white;
-		box-shadow: 0 2px 8px rgba(31, 35, 41, 0.08);
+		border: 0;
+		border-left: 2px solid var(--color, #e30613);
+		border-radius: 2px;
+		background: #f1f2f4;
+		box-shadow: none;
 
 		font-size: 0.875rem;
 		line-height: 1.45;
@@ -86,6 +87,34 @@
 		&:focus {
 			color: black;
 		}
+	}
+
+	&__composer-send {
+		width: 36px;
+		height: 36px;
+		margin: 0;
+
+		color: #ffffff;
+		border-radius: 2px;
+		background: var(--color, #e30613);
+
+		&.chat__composer-send {
+			background: var(--color, #e30613);
+		}
+
+		&:hover:not(:disabled),
+		&:focus:not(:disabled) {
+			background: #c50012;
+		}
+
+		&:disabled {
+			color: #ffffff;
+			background: var(--color, #e30613);
+		}
+	}
+
+	&__composer-upload {
+		color: #292d38;
 	}
 }
 

@@ -8,10 +8,11 @@
 	background-size: cover;
 
 	&--accessory {
-		width: 5.5rem;
-		height: 5.5rem;
+		width: 4.25rem;
+		height: 4.25rem;
 
-		border-radius: variables.$default-border-radius;
+		border: 1px solid #e0e4e9;
+		border-radius: 2px;
 	}
 
 	&--context {

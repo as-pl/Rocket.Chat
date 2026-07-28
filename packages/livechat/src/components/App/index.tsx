@@ -18,7 +18,22 @@ const AppConnector = () => (
 			<SDKProvider serverURL={host}>
 				<ServerProvider>
 					<StoreConsumer>
-						{({ config, user, triggered, gdpr, sound, undocked, minimized = true, expanded = false, alerts, modal, dispatch, iframe }) => (
+						{({
+							config,
+							user,
+							triggered,
+							gdpr,
+							sound,
+							undocked,
+							minimized = true,
+							expanded = false,
+							alerts,
+							modal,
+							dispatch,
+							iframe,
+							room,
+							languageSelectionConfirmed,
+						}) => (
 							<App
 								config={config}
 								gdpr={gdpr}
@@ -32,6 +47,8 @@ const AppConnector = () => (
 								modal={modal}
 								dispatch={dispatch}
 								iframe={iframe}
+								room={room}
+								languageSelectionConfirmed={languageSelectionConfirmed}
 							/>
 						)}
 					</StoreConsumer>

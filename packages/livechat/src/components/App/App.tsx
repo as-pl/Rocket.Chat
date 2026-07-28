@@ -12,12 +12,14 @@ import history from '../../history';
 import Connection from '../../lib/connection';
 import CustomFields from '../../lib/customFields';
 import Hooks from '../../lib/hooks';
+import { browserLanguage, haveSameBaseLanguage } from '../../lib/locale';
 import { parentCall } from '../../lib/parentCall';
 import Triggers from '../../lib/triggers';
 import userPresence from '../../lib/userPresence';
 import { ChatConnector } from '../../routes/Chat';
 import ChatFinished from '../../routes/ChatFinished';
 import GDPRAgreement from '../../routes/GDPRAgreement';
+import LanguageSelection from '../../routes/LanguageSelection';
 import LeaveMessage from '../../routes/LeaveMessage';
 import Register from '../../routes/Register';
 import SwitchDepartment from '../../routes/SwitchDepartment';
@@ -54,6 +56,7 @@ type AppProps = {
 	}[];
 	iframe: {
 		visible: boolean;
+		language?: string;
 		guest?: {
 			token: string;
 			department: string;
@@ -62,6 +65,8 @@ type AppProps = {
 		};
 		theme: StoreState['iframe']['theme'];
 	};
+	room?: StoreState['room'];
+	languageSelectionConfirmed?: StoreState['languageSelectionConfirmed'];
 	i18n: typeof i18next;
 };
 
@@ -75,6 +80,16 @@ export class App extends Component<AppProps, AppState> {
 		initialized: false,
 		poppedOut: false,
 	};
+
+	protected needsLanguageSelection() {
+		const {
+			iframe: { language: pageLanguage },
+			room,
+			languageSelectionConfirmed,
+		} = this.props;
+
+		return Boolean(pageLanguage && !room && !languageSelectionConfirmed && !haveSameBaseLanguage(pageLanguage, browserLanguage()));
+	}
 
 	protected handleRoute = async ({ url }: { url: string }) => {
 		setTimeout(() => {
@@ -94,6 +109,15 @@ export class App extends Component<AppProps, AppState> {
 			} = this.props;
 
 			setInitCookies();
+
+			if (url === '/' && this.needsLanguageSelection()) {
+				route('/language');
+				return;
+			}
+
+			if (url === '/language') {
+				return;
+			}
 
 			// return route('/gdpr');
 			// return route('/leave-message');
@@ -163,7 +187,11 @@ export class App extends Component<AppProps, AppState> {
 
 		window.addEventListener('beforeunload', () => {
 			visibility.removeListener(this.handleVisibilityChange);
-			dispatch({ minimized: true, undocked: false });
+
+			// Preserve the persisted UI state across development reloads.
+			if (process.env.NODE_ENV !== 'development') {
+				dispatch({ minimized: true, undocked: false });
+			}
 		});
 
 		i18next.on('languageChanged', this.handleLanguageChange);
@@ -212,6 +240,7 @@ export class App extends Component<AppProps, AppState> {
 			<ScreenProvider>
 				<Router history={history} onChange={this.handleRoute}>
 					<ChatConnector path='/' default />
+					<LanguageSelection path='/language' />
 					<ChatFinished path='/chat-finished' />
 					<GDPRAgreement path='/gdpr' />
 					<LeaveMessage path='/leave-message' />

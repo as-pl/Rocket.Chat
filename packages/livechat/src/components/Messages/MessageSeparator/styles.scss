@@ -3,7 +3,7 @@
 
 $separator-text-font-size: 0.625rem;
 $separator-text-letter-spacing: 0.2px;
-$separator-line-width: 2px;
+$separator-line-width: 1px;
 $separator-date-text-color: colors.$color-text-grey;
 $separator-date-line-color: colors.$bg-color-grey;
 $separator-unread-text-color: colors.$color-red;
@@ -12,7 +12,7 @@ $separator-unread-line-color: colors.$color-red;
 .separator {
 	display: flex;
 
-	margin: variables.$default-gap 0;
+	margin: 4px 0 18px;
 	align-items: center;
 	flex-flow: row nowrap;
 
@@ -25,7 +25,8 @@ $separator-unread-line-color: colors.$color-red;
 		letter-spacing: $separator-text-letter-spacing;
 
 		font-size: $separator-text-font-size;
-		font-weight: bold;
+		font-family: monospace;
+		font-weight: 400;
 		line-height: 1rem;
 	}
 

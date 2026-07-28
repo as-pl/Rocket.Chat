@@ -119,6 +119,8 @@ export type StoreState = {
 	messageListPosition?: 'top' | 'bottom' | 'free';
 	renderedTriggers: TriggerMessage[];
 	customFieldsQueue: Record<string, { value: string; overwrite: boolean }>;
+	conversationLanguage?: string;
+	languageSelectionConfirmed?: boolean;
 };
 
 export const initialState = (): StoreState => ({

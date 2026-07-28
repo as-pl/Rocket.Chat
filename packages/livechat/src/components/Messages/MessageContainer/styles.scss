@@ -1,13 +1,14 @@
 @use 'sass:math';
 @use '../../../styles/variables';
 
-$message-container-margin: 0 0 variables.$default-padding 0;
+$message-container-margin: 0 0 18px;
 $message-container-compact-margin: 0 0 math.div(variables.$default-padding, 4) 0;
 
 .message-container {
 	display: flex;
 
 	margin: $message-container-margin;
+	align-items: flex-end;
 	justify-content: flex-start;
 
 	&--compact {
@@ -25,5 +26,13 @@ $message-container-compact-margin: 0 0 math.div(variables.$default-padding, 4) 0
 	&-break {
 		display: flex;
 		flex-wrap: wrap;
+	}
+
+	@media (max-width: 767px) {
+		margin-bottom: 8px;
+
+		&--compact {
+			margin-bottom: math.div(variables.$default-padding, 4);
+		}
 	}
 }

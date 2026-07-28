@@ -5,6 +5,7 @@ import type { StoreState } from '../store';
 import { initialState, store } from '../store';
 import type { LivechatMessageEventData } from '../widget';
 import CustomFields from './customFields';
+import { normalizeLivechatLanguage } from './locale';
 import { loadConfig, updateBusinessUnit } from './main';
 import { parentCall } from './parentCall';
 import { createToken } from './random';
@@ -286,8 +287,14 @@ const api = {
 
 	setLanguage: async (language: StoreState['iframe']['language']) => {
 		const { iframe } = store.state;
-		store.setState({ iframe: { ...iframe, language } });
-		void i18next.changeLanguage(language);
+		const pageLanguage = normalizeLivechatLanguage(language || 'en');
+		const activeLanguage =
+			store.state.languageSelectionConfirmed && store.state.conversationLanguage
+				? normalizeLivechatLanguage(store.state.conversationLanguage)
+				: pageLanguage;
+
+		store.setState({ iframe: { ...iframe, language: pageLanguage } });
+		void i18next.changeLanguage(activeLanguage);
 	},
 
 	showWidget: () => {

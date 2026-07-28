@@ -8,6 +8,8 @@ $message-content-margin: math.div(-$message-content-gap, 2) math.div(variables.$
 	display: flex;
 	flex-direction: column;
 
+	width: fit-content;
+	max-width: min(78%, 620px);
 	margin: $message-content-margin;
 	align-items: flex-start;
 
@@ -17,5 +19,9 @@ $message-content-margin: math.div(-$message-content-gap, 2) math.div(variables.$
 
 	&--reverse {
 		align-items: flex-end;
+	}
+
+	@media (max-width: 767px) {
+		max-width: 86%;
 	}
 }

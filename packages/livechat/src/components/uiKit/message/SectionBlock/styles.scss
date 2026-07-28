@@ -4,7 +4,8 @@
 .uikit-section-block {
 	display: flex;
 
-	margin: 0 2px 8px;
+	margin: 0;
+	padding: 12px;
 
 	color: colors.$color-text-dark;
 
@@ -17,7 +18,7 @@
 	&__content {
 		flex: 1 1 auto;
 
-		margin: 0 6px;
+		margin: 0;
 	}
 
 	&__text {
@@ -33,11 +34,18 @@
 
 	&__field {
 		flex: 1 1 50%;
+		padding: 8px 10px;
+
+		border-top: 1px solid #e0e4e9;
+
+		& + & {
+			border-left: 1px solid #e0e4e9;
+		}
 	}
 
 	&__accessory {
 		flex: 0 0 auto;
 
-		margin: 0 6px;
+		margin: 0 0 0 12px;
 	}
 }

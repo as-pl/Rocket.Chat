@@ -1,7 +1,11 @@
 .register__message {
-	margin: 0 0 1rem;
+	margin: 0 0 1.5rem;
+	padding: 12px 14px;
 
-	text-align: center;
-	font-weight: 500;
+	text-align: left;
+	border-left: 2px solid var(--color, #e30613);
+	background: #f1f2f4;
+
+	font-weight: 400;
 	line-height: 1.5;
 }

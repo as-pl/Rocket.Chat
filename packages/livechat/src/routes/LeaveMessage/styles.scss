@@ -4,18 +4,27 @@
 	}
 
 	&__main {
-		padding: 0 1.5rem;
+		padding: 0;
 	}
 
 	&__message {
-		margin: 0 0 1rem;
+		margin: 0 0 1.5rem;
 
-		text-align: center;
-		font-weight: 500;
+		text-align: left;
+		font-weight: 400;
 		line-height: 1.5;
+	}
+
+	&__main-message {
+		margin-bottom: 1.5rem;
+		padding: 12px 14px;
+
+		border-left: 2px solid var(--color, #e30613);
+		background: #f1f2f4;
 	}
 }
 
 .offline_msg {
-	text-align: center;
+	text-align: left;
+	line-height: 1.5;
 }

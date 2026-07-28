@@ -1,0 +1,132 @@
+@use '../../styles/colors';
+
+.language-selection {
+	&__content {
+		display: flex;
+		flex-direction: column;
+
+		width: 100%;
+		max-width: 560px;
+		height: 100%;
+		margin: 0 auto;
+		gap: 18px;
+		justify-content: center;
+	}
+
+	&__intro {
+		padding: 14px 16px;
+
+		border-left: 2px solid var(--color, colors.$color-red);
+		background: colors.$bg-color-light;
+	}
+
+	&__title {
+		margin: 0 0 6px;
+
+		color: colors.$color-text-dark;
+
+		font-size: 1rem;
+		line-height: 1.4;
+	}
+
+	&__description {
+		margin: 0;
+
+		color: colors.$color-text-grey-system;
+
+		font-size: 0.8125rem;
+		line-height: 1.45;
+	}
+
+	&__options {
+		display: grid;
+
+		gap: 10px;
+	}
+
+	&__option {
+		display: flex;
+
+		width: 100%;
+		padding: 14px;
+
+		cursor: pointer;
+		transition:
+			border-color 150ms ease,
+			background-color 150ms ease;
+		text-align: left;
+
+		color: colors.$color-text-dark;
+		border: 1px solid colors.$bg-color-grey;
+		border-radius: 2px;
+		background: colors.$bg-color-white;
+		align-items: center;
+		gap: 12px;
+
+		&:hover,
+		&:focus-visible {
+			border-color: var(--color, colors.$color-red);
+			background: colors.$bg-color-light;
+		}
+
+		&:focus-visible {
+			outline: 2px solid rgba(41, 45, 56, 0.25);
+			outline-offset: 2px;
+		}
+	}
+
+	&__language-code {
+		display: grid;
+		flex: 0 0 42px;
+
+		width: 42px;
+		height: 42px;
+
+		text-transform: uppercase;
+
+		color: colors.$color-white;
+		border-radius: 2px;
+		background: var(--color, colors.$color-red);
+
+		font-size: 0.75rem;
+		font-weight: 700;
+		place-items: center;
+	}
+
+	&__option-copy {
+		display: flex;
+		overflow: hidden;
+		flex-direction: column;
+
+		min-width: 0;
+		gap: 3px;
+
+		strong,
+		small {
+			overflow: hidden;
+
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		strong {
+			font-size: 0.9375rem;
+			line-height: 1.25rem;
+		}
+
+		small {
+			color: colors.$color-text-grey-system;
+
+			font-size: 0.6875rem;
+			line-height: 1rem;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.language-selection {
+		&__content {
+			justify-content: flex-start;
+		}
+	}
+}

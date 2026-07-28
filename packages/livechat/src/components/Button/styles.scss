@@ -4,7 +4,7 @@
 @use '../../styles/variables';
 
 $button-border-width: variables.$default-border;
-$button-border-radius: 5px;
+$button-border-radius: 2px;
 $button-padding: (0.75 * variables.$default-gap - variables.$default-border) (1.5 * variables.$default-gap - variables.$default-border);
 $button-small-padding: (0.25 * variables.$default-gap - math.div(variables.$default-border, 2))
 	(1.5 * variables.$default-gap - variables.$default-border);
@@ -36,7 +36,7 @@ $button-badge-font-size: 0.8125rem;
 $button-badge-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 
 $button-icon-size: 54px;
-$button-icon-border-radius: 4px;
+$button-icon-border-radius: 2px;
 $button-icon-padding: 10px;
 
 .button {
@@ -86,7 +86,9 @@ $button-icon-padding: 10px;
 	@include helpers.pressable-button($button-active-displacement, $button-border-width);
 
 	&:focus {
-		box-shadow: 0 0 5px rgba(#000000, 0.5);
+		outline: 2px solid rgba(41, 45, 56, 0.35);
+		outline-offset: 2px;
+		box-shadow: none;
 	}
 
 	&--danger {
@@ -110,7 +112,8 @@ $button-icon-padding: 10px;
 		background: none;
 
 		&:focus {
-			box-shadow: none;
+			outline: 1px solid currentColor;
+			outline-offset: 2px;
 		}
 	}
 
@@ -174,7 +177,7 @@ $button-icon-padding: 10px;
 		height: $button-icon-size;
 		padding: $button-icon-padding;
 
-		border-radius: $button-icon-border-radius;
+		border-radius: 50%;
 	}
 
 	&__badge {
