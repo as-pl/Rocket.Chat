@@ -34,16 +34,51 @@ $max-lines: 12;
 	}
 
 	.screen__chat-button {
-		color: #ffffff;
-		border-radius: 50%;
-		background-color: var(--color, #e30613);
-		background-size: cover !important;
-		box-shadow: $screen-box-shadow;
 		display: none;
 
+		min-width: 96px;
+		height: 54px;
+		padding: 0 16px;
+
+		color: #ffffff;
+		border-color: #b91c1c;
+		border-radius: 12px;
+		background-color: #b91c1c;
+		background-size: cover !important;
+		box-shadow: $screen-box-shadow;
+
+		font-weight: 400;
+		align-items: center;
+		gap: 8px;
+
 		svg {
+			flex: 0 0 auto;
+
+			width: 24px;
+			height: 24px;
+
 			fill: currentColor;
 		}
+
+		img {
+			width: 24px;
+			height: 24px;
+			object-fit: cover;
+		}
+	}
+
+	.screen__chat-button-icon {
+		display: flex;
+		flex: 0 0 auto;
+
+		width: 24px;
+		height: 24px;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.screen__chat-button-label {
+		line-height: 20px;
 	}
 
 	.screen__chat-close-button {
@@ -72,8 +107,10 @@ $max-lines: 12;
 		.screen__chat-close-button {
 			display: none;
 		}
+
 		.screen__chat-button {
-			display: block;
+			display: flex;
+
 			animation: 0.4s ease-in-out both popup-btn;
 		}
 	}
@@ -108,7 +145,7 @@ $max-lines: 12;
 		}
 
 		.screen__chat-button {
-			display: block;
+			display: flex;
 		}
 	}
 }

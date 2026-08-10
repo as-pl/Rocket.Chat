@@ -1,5 +1,5 @@
-import ChatIcon from '../../icons/chat.svg';
-import CloseIcon from '../../icons/close.svg';
+import styles from './styles.scss';
+import { createClassName } from '../../helpers/createClassName';
 import { Button } from '../Button';
 
 type ChatButtonProps = {
@@ -9,21 +9,26 @@ type ChatButtonProps = {
 	onClick: () => void;
 	triggered?: boolean;
 	className?: string;
-	logoUrl?: string;
 };
 
-export const ChatButton = ({ text, minimized, badge, onClick, triggered = false, className, logoUrl }: ChatButtonProps) => {
-	const openIcon = logoUrl ? <img src={logoUrl} width={30} height={30} alt='Livechat' /> : <ChatIcon />;
+export const ChatButton = ({ text, minimized, badge, onClick, triggered = false, className }: ChatButtonProps) => {
+	const isLauncherVisible = minimized || triggered;
 
 	return (
-		<Button
-			icon={minimized || triggered ? openIcon : <CloseIcon />}
-			badge={badge}
-			onClick={onClick}
-			className={className}
-			data-qa-id='chat-button'
-		>
-			{text}
+		<Button badge={badge} onClick={onClick} className={className} aria-label={isLauncherVisible ? 'Chat' : text} data-qa-id='chat-button'>
+			<span className={createClassName(styles, 'screen__chat-button-icon')}>
+				<svg aria-hidden='true' focusable='false' viewBox='0 0 24 24'>
+					<g stroke='none' strokeWidth='1' fill='currentColor' fillRule='nonzero'>
+						<path d='M21.6277201,11.0930117 C21.6277201,7.83151627 17.6238585,5.1875108 12.685183,5.1875108 C7.74629556,5.1875108 3.742434,7.83129706 3.74264602,11.0930117 C3.74264602,12.5140934 4.50296415,13.8181216 5.76959564,14.836969 C5.98755633,16.9614675 4.96920497,18.2512476 4.2818231,19.0145064 C6.39506649,19.5671127 8.57043292,17.8571238 9.55931294,16.6274048 C10.5322912,16.8669918 11.5854145,16.9985125 12.685183,16.9985125 C17.6238585,16.9985125 21.6277201,14.3542878 21.6277201,11.0930117 Z M3.80280171,20.9898783 L0.576756994,20.146278 L2.84909288,17.6231095 C3.4276545,16.9806832 3.74448562,16.444202 3.82126762,15.7743766 C2.52645045,14.4645133 1.78100505,12.8479995 1.78100506,11.0931492 C1.78070411,6.46351564 6.79773137,3.15047022 12.685183,3.15047022 C18.5722766,3.15047022 23.589361,6.46363832 23.589361,11.0930117 C23.589361,15.7222265 18.5721653,19.0355531 12.685183,19.0355531 C11.8545034,19.0355531 11.0353565,18.9695358 10.2398189,18.8402835 C8.48035636,20.5515061 6.10347625,21.5914973 3.80280171,20.9898783 Z' />
+						<g transform='translate(7.611408, 9.673691)'>
+							<ellipse cx='5.19081294' cy='1.35423197' rx='1.29770324' ry='1.35423197' />
+							<ellipse cx='9.08392265' cy='1.35423197' rx='1.29770324' ry='1.35423197' />
+							<ellipse cx='1.29770324' cy='1.35423197' rx='1.29770324' ry='1.35423197' />
+						</g>
+					</g>
+				</svg>
+			</span>
+			<span className={createClassName(styles, 'screen__chat-button-label')}>Chat</span>
 		</Button>
 	);
 };

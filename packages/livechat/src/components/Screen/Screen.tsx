@@ -27,7 +27,6 @@ export const Screen = ({
 }) => {
 	const {
 		theme,
-		livechatLogo,
 		notificationsEnabled,
 		minimized = false,
 		expanded = false,
@@ -106,7 +105,6 @@ export const Screen = ({
 				text={title}
 				badge={unread}
 				minimized={minimized}
-				logoUrl={livechatLogo?.url}
 				className={createClassName(styles, 'screen__chat-button')}
 				onClick={minimized ? onRestore : onMinimize}
 			/>
