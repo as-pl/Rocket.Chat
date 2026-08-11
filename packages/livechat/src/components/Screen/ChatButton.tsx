@@ -15,7 +15,13 @@ export const ChatButton = ({ text, minimized, badge, onClick, triggered = false,
 	const isLauncherVisible = minimized || triggered;
 
 	return (
-		<Button badge={badge} onClick={onClick} className={className} aria-label={isLauncherVisible ? 'Chat' : text} data-qa-id='chat-button'>
+		<Button
+			badge={badge}
+			onClick={onClick}
+			className={className}
+			aria-label={isLauncherVisible ? 'AS-PL Expert Desk' : text}
+			data-qa-id='chat-button'
+		>
 			<span className={createClassName(styles, 'screen__chat-button-icon')}>
 				<svg aria-hidden='true' focusable='false' viewBox='0 0 24 24'>
 					<g stroke='none' strokeWidth='1' fill='currentColor' fillRule='nonzero'>
@@ -28,7 +34,7 @@ export const ChatButton = ({ text, minimized, badge, onClick, triggered = false,
 					</g>
 				</svg>
 			</span>
-			<span className={createClassName(styles, 'screen__chat-button-label')}>Chat</span>
+			<span className={createClassName(styles, 'screen__chat-button-label')}>AS-PL Expert Desk</span>
 		</Button>
 	);
 };

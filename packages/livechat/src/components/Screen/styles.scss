@@ -36,13 +36,13 @@ $max-lines: 12;
 	.screen__chat-button {
 		display: none;
 
-		min-width: 96px;
-		height: 54px;
-		padding: 0 16px;
+		min-width: 176px;
+		height: 42px;
+		padding: 0 12px;
 
 		color: #ffffff;
 		border-color: #b91c1c;
-		border-radius: 12px;
+		border-radius: 8px;
 		background-color: #b91c1c;
 		background-size: cover !important;
 		box-shadow: $screen-box-shadow;
@@ -54,8 +54,8 @@ $max-lines: 12;
 		svg {
 			flex: 0 0 auto;
 
-			width: 24px;
-			height: 24px;
+			width: 20px;
+			height: 20px;
 
 			fill: currentColor;
 		}
@@ -71,8 +71,8 @@ $max-lines: 12;
 		display: flex;
 		flex: 0 0 auto;
 
-		width: 24px;
-		height: 24px;
+		width: 20px;
+		height: 20px;
 		align-items: center;
 		justify-content: center;
 	}
