@@ -34,31 +34,21 @@ export type ScreenContextValue = {
 		src: string;
 		play: boolean;
 	};
-	alerts: unknown;
-	modal: unknown;
-	nameDefault: string;
-	emailDefault: string;
-	departmentDefault: string;
+	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
+	modal: ComponentChildren;
+	nameDefault: string | undefined;
+	emailDefault: string | undefined;
+	departmentDefault: string | undefined;
 	onEnableNotifications: () => unknown;
 	onDisableNotifications: () => unknown;
 	onMinimize: () => unknown;
 	onRestore: () => Promise<void>;
 	onOpenWindow: () => unknown;
-	onDismissAlert: () => unknown;
+	onDismissAlert: (id: string) => unknown;
 	dismissNotification: () => void;
+	wasMinimized: boolean;
 	setWasMinimized: (value: boolean) => void;
-	theme?: {
-		color?: string;
-		fontColor?: string;
-		iconColor?: string;
-		position?: 'left' | 'right';
-		guestBubbleBackgroundColor?: string;
-		agentBubbleBackgroundColor?: string;
-		background?: string;
-		hideGuestAvatar?: boolean;
-		hideAgentAvatar?: boolean;
-		hideExpandChat?: boolean;
-	};
+	theme: ScreenTheme;
 };
 
 export const ScreenContext = createContext<ScreenContextValue>({
@@ -71,14 +61,27 @@ export const ScreenContext = createContext<ScreenContextValue>({
 		hideExpandChat: false,
 	},
 	notificationsEnabled: true,
+	hideWatermark: false,
+	livechatLogo: undefined,
 	minimized: true,
+	expanded: false,
 	windowed: false,
+	sound: { src: '', play: false },
+	alerts: [],
+	modal: null,
+	nameDefault: undefined,
+	emailDefault: undefined,
+	departmentDefault: undefined,
 	onEnableNotifications: () => undefined,
 	onDisableNotifications: () => undefined,
 	onMinimize: () => undefined,
 	onRestore: async () => undefined,
 	onOpenWindow: () => undefined,
-} as ScreenContextValue);
+	onDismissAlert: () => undefined,
+	dismissNotification: () => undefined,
+	wasMinimized: true,
+	setWasMinimized: () => undefined,
+});
 
 type ScreenProviderProps = {
 	children: ComponentChildren;
@@ -165,23 +168,23 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 	const screenProps = {
 		theme: {
 			color: customColor || '#e30613',
-			fontColor: customFontColor,
-			iconColor: customIconColor,
+			fontColor: customFontColor || '',
+			iconColor: customIconColor || '',
 			position,
 			guestBubbleBackgroundColor,
 			agentBubbleBackgroundColor,
 			background: customBackground,
 			hideAgentAvatar,
 			hideGuestAvatar,
-			hideExpandChat: customHideExpandChat || hideExpandChat,
+			hideExpandChat: Boolean(customHideExpandChat || hideExpandChat),
 		},
-		notificationsEnabled: sound?.enabled,
-		minimized: !poppedOut && (minimized || undocked),
+		notificationsEnabled: Boolean(sound?.enabled),
+		minimized: !poppedOut && Boolean(minimized || undocked),
 		expanded: !minimized && expanded,
 		windowed: poppedOut,
 		livechatLogo,
 		hideWatermark,
-		sound,
+		sound: { src: sound?.src || '', play: Boolean(sound?.play) },
 		alerts,
 		modal,
 		nameDefault: name,
@@ -196,7 +199,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		dismissNotification,
 		wasMinimized,
 		setWasMinimized,
-	};
+	} satisfies ScreenContextValue;
 
 	return <ScreenContext.Provider value={screenProps}>{children}</ScreenContext.Provider>;
 };

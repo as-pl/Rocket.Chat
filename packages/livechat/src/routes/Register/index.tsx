@@ -40,7 +40,6 @@ export const Register = (_: RegisterProps) => {
 			departments = [],
 			messages: { registrationFormMessage: message },
 			settings: { nameFieldRegistrationForm: hasNameField, emailFieldRegistrationForm: hasEmailField },
-			theme: { title },
 			customFields = [],
 		},
 
@@ -61,7 +60,6 @@ export const Register = (_: RegisterProps) => {
 		mode: 'onChange',
 	});
 
-	const defaultTitle = t('need_help');
 	const defaultMessage = t('please_tell_us_some_information_to_start_the_chat');
 
 	const registerCustomFields = (customFields: Record<string, unknown> = {}) => {
@@ -127,7 +125,7 @@ export const Register = (_: RegisterProps) => {
 	}, [user?._id]);
 
 	return (
-		<Screen title={''} className={createClassName(styles, 'register')}>
+		<Screen title='' className={createClassName(styles, 'register')}>
 			<FormScrollShadow topRef={topRef} bottomRef={bottomRef}>
 				<ScreenContent full>
 					<Form

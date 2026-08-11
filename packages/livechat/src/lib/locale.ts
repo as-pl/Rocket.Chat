@@ -43,6 +43,23 @@ export const haveSameBaseLanguage = (firstLanguage: string, secondLanguage: stri
  */
 export const browserLanguage = (): string => navigator.language;
 
+export const getSelectableChatLanguages = (pageLanguage?: string, detectedBrowserLanguage = browserLanguage()): string[] => {
+	const languages = [normalizeLivechatLanguage(pageLanguage || 'en'), normalizeLivechatLanguage(detectedBrowserLanguage)];
+
+	return languages.filter((language, index) => languages.findIndex((candidate) => haveSameBaseLanguage(candidate, language)) === index);
+};
+
+export const getNativeLanguageName = (language: string): string => {
+	const normalizedLanguage = normalizeLivechatLanguage(language);
+	const [languageCode] = normalizedLanguage.split('-');
+
+	try {
+		return new Intl.DisplayNames([normalizedLanguage], { type: 'language' }).of(languageCode) || languageCode.toUpperCase();
+	} catch {
+		return languageCode.toUpperCase();
+	}
+};
+
 /**
  * This is configured langauge
  */

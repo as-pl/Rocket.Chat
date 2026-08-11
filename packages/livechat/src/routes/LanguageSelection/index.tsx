@@ -6,22 +6,11 @@ import { useTranslation } from 'react-i18next';
 import styles from './styles.scss';
 import { Screen, ScreenContent } from '../../components/Screen';
 import { createClassName } from '../../helpers/createClassName';
-import { browserLanguage, haveSameBaseLanguage, normalizeLivechatLanguage } from '../../lib/locale';
+import { getNativeLanguageName, getSelectableChatLanguages } from '../../lib/locale';
 import { StoreContext } from '../../store';
 
 type LanguageSelectionProps = {
 	path: string;
-};
-
-const getNativeLanguageName = (language: string): string => {
-	const normalizedLanguage = normalizeLivechatLanguage(language);
-	const [languageCode] = normalizedLanguage.split('-');
-
-	try {
-		return new Intl.DisplayNames([normalizedLanguage], { type: 'language' }).of(languageCode) || languageCode.toUpperCase();
-	} catch {
-		return languageCode.toUpperCase();
-	}
 };
 
 const LanguageSelection = (_: LanguageSelectionProps) => {
@@ -32,24 +21,17 @@ const LanguageSelection = (_: LanguageSelectionProps) => {
 		dispatch,
 	} = useContext(StoreContext);
 
-	const pageLanguage = normalizeLivechatLanguage(configuredPageLanguage || 'en');
-	const detectedBrowserLanguage = normalizeLivechatLanguage(browserLanguage());
-	const languagesMatch = haveSameBaseLanguage(pageLanguage, detectedBrowserLanguage);
+	const selectableLanguages = useMemo(() => getSelectableChatLanguages(configuredPageLanguage), [configuredPageLanguage]);
+	const languagesMatch = selectableLanguages.length < 2;
 
 	const languageOptions = useMemo(
-		() => [
-			{
-				language: pageLanguage,
-				name: getNativeLanguageName(pageLanguage),
-				source: t('website_language'),
-			},
-			{
-				language: detectedBrowserLanguage,
-				name: getNativeLanguageName(detectedBrowserLanguage),
-				source: t('browser_language'),
-			},
-		],
-		[detectedBrowserLanguage, pageLanguage, t],
+		() =>
+			selectableLanguages.map((language, index) => ({
+				language,
+				name: getNativeLanguageName(language),
+				source: index === 0 ? t('website_language') : t('browser_language'),
+			})),
+		[selectableLanguages, t],
 	);
 
 	useEffect(() => {

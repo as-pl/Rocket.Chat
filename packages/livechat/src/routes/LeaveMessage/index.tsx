@@ -29,8 +29,8 @@ const LeaveMessage = (_: LeaveMessageProps) => {
 	const {
 		config: {
 			departments = [],
-			messages: { offlineMessage, offlineSuccessMessage, offlineUnavailableMessage },
-			theme: { offlineTitle: title, offlineColor },
+			messages: { offlineSuccessMessage, offlineUnavailableMessage },
+			theme: { offlineColor },
 			settings: { displayOfflineForm },
 		},
 		// iframe,
@@ -88,7 +88,7 @@ const LeaveMessage = (_: LeaveMessageProps) => {
 	const defaultUnavailableMessage = t('offline_form_not_available');
 
 	return (
-		<Screen title={''} color={offlineColor} className={createClassName(styles, 'leave-message')}>
+		<Screen title='' color={offlineColor} className={createClassName(styles, 'leave-message')}>
 			{displayOfflineForm ? (
 				<FormScrollShadow topRef={topRef} bottomRef={bottomRef}>
 					<ScreenContent full>

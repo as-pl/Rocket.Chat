@@ -7,6 +7,7 @@ type HeaderActionProps = {
 	children?: ComponentChildren;
 	className?: string;
 	onClick?: () => void;
+	disabled?: boolean;
 };
 
 const HeaderAction = ({ children, className = undefined, ...props }: HeaderActionProps) => (

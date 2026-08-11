@@ -1,5 +1,7 @@
+import type { ComponentChildren, Ref } from 'preact';
 import { useContext, useLayoutEffect } from 'preact/hooks';
 
+import type { Agent } from '../../definitions/agents';
 import { createClassName } from '../../helpers/createClassName';
 import CloseIcon from '../../icons/close.svg';
 import { Button } from '../Button';
@@ -7,9 +9,26 @@ import { PopoverContainer } from '../Popover';
 import { Sound } from '../Sound';
 import { ChatButton } from './ChatButton';
 import CssVar from './CssVar';
-import ScreenHeader from './Header';
+import ScreenHeader, { type LanguageAction } from './Header';
 import { ScreenContext } from './ScreenProvider';
 import styles from './styles.scss';
+
+type ScreenProps = {
+	title?: string;
+	color?: string;
+	agent?: Partial<Agent> | null;
+	children?: ComponentChildren;
+	className?: string;
+	unread?: number;
+	triggered?: boolean;
+	queueInfo?: { spot: number };
+	onSoundStop?: () => void;
+	onChangeDepartment?: () => void;
+	onFinishChat?: () => void;
+	onRemoveUserData?: () => void;
+	languageAction?: LanguageAction;
+	ref?: Ref<HTMLDivElement>;
+};
 
 export const Screen = ({
 	title,
@@ -24,7 +43,9 @@ export const Screen = ({
 	onChangeDepartment,
 	onFinishChat,
 	onRemoveUserData,
-}) => {
+	languageAction,
+	ref,
+}: ScreenProps) => {
 	const {
 		theme,
 		notificationsEnabled,
@@ -51,10 +72,13 @@ export const Screen = ({
 			const timeout = setTimeout(() => setWasMinimized(false), 400);
 			return () => clearTimeout(timeout);
 		}
+
+		return undefined;
 	}, [minimized, wasMinimized, setWasMinimized]);
 
 	return (
 		<div
+			ref={ref}
 			className={createClassName(styles, 'screen', {
 				minimized,
 				expanded,
@@ -92,6 +116,7 @@ export const Screen = ({
 							onChangeDepartment={onChangeDepartment}
 							onFinishChat={onFinishChat}
 							onRemoveUserData={onRemoveUserData}
+							languageAction={languageAction}
 						/>
 					)}
 
@@ -102,7 +127,7 @@ export const Screen = ({
 
 			<ChatButton
 				triggered={triggered}
-				text={title}
+				text={title || ''}
 				badge={unread}
 				minimized={minimized}
 				className={createClassName(styles, 'screen__chat-button')}

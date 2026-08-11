@@ -176,8 +176,12 @@ export class Composer extends Component<ComposerProps, ComposerState> {
 
 	// we only update composer if value length changed from 0 to 1 or 1 to 0
 	// everything else is managed by this.el
-	override shouldComponentUpdate({ value: nextValue = '' }: ComposerProps) {
-		const { value = '', limitTextLength } = this.props;
+	override shouldComponentUpdate({ value: nextValue = '', placeholder: nextPlaceholder }: ComposerProps) {
+		const { value = '', limitTextLength, placeholder } = this.props;
+
+		if (nextPlaceholder !== placeholder) {
+			return true;
+		}
 
 		const nextValueEmpty = !nextValue || nextValue.length === 0;
 		const valueEmpty = !value || value.length === 0;

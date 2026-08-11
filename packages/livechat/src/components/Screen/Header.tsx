@@ -20,9 +20,16 @@ import Alert from '../Alert';
 import { Header, HeaderAction, HeaderActions, HeaderContent, HeaderPicture, HeaderPost, HeaderSubTitle, HeaderTitle } from '../Header';
 import { TooltipContainer, TooltipTrigger } from '../Tooltip';
 
+export type LanguageAction = {
+	code: string;
+	label: string;
+	disabled: boolean;
+	onClick: () => void;
+};
+
 type ScreenHeaderProps = {
 	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
-	agent?: Agent | null;
+	agent?: Partial<Agent> | null;
 	notificationsEnabled: boolean;
 	minimized: boolean;
 	expanded: boolean;
@@ -33,14 +40,15 @@ type ScreenHeaderProps = {
 	onMinimize: () => unknown;
 	onRestore: ScreenContextValue['onRestore'];
 	onOpenWindow: () => unknown;
-	queueInfo: {
+	queueInfo?: {
 		spot: number;
 	};
-	title: string;
-	hideExpandChat: boolean;
+	title?: string;
+	hideExpandChat?: boolean;
 	onChangeDepartment: any;
 	onFinishChat: any;
 	onRemoveUserData: any;
+	languageAction?: LanguageAction;
 };
 
 const ScreenHeader = ({
@@ -62,6 +70,7 @@ const ScreenHeader = ({
 	onChangeDepartment,
 	onFinishChat,
 	onRemoveUserData,
+	languageAction,
 }: ScreenHeaderProps) => {
 	const { t } = useTranslation();
 	const headerRef = useRef<HTMLElement>(null);
@@ -123,6 +132,14 @@ const ScreenHeader = ({
 
 			<TooltipContainer>
 				<HeaderActions>
+					{languageAction && (
+						<TooltipTrigger content={languageAction.label} placement='bottom-left'>
+							<HeaderAction aria-label={languageAction.label} disabled={languageAction.disabled} onClick={languageAction.onClick}>
+								<span className={createClassName(styles, 'screen__language-action')}>{languageAction.code}</span>
+							</HeaderAction>
+						</TooltipTrigger>
+					)}
+
 					{/* {title && (
 						<TooltipTrigger content={notificationsEnabled ? t('sound_is_on') : t('sound_is_off')} placement='bottom-left'>
 							<HeaderAction
