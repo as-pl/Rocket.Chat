@@ -21,6 +21,8 @@ The Polish commands `przeprowadź pełną aktualizację` and `przeprowadz pelna 
 4. Update both `docker-build` and `docker-push` entries in the Rocket.Chat `Makefile` to the new `arturkmera/custom-rc:<version>` tag.
 5. Commit only the task-scoped Rocket.Chat changes plus `Makefile`, verify the staged diff, and push the current Rocket.Chat branch to `origin`.
 6. From the Rocket.Chat repository, with Node.js `22.22.3` on `PATH`, run `make rebuild-publish`. This must complete package build, Meteor build, Docker build, and Docker push.
+   - Redirect the full command output to a temporary log and do not continuously stream or inspect successful build output. This preserves agent context and tokens.
+   - While the command runs, monitor only its process status. On success, read only the final build summary, pushed tag, and registry digest. Read a larger relevant log tail only when the command fails or the digest is missing.
 7. Treat the Docker registry digest printed by `docker push` as the publication success gate. If build or push fails, stop and do not change GitOps.
 8. After a successful image push, update only `infrastructure/gitops/environments/production/rocketchat.values.yaml` in the AS-PL monorepo to the published tag. Do not stage unrelated monorepo changes.
 9. Verify the staged GitOps diff, commit it separately with `chore(infra): bump Rocket.Chat image to <version>`, and push `webpage-backend` to `origin`.
