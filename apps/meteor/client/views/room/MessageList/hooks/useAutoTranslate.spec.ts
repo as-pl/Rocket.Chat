@@ -1,4 +1,4 @@
-import type { IMessage, IRoom, ISubscription } from '@rocket.chat/core-typings';
+import type { IMessage, IRoom, ISubscription, IUser } from '@rocket.chat/core-typings';
 import { mockAppRoot } from '@rocket.chat/mock-providers';
 import { renderHook } from '@testing-library/react';
 
@@ -7,7 +7,7 @@ import { AutoTranslate } from '../../../../../app/autotranslate/client';
 
 jest.mock('../../../../../app/autotranslate/client', () => ({
 	AutoTranslate: {
-		getLanguage: jest.fn(() => 'pl'),
+		getLanguage: jest.fn(() => 'en'),
 	},
 }));
 
@@ -23,7 +23,7 @@ describe('useAutoTranslate for queued LiveChat rooms', () => {
 		jest.clearAllMocks();
 	});
 
-	it('uses the agent language and displays an existing translation before the chat is taken', () => {
+	it('uses the workspace language when the queued-room agent has no profile language', () => {
 		const room = { _id: 'queued-room', t: 'l' } as IRoom;
 		const message = {
 			_id: 'visitor-message',
@@ -36,7 +36,7 @@ describe('useAutoTranslate for queued LiveChat rooms', () => {
 		} as IMessage;
 
 		const { result } = renderHook(() => useAutoTranslate(undefined, room), {
-			wrapper: mockAppRoot().withSetting('AutoTranslate_Enabled', true).build(),
+			wrapper: mockAppRoot().withSetting('AutoTranslate_Enabled', true).withSetting('Language', 'pl').build(),
 		});
 
 		expect(AutoTranslate.getLanguage).toHaveBeenCalledWith(room._id);
@@ -49,14 +49,26 @@ describe('useAutoTranslate for queued LiveChat rooms', () => {
 		const room = { _id: 'regular-room', t: 'c' } as IRoom;
 
 		const { result } = renderHook(() => useAutoTranslate(undefined, room), {
-			wrapper: mockAppRoot().withSetting('AutoTranslate_Enabled', true).build(),
+			wrapper: mockAppRoot().withSetting('AutoTranslate_Enabled', true).withSetting('Language', 'pl').build(),
 		});
 
 		expect(result.current.autoTranslateEnabled).toBe(false);
 		expect(result.current.autoTranslateLanguage).toBeUndefined();
 	});
 
+	it('keeps an explicitly selected agent profile language instead of the workspace language', () => {
+		const room = { _id: 'queued-room', t: 'l' } as IRoom;
+		const user = { _id: 'agent', username: 'agent', name: 'Agent', language: 'en' } as IUser;
+
+		const { result } = renderHook(() => useAutoTranslate(undefined, room), {
+			wrapper: mockAppRoot().withUser(user).withSetting('AutoTranslate_Enabled', true).withSetting('Language', 'pl').build(),
+		});
+
+		expect(result.current.autoTranslateLanguage).toBe('en');
+	});
+
 	it('keeps the subscription language path after the chat is taken', () => {
+		jest.mocked(AutoTranslate.getLanguage).mockReturnValueOnce('pl');
 		const subscription = {
 			rid: 'taken-room',
 			t: 'l',
