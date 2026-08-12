@@ -47,23 +47,13 @@ test.describe('OC - Contact Unknown Callout', () => {
 		await agent.page.close();
 	});
 
-	test('OC - Contact Unknown Callout - Dismiss callout', async () => {
+	// AS-PL customization: protect the fork behavior that anonymous B2B LiveChat visitors do not trigger the unknown-contact warning.
+	test('OC - Contact Unknown Callout - hidden for AS-PL LiveChat', async () => {
 		await test.step('expect to open conversation', async () => {
 			await agent.poHomeChannel.navbar.openChat(newVisitor.name);
 		});
 
-		await test.step('expect contact unknown callout to be visible', async () => {
-			await expect(agent.poHomeChannel.content.contactUnknownCallout).toBeVisible();
-		});
-
-		await test.step('expect to hide callout when dismiss is clicked', async () => {
-			await agent.poHomeChannel.content.btnDismissContactUnknownCallout.click();
-			await expect(agent.poHomeChannel.content.contactUnknownCallout).not.toBeVisible();
-		});
-
-		await test.step('expect keep callout hidden after changing pages', async () => {
-			await agent.poHomeChannel.navbar.btnHome.click();
-			await agent.poHomeChannel.navbar.openChat(newVisitor.name);
+		await test.step('expect contact unknown callout to stay hidden', async () => {
 			await expect(agent.poHomeChannel.content.contactUnknownCallout).not.toBeVisible();
 		});
 	});

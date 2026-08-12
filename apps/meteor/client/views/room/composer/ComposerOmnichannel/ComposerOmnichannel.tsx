@@ -6,7 +6,6 @@ import { useIsRoomOverMacLimit } from '../../../omnichannel/hooks/useIsRoomOverM
 import { useOmnichannelRoom, useUserIsSubscribed } from '../../contexts/RoomContext';
 import type { ComposerMessageProps } from '../ComposerMessage';
 import ComposerMessage from '../ComposerMessage';
-import ComposerOmnichannelCallout from './ComposerOmnichannelCallout';
 import { ComposerOmnichannelInquiry } from './ComposerOmnichannelInquiry';
 import { ComposerOmnichannelJoin } from './ComposerOmnichannelJoin';
 import { ComposerOmnichannelOnHold } from './ComposerOmnichannelOnHold';
@@ -23,57 +22,28 @@ const ComposerOmnichannel = (props: ComposerMessageProps) => {
 	const isSameAgent = servedBy?._id === userId;
 	const isRoomOverMacLimit = useIsRoomOverMacLimit(room);
 
+	// AS-PL customization: anonymous B2B LiveChat visitors are expected, so the upstream unknown-contact callout is intentionally not mounted.
 	if (!open) {
-		return (
-			<>
-				<ComposerOmnichannelCallout />
-				<MessageFooterCallout color='default'>{t('This_conversation_is_already_closed')}</MessageFooterCallout>
-			</>
-		);
+		return <MessageFooterCallout color='default'>{t('This_conversation_is_already_closed')}</MessageFooterCallout>;
 	}
 
 	if (isRoomOverMacLimit) {
-		return (
-			<>
-				<ComposerOmnichannelCallout />
-				<MessageFooterCallout color='default'>{t('Workspace_exceeded_MAC_limit_disclaimer')}</MessageFooterCallout>
-			</>
-		);
+		return <MessageFooterCallout color='default'>{t('Workspace_exceeded_MAC_limit_disclaimer')}</MessageFooterCallout>;
 	}
 
 	if (onHold) {
-		return (
-			<>
-				<ComposerOmnichannelCallout />
-				<ComposerOmnichannelOnHold />
-			</>
-		);
+		return <ComposerOmnichannelOnHold />;
 	}
 
 	if (isInquired) {
-		return (
-			<>
-				<ComposerOmnichannelCallout />
-				<ComposerOmnichannelInquiry />
-			</>
-		);
+		return <ComposerOmnichannelInquiry />;
 	}
 
 	if (!isSubscribed && !isSameAgent) {
-		return (
-			<>
-				<ComposerOmnichannelCallout />
-				<ComposerOmnichannelJoin />
-			</>
-		);
+		return <ComposerOmnichannelJoin />;
 	}
 
-	return (
-		<>
-			<ComposerOmnichannelCallout />
-			<ComposerMessage {...props} />
-		</>
-	);
+	return <ComposerMessage {...props} />;
 };
 
 export default ComposerOmnichannel;

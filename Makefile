@@ -5,10 +5,10 @@ app-build:
 	cd apps/meteor && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build --server-only --directory ../../custom-build
 
 docker-build:
-	docker build -t arturkmera/custom-rc:8.1.7 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
+	docker build -t arturkmera/custom-rc:8.1.9 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
 
 docker-push:
-	docker push arturkmera/custom-rc:8.1.7
+	docker push arturkmera/custom-rc:8.1.9
 
 prepare:
 	yarn install

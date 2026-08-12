@@ -53,7 +53,8 @@ const MessageListProvider = ({ children, attachmentDimension }: MessageListProvi
 	const showUsername = Boolean(!useUserPreference<boolean>('hideUsernames') && !isMobile);
 	const highlights = useUserPreference<string[]>('highlights');
 
-	const { showAutoTranslate, autoTranslateLanguage, autoTranslateEnabled } = useAutoTranslate(subscription);
+	// AS-PL customization: pass the room so queued LiveChats can render stored translations before the agent receives a subscription.
+	const { showAutoTranslate, autoTranslateLanguage, autoTranslateEnabled } = useAutoTranslate(subscription, room);
 	const { katexEnabled, katexDollarSyntaxEnabled, katexParenthesisSyntaxEnabled } = useKatex();
 
 	const formatDateAndTime = useFormatDateAndTime();

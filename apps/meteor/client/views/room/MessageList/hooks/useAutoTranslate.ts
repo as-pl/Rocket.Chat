@@ -1,4 +1,4 @@
-import type { IMessage, ISubscription, ITranslatedMessage } from '@rocket.chat/core-typings';
+import type { IMessage, IRoom, ISubscription, ITranslatedMessage } from '@rocket.chat/core-typings';
 import { useSetting } from '@rocket.chat/ui-contexts';
 import { useCallback, useMemo } from 'react';
 
@@ -13,12 +13,16 @@ export type AutoTranslateOptions = {
 	showAutoTranslate: (message: IMessage & Partial<ITranslatedMessage>) => boolean;
 };
 
-export const useAutoTranslate = (subscription?: ISubscription): AutoTranslateOptions => {
+export const useAutoTranslate = (subscription?: ISubscription, room?: IRoom): AutoTranslateOptions => {
 	const autoTranslateSettingEnabled = useSetting('AutoTranslate_Enabled', false);
 	const isSubscriptionEnabled = autoTranslateSettingEnabled && subscription?.autoTranslateLanguage && subscription?.autoTranslate;
-	const isLivechatRoom = useMemo(() => subscription && roomCoordinator.isLivechatRoom(subscription?.t), [subscription]);
+	// AS-PL customization: before an agent takes a LiveChat there is no subscription, so identify the room from RoomContext as a fallback.
+	const roomType = subscription?.t ?? room?.t;
+	const isLivechatRoom = useMemo(() => Boolean(roomType && roomCoordinator.isLivechatRoom(roomType)), [roomType]);
 	const autoTranslateEnabled = Boolean(isSubscriptionEnabled || isLivechatRoom);
-	const autoTranslateLanguage = autoTranslateEnabled && subscription ? AutoTranslate.getLanguage(subscription.rid) : undefined;
+	// AS-PL customization: AutoTranslate already falls back to the logged-in user's language; it only needs the queued room id when no subscription exists.
+	const rid = subscription?.rid ?? room?._id;
+	const autoTranslateLanguage = autoTranslateEnabled && rid ? AutoTranslate.getLanguage(rid) : undefined;
 
 	const showAutoTranslate = useCallback(
 		(message: IMessage): boolean => {

@@ -16,6 +16,7 @@ import { Screen, ScreenContent, ScreenFooter } from '../../components/Screen';
 import { createClassName } from '../../helpers/createClassName';
 import { parseOfflineMessage } from '../../helpers/parseOfflineMessage';
 import { sortArrayByColumn } from '../../helpers/sortArrayByColumn';
+import { useChatLanguageAction } from '../../hooks/useChatLanguageAction';
 import { validateEmail } from '../../lib/email';
 import { parentCall } from '../../lib/parentCall';
 import { createToken } from '../../lib/random';
@@ -39,6 +40,8 @@ const LeaveMessage = (_: LeaveMessageProps) => {
 		alerts,
 	} = useContext(StoreContext);
 	const { t } = useTranslation();
+	// AS-PL customization: offline visitors need the same page/browser language switch before they submit the contact form.
+	const languageAction = useChatLanguageAction();
 
 	const topRef = useRef<HTMLDivElement>(null);
 	const bottomRef = useRef<HTMLDivElement>(null);
@@ -88,7 +91,7 @@ const LeaveMessage = (_: LeaveMessageProps) => {
 	const defaultUnavailableMessage = t('offline_form_not_available');
 
 	return (
-		<Screen title='' color={offlineColor} className={createClassName(styles, 'leave-message')}>
+		<Screen title='' color={offlineColor} className={createClassName(styles, 'leave-message')} languageAction={languageAction}>
 			{displayOfflineForm ? (
 				<FormScrollShadow topRef={topRef} bottomRef={bottomRef}>
 					<ScreenContent full>

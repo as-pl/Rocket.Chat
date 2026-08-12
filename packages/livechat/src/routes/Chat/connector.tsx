@@ -1,22 +1,13 @@
 import type { TFunction } from 'i18next';
-import i18next from 'i18next';
 import type { Ref } from 'preact';
-import { useCallback, useContext, useMemo, useState } from 'preact/hooks';
+import { useContext } from 'preact/hooks';
 import { withTranslation } from 'react-i18next';
 
 import { ChatContainer } from '.';
 import { ScreenContext } from '../../components/Screen/ScreenProvider';
 import { canRenderMessage } from '../../helpers/canRenderMessage';
 import { formatAgent } from '../../helpers/formatAgent';
-import {
-	configLanguage,
-	getNativeLanguageName,
-	getSelectableChatLanguages,
-	haveSameBaseLanguage,
-	normalizeLivechatLanguage,
-} from '../../lib/locale';
-import { createToken } from '../../lib/random';
-import { loadMessages } from '../../lib/room';
+import { useChatLanguageAction } from '../../hooks/useChatLanguageAction';
 import { StoreContext } from '../../store';
 
 type ChatConnectorProps = {
@@ -28,7 +19,6 @@ type ChatConnectorProps = {
 
 export const ChatConnector = ({ ref, t }: ChatConnectorProps) => {
 	const { theme } = useContext(ScreenContext);
-	const [languageChangePending, setLanguageChangePending] = useState(false);
 	const {
 		config: {
 			settings: {
@@ -45,7 +35,7 @@ export const ChatConnector = ({ ref, t }: ChatConnectorProps) => {
 			messages: { conversationFinishedMessage },
 			departments = {},
 		},
-		iframe: { theme: { title: customTitle = '' } = {}, guest = {}, language: configuredPageLanguage },
+		iframe: { theme: { title: customTitle = '' } = {}, guest = {} },
 		token,
 		agent,
 		sound,
@@ -65,53 +55,8 @@ export const ChatConnector = ({ ref, t }: ChatConnectorProps) => {
 		messageListPosition,
 	} = useContext(StoreContext);
 
-	const selectableLanguages = useMemo(() => getSelectableChatLanguages(configuredPageLanguage), [configuredPageLanguage]);
-	const activeLanguage = normalizeLivechatLanguage(configLanguage() || selectableLanguages[0] || 'en');
-	const targetLanguage = selectableLanguages.find((language) => !haveSameBaseLanguage(language, activeLanguage));
-
-	const handleLanguageChange = useCallback(async () => {
-		if (!targetLanguage || languageChangePending) {
-			return;
-		}
-
-		setLanguageChangePending(true);
-		dispatch({
-			conversationLanguage: targetLanguage,
-			languageSelectionConfirmed: true,
-		});
-
-		try {
-			await i18next.changeLanguage(targetLanguage);
-			if (room?._id) {
-				await loadMessages();
-			}
-		} catch (error) {
-			console.error(error);
-			dispatch({
-				loading: false,
-				alerts: [
-					...(alerts || []),
-					{
-						id: createToken(),
-						children: t('error_changing_chat_language'),
-						error: true,
-						timeout: 5000,
-					},
-				],
-			});
-		} finally {
-			setLanguageChangePending(false);
-		}
-	}, [alerts, dispatch, languageChangePending, room?._id, t, targetLanguage]);
-
-	const languageAction = targetLanguage
-		? {
-				code: targetLanguage.split('-')[0].toUpperCase(),
-				label: t('switch_chat_language_to', { language: getNativeLanguageName(targetLanguage) }),
-				disabled: languageChangePending,
-				onClick: handleLanguageChange,
-			}
-		: undefined;
+	// AS-PL customization: use the shared switch so active chat and the offline contact form follow identical language rules.
+	const languageAction = useChatLanguageAction();
 
 	return (
 		<ChatContainer

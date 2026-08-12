@@ -31,7 +31,8 @@ const getLanguageCandidates = (language: string): string[] => {
 	return [...new Set([language, baseLanguage].filter(Boolean))];
 };
 
-const isSameBaseLanguage = (sourceLanguage: string, targetLanguage: string): boolean => getBaseLanguage(sourceLanguage) === getBaseLanguage(targetLanguage);
+const isSameBaseLanguage = (sourceLanguage: string, targetLanguage: string): boolean =>
+	getBaseLanguage(sourceLanguage) === getBaseLanguage(targetLanguage);
 
 const hasTranslation = (message: IMessage, language: string): boolean => {
 	if (!isTranslatedMessage(message)) {
@@ -131,6 +132,16 @@ const shouldTranslateVisitorMessageForAgent = (message: IMessage, targetLanguage
 	}
 
 	return !hasTranslation(message, targetLanguage);
+};
+
+// AS-PL customization: queued LiveChat rooms do not have an assigned agent yet, so use the workspace language for the first translation.
+export const getLivechatQueueAutoTranslateLanguage = (): string | undefined => {
+	if (!settings.get('AutoTranslate_Enabled')) {
+		return;
+	}
+
+	const workspaceLanguage = String(settings.get('Language') || '').trim();
+	return workspaceLanguage && workspaceLanguage !== 'default' ? workspaceLanguage : undefined;
 };
 
 export const rememberLivechatRoomAutoTranslateLanguage = (rid: string, targetLanguage?: string): void => {
