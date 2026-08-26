@@ -1,10 +1,11 @@
-import type {
-	IMessage,
-	IRoom,
-	MessageAttachment,
-	IProviderMetadata,
-	ISupportedLanguage,
-	ITranslationResult,
+import {
+	isMessageFromVisitor,
+	type IMessage,
+	type IRoom,
+	type MessageAttachment,
+	type IProviderMetadata,
+	type ISupportedLanguage,
+	type ITranslationResult,
 } from '@rocket.chat/core-typings';
 import { Logger } from '@rocket.chat/logger';
 import { Messages, Subscriptions } from '@rocket.chat/models';
@@ -13,6 +14,7 @@ import { isTruthy } from '@rocket.chat/tools';
 import { Meteor } from 'meteor/meteor';
 import _ from 'underscore';
 
+import { isSingleNumberOrAlphanumericIdentifier } from './isSingleNumberOrAlphanumericIdentifier';
 import { callbacks } from '../../../server/lib/callbacks';
 import { notifyOnMessageChange } from '../../lib/server/lib/notifyListener';
 import { Markdown } from '../../markdown/server';
@@ -310,6 +312,11 @@ export abstract class AutoTranslate {
 		message: IMessage,
 		{ room, targetLanguage, context }: { room: IRoom; targetLanguage?: string } & TranslateMessageOptions,
 	): Promise<IMessage | null> {
+		// AS-PL customization: standalone LiveChat visitor numbers and alphanumeric identifiers must bypass every translation entry point because DeepL can fabricate text from them.
+		if (room.t === 'l' && isMessageFromVisitor(message) && isSingleNumberOrAlphanumericIdentifier(message.msg)) {
+			return Messages.findOneById(message._id);
+		}
+
 		let targetLanguages: string[];
 		if (targetLanguage) {
 			targetLanguages = [targetLanguage];
