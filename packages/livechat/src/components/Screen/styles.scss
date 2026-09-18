@@ -111,7 +111,12 @@ $max-lines: 12;
 		.screen__chat-button {
 			display: flex;
 
-			animation: 0.4s ease-in-out both popup-btn;
+			// AS-PL customization: match the webpage launcher fade without moving the button.
+			animation: 0.35s ease-out both popup-btn;
+
+			@media (prefers-reduced-motion: reduce) {
+				animation: none;
+			}
 		}
 	}
 
@@ -295,12 +300,14 @@ $max-lines: 12;
 	}
 }
 
+// AS-PL customization: keep the Expert Desk launcher stationary while it appears.
 @keyframes popup-btn {
 	0% {
-		transform: translateY(100px) scale(0.2);
+		opacity: 0;
 	}
+
 	100% {
-		transform: translateY(0) scale(1);
+		opacity: 1;
 	}
 }
 
