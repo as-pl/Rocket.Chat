@@ -1,3 +1,6 @@
+# AS-PL customization: use the project's Deno version when publishing our custom image so Jitsi can load the bundled dependencies.
+DENO_VERSION := $(shell awk '$$1 == "deno" { print $$2 }' .tool-versions)
+
 packages-build:
 	yarn turbo build --no-cache
 
@@ -5,7 +8,7 @@ app-build:
 	cd apps/meteor && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build --server-only --directory ../../custom-build
 
 docker-build:
-	docker build -t arturkmera/custom-rc:8.1.11 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
+	docker build --build-arg DENO_VERSION=$(DENO_VERSION) -t arturkmera/custom-rc:8.1.11 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
 
 docker-push:
 	docker push arturkmera/custom-rc:8.1.11

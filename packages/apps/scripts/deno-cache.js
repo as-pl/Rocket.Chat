@@ -45,14 +45,10 @@ try {
 	}
 
 	if (installedVersion !== denoToolVersion) {
-		const message = `Incorrect Deno version. Required '${denoToolVersion}', found '${installedVersion}'.${CI ? '' : " The server will likely work, but it may cause your deno.lock to change - do not commit it. Make sure your Deno version matches the required one so you don't see this message again."}`;
-
-		if (CI) {
-			throw new Error(message);
-		}
-
-		// We don't need to fail if a dev environment doesn't have a matching Deno version, just the warning is enough
-		console.warn(message);
+		// AS-PL customization: local release builds must not cache dependencies with a different Deno version than the production image uses.
+		throw new Error(
+			`Incorrect Deno version. Required '${denoToolVersion}', found '${installedVersion}'. Use the version in .tool-versions.`,
+		);
 	}
 } catch (e) {
 	if (e.status === SHELL_ERR_CMD_NOT_FOUND) {
