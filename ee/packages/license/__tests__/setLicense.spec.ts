@@ -8,12 +8,32 @@ import { DuplicatedLicenseError } from '../src/errors/DuplicatedLicenseError';
 import { InvalidLicenseError } from '../src/errors/InvalidLicenseError';
 import { NotReadyForValidation } from '../src/errors/NotReadyForValidation';
 
-// Same license used on ci tasks so no I didnt leak it
+// AS-PL customization: retain the public upstream V2 fixture so CI tests legacy license compatibility.
 const VALID_LICENSE =
-	process.env.ENTERPRISE_LICENSE ||
 	'Uo7Jcr6WW0XYA8ydHd+Sk6pZ9/0V6dIASnyTwvUrNym/zJg2Ma3eYNKkC8osXLCc72y1ahohnWY7/+7IYkvono3GYXQR+IGvYbbrVgNR6OjMahd9P/odHZL1GFTm2qHrEL5Hh/XEOG+YluFeRdWPzCizQlp4zGGOi0+PkQo096TR9NVCLrsErVl2MW1WM6ZM1W5EUJG9pKly4BQnaOTUAlor1im6i8qPTDCKrISZfLiZEWuQKaPW/GE3mRKjQNjDh0CabX1N2S880pRRGoozBYAnp2NmFfrQW0+5ihKisBTIeMbMZ7K5NE5PkYU1nhQDcc+rpDHtwG9Ceg5X0J+oea3UfrPTmDON2aSI0iO22kvL6G7QI3fyrEIvJrMbxcNKxAFeQYgnjisw/b06+chWSG4jG686Fx58XrVS87dFhWL9WoGltsk1dJCntUQvI1sX6zOfpvyg1iWRnHfYDOrwoWlX57XMm29fWineEoqnOOTOVnA/uP+DKEhercQ9Xuo7Cr6zJxpQpwd03e7ODVjiEbTDqlkZE687rmxRCD4Wmu8L86WIl2xSEIajKLX301Ww5mz/FdLqk+Mg32lkW66W3azQKvJ1440NBrYxhpJ+dl9vSFMb3s1+xnz1cYUbjUcq9mARvORcgy5mLwKulmqT6Sq0Uvbv10YCO0TW0beXYW8=';
 
 describe('License set license procedures', () => {
+	// AS-PL customization: this signed V2 fixture expires on 2026-07-01; a fixed clock keeps CI deterministic
+	// without changing production validation or depending on a real enterprise license.
+	beforeEach(() => {
+		jest.useFakeTimers({ now: new Date('2026-01-01T00:00:00.000Z') });
+	});
+
+	afterEach(() => {
+		jest.clearAllTimers();
+		jest.useRealTimers();
+	});
+
+	// AS-PL customization: prove the fixed test clock does not bypass the V2 fixture's expiration check.
+	it('should reject the legacy fixture after its expiration date', async () => {
+		jest.setSystemTime(new Date('2026-07-02T00:00:00.000Z'));
+		const license = await getReadyLicenseManager();
+
+		await license.setLicense(VALID_LICENSE);
+
+		expect(license.hasValidLicense()).toBe(false);
+	});
+
 	describe('Invalid formats', () => {
 		it('should have no license by default', async () => {
 			const license = new LicenseImp();

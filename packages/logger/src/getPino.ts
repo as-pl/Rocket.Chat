@@ -11,7 +11,8 @@ const mainPino = pino({
 	},
 	level: 'warn',
 	timestamp: pino.stdTimeFunctions.isoTime,
-	...(process.env.NODE_ENV !== 'production'
+	// AS-PL customization: tests must exit cleanly without a background pretty-print worker keeping Jest alive.
+	...(process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test'
 		? {
 				transport: {
 					target: 'pino-pretty',
