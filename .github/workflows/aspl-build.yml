@@ -1,0 +1,28 @@
+# AS-PL customization: dispatch an exact fork commit to our existing monorepo builders.
+name: AS-PL build request
+on:
+  push:
+    branches: [as8.5.1]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  dispatch:
+    if: github.repository == 'as-pl/Rocket.Chat' && github.ref == 'refs/heads/as8.5.1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app
+        with:
+          app-id: ${{ vars.ROCKETCHAT_APP_ID }}
+          private-key: ${{ secrets.ROCKETCHAT_APP_PRIVATE_KEY }}
+          owner: as-pl
+          repositories: as-pl-monorepo
+          permission-actions: write
+      - name: Request candidate build
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          gh api --method POST repos/as-pl/as-pl-monorepo/actions/workflows/rocketchat-build.yml/dispatches \
+            -f ref=webpage-backend -f "inputs[source_sha]=$SOURCE_SHA"

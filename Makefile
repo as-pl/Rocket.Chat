@@ -1,17 +1,28 @@
 # AS-PL customization: use the project's Deno version when publishing our custom image so Jitsi can load the bundled dependencies.
 DENO_VERSION := $(shell awk '$$1 == "deno" { print $$2 }' .tool-versions)
 
+# AS-PL customization: candidates are immutable; only gmon may promote the latest channel.
+.DEFAULT_GOAL := packages-build
+.PHONY: guard-candidate docker-build docker-push
+IMAGE_REPOSITORY ?= arturkmera/custom-rc
+# AS-PL customization: expose the upstream base version without changing the application's version for fork releases.
+UPSTREAM_VERSION := $(shell node -p 'require("./package.json").version')
+IMAGE_TAG ?= $(UPSTREAM_VERSION)-aspl-local-$(shell git rev-parse --short=12 HEAD)
+
+guard-candidate:
+	@test "$(IMAGE_TAG)" != latest || (echo "latest is managed by gmon" >&2; exit 1)
+
 packages-build:
 	yarn turbo build --no-cache
 
 app-build:
 	cd apps/meteor && METEOR_DISABLE_OPTIMISTIC_CACHING=1 meteor build --server-only --directory ../../custom-build
 
-docker-build:
-	docker build --build-arg DENO_VERSION=$(DENO_VERSION) -t arturkmera/custom-rc:8.1.11 -f apps/meteor/.docker/Dockerfile.debian ./custom-build
+docker-build: guard-candidate
+	docker build --build-arg DENO_VERSION=$(DENO_VERSION) -t "$(IMAGE_REPOSITORY):$(IMAGE_TAG)" -f apps/meteor/.docker/Dockerfile.debian ./custom-build
 
-docker-push:
-	docker push arturkmera/custom-rc:8.1.11
+docker-push: guard-candidate
+	docker push "$(IMAGE_REPOSITORY):$(IMAGE_TAG)"
 
 prepare:
 	yarn install
@@ -49,14 +60,14 @@ test-local-build-first-run:
 		-e ROOT_URL="http://localhost:3000" \
 		-e MONGO_URL="mongodb://mongo:27017/rocketchat?replicaSet=rs0" \
 		-e MONGO_OPLOG_URL="mongodb://mongo:27017/local?replicaSet=rs0" \
-		arturkmera/custom-rc
+		$(IMAGE_REPOSITORY):$(IMAGE_TAG)
 
 test-local-build:
 	yarn install
 	$(MAKE) packages-build
 	$(MAKE) app-build
 	$(MAKE) docker-build
-	docker run -it --rm -p 3000:3000 arturkmera/custom-rc
+	docker run -it --rm -p 3000:3000 $(IMAGE_REPOSITORY):$(IMAGE_TAG)
 
 # w razie czego  cd packages/livechat && yarn build
 .PHONY: start
