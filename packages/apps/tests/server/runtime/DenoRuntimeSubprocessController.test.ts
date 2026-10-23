@@ -30,6 +30,10 @@ describe('DenoRuntimeSubprocessController', () => {
 			const infrastructure = new TestInfastructureSetup();
 			manager = infrastructure.getMockManager();
 
+			// AS-PL customization: isolate runtime files so parallel codec tests keep their own Deno symlink.
+			const tempDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'deno-controller-runtime-'));
+			manager.getTempFilePath = () => tempDirectory;
+
 			const accessors = new AppAccessorManager(manager);
 			manager.getAccessorManager = () => accessors;
 
@@ -57,9 +61,8 @@ describe('DenoRuntimeSubprocessController', () => {
 	after(
 		async () => {
 			await controller?.stopApp();
-			await fs.unlink(path.join(os.tmpdir(), 'deno-runtime')).catch((reason) => {
-				console.warn('Failed to delete temporary Deno runtime symlink', reason);
-			});
+			// AS-PL customization: this suite owns only its temporary runtime directory.
+			await fs.rm(manager.getTempFilePath(), { recursive: true, force: true });
 		},
 		{ timeout: 30_000 },
 	);

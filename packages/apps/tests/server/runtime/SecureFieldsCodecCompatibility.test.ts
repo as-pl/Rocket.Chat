@@ -71,9 +71,13 @@ describe('@@SecureFields codec compatibility (Node → Deno)', () => {
 	// Shared helpers
 	// -------------------------------------------------------------------------
 
-	function buildManager(): AppManager {
+	async function buildManager(): Promise<AppManager> {
 		const infrastructure = new TestInfastructureSetup();
 		const manager = infrastructure.getMockManager();
+
+		// AS-PL customization: parallel runtime suites must not delete each other's Deno symlink.
+		const tempDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'secure-fields-runtime-'));
+		manager.getTempFilePath = () => tempDirectory;
 
 		const accessors = new AppAccessorManager(manager);
 		manager.getAccessorManager = () => accessors;
@@ -101,7 +105,7 @@ describe('@@SecureFields codec compatibility (Node → Deno)', () => {
 
 		before(
 			async () => {
-				manager = buildManager();
+				manager = await buildManager();
 				appPackage = await parseAppPackage(manager, 'secure-fields-test-with-abac_0.0.1.zip');
 				appStorageItem = {
 					id: 'secure-fields-test-with-abac',
@@ -117,7 +121,8 @@ describe('@@SecureFields codec compatibility (Node → Deno)', () => {
 		after(
 			async () => {
 				await controller?.stopApp();
-				await fs.unlink(path.join(os.tmpdir(), 'deno-runtime')).catch(() => undefined);
+				// AS-PL customization: clean only this suite's isolated runtime directory.
+				await fs.rm(manager.getTempFilePath(), { recursive: true, force: true });
 			},
 			{ timeout: 30_000 },
 		);
@@ -186,7 +191,7 @@ describe('@@SecureFields codec compatibility (Node → Deno)', () => {
 
 		before(
 			async () => {
-				manager = buildManager();
+				manager = await buildManager();
 				appPackage = await parseAppPackage(manager, 'secure-fields-test-no-abac_0.0.1.zip');
 				appStorageItem = {
 					id: 'secure-fields-test-no-abac',
@@ -202,7 +207,8 @@ describe('@@SecureFields codec compatibility (Node → Deno)', () => {
 		after(
 			async () => {
 				await controller?.stopApp();
-				await fs.unlink(path.join(os.tmpdir(), 'deno-runtime')).catch(() => undefined);
+				// AS-PL customization: clean only this suite's isolated runtime directory.
+				await fs.rm(manager.getTempFilePath(), { recursive: true, force: true });
 			},
 			{ timeout: 30_000 },
 		);
