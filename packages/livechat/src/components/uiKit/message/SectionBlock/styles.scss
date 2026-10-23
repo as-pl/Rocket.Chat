@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../../../styles/colors';
 @use '../../../../styles/variables';
 
@@ -34,6 +35,7 @@
 
 	&__field {
 		flex: 1 1 50%;
+
 		padding: 8px 10px;
 
 		border-top: 1px solid #e0e4e9;

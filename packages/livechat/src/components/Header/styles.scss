@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use 'sass:math';
 @use '../../styles/colors';
 @use '../../styles/helpers';
@@ -93,17 +94,18 @@ $header-action-active-displacement: 2px;
       display: flex;
       flex: 0 0 auto;
 
+      width: 36px;
+      height: 36px;
+      padding: 8px;
+
       cursor: pointer;
 
       color: inherit;
       border: none;
       outline: none;
       background: none;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      padding: 8px;
       align-items: center;
+      justify-content: center;
 
       @include helpers.pressable-button($header-action-active-displacement, 0);
 
@@ -126,15 +128,18 @@ $header-action-active-displacement: 2px;
     top: calc(#{$header-height} + 8px);
     right: 0;
     left: 0;
+
     display: flex;
-    pointer-events: none;
-    box-sizing: border-box;
     flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+
+    box-sizing: border-box;
     width: 100%;
     padding: 0 16px;
+
+    pointer-events: none;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
   }
 
   &__post_t {
@@ -143,15 +148,18 @@ $header-action-active-displacement: 2px;
     top: calc(#{$header-height} + 8px);
     right: 0;
     left: 0;
+
     display: flex;
-    pointer-events: none;
-    box-sizing: border-box;
     flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+
+    box-sizing: border-box;
     width: 100%;
     padding: 0 16px;
+
+    pointer-events: none;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
   }
 
   &__post>*,

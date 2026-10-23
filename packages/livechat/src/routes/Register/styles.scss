@@ -1,8 +1,10 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 .register__message {
 	margin: 0 0 1.5rem;
 	padding: 12px 14px;
 
 	text-align: left;
+
 	border-left: 2px solid var(--color, #e30613);
 	background: #f1f2f4;
 

@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../../styles/colors';
 @use '../../../styles/variables';
 
@@ -24,8 +25,9 @@ $separator-unread-line-color: colors.$color-red;
 		white-space: nowrap;
 		letter-spacing: $separator-text-letter-spacing;
 
-		font-size: $separator-text-font-size;
 		font-family: monospace;
+
+		font-size: $separator-text-font-size;
 		font-weight: 400;
 		line-height: 1rem;
 	}

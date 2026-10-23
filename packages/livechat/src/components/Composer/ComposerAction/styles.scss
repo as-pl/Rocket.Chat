@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../../styles/helpers';
 
 $composer-action-margin: 0 5px;
@@ -10,10 +11,11 @@ $composer-action-margin: 0 5px;
 
 	cursor: pointer;
 
+	color: #697487;
+
 	border: none;
 
 	background: none;
-	color: #697487;
 
 	font-size: 0;
 
@@ -25,9 +27,9 @@ $composer-action-margin: 0 5px;
 
 	&:disabled {
 		cursor: default;
+		transform: none;
 
 		opacity: 0.45;
-		transform: none;
 	}
 
 	@include helpers.pressable-button(1px);

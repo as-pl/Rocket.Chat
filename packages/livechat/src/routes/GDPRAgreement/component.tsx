@@ -23,8 +23,9 @@ class GDPR extends Component<GDPRProps> {
 		onAgree?.();
 	};
 
+	// AS-PL customization: keep the header empty because the consent title is already rendered in the content.
 	render = ({ title, consentText, instructions, t }: GDPRProps) => (
-		<Screen title={''} className={createClassName(styles, 'gdpr')}>
+		<Screen title='' className={createClassName(styles, 'gdpr')}>
 			<ScreenContent>
 				<div className={createClassName(styles, 'gdpr__wrapper')}>
 					{title && <strong>{title}</strong>}

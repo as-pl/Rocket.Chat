@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../../styles/colors';
 @use '../../../styles/variables';
 
@@ -69,8 +70,9 @@ $message-bubble-quoted-indicator-color: colors.$color-green;
 	}
 
 	&--system {
-		border-left: 0;
 		text-align: center;
+
+		border-left: 0;
 
 		background-color: transparent;
 

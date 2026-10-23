@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use 'sass:math';
 @use '../../styles/colors';
 
@@ -229,6 +230,7 @@ $max-lines: 12;
 
 .screen__brand-mark {
 	display: grid;
+
 	width: 38px;
 	height: 38px;
 
@@ -325,18 +327,22 @@ $max-lines: 12;
 
 @keyframes screen-off-overlay {
 	0% {
-		transform: scale(1) translateY(54px);
 		display: block;
+
+		transform: scale(1) translateY(54px);
 		content-visibility: hidden;
 	}
 
 	70% {
 		opacity: 1;
 	}
+
 	100% {
-		transform: scale(0.1) translateY(54px);
-		opacity: 0;
 		display: none;
+
+		transform: scale(0.1) translateY(54px);
+
+		opacity: 0;
 		content-visibility: hidden;
 	}
 }

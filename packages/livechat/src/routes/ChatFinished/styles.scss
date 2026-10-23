@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../styles/colors';
 
 .chat-finished {
@@ -5,6 +6,7 @@
 
 	&__greeting {
 		margin: 0.5rem 0;
+
 		text-align: left;
 		letter-spacing: 0;
 
@@ -28,10 +30,12 @@
 	&__container {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
-		height: 99%;
+
 		width: 100%;
+		height: 99%;
+
 		text-align: left;
+		align-items: flex-start;
 		gap: 20px;
 	}
 
@@ -43,6 +47,7 @@
 		padding: 4px 0;
 
 		text-transform: lowercase;
+
 		color: #8995a8;
 
 		font-family: monospace;

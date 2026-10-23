@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use '../../styles/colors';
 @use '../../styles/helpers';
 @use '../../styles/variables';
@@ -15,10 +16,8 @@ $screen-box-shadow: 0 (math.div(16px, 2) - 1) 16px 0 rgba(0, 0, 0, 0.1);
 .alert {
 	display: flex;
 	overflow: hidden;
-	box-sizing: border-box;
 
-	box-shadow: $screen-box-shadow;
-	gap: 0.75rem;
+	box-sizing: border-box;
 	width: fit-content;
 	max-width: 100%;
 	min-height: 32px;
@@ -27,25 +26,29 @@ $screen-box-shadow: 0 (math.div(16px, 2) - 1) 16px 0 rgba(0, 0, 0, 0.1);
 	letter-spacing: 0;
 
 	color: $alert-color;
-	background-color: $alert-background-color;
 
 	border-radius: 2px;
+	background-color: $alert-background-color;
+
+	box-shadow: $screen-box-shadow;
 
 	font-family: $alert-font-family;
 	font-size: 12px;
 	font-weight: 600;
 	line-height: 16px;
 	align-items: center;
+	gap: 0.75rem;
 	justify-content: space-between;
 
 	&__content {
 		display: -webkit-box;
 		overflow: hidden;
-		min-width: 0;
 
-		overflow-wrap: anywhere;
+		min-width: 0;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
+
+		overflow-wrap: anywhere;
 	}
 
 	&__close {

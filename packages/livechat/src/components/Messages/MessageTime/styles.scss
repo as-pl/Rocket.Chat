@@ -1,3 +1,4 @@
+// AS-PL customization: keep fork styling compatible with the release lint gate without changing selectors or values.
 @use 'sass:math';
 @use '../../../styles/colors';
 @use '../../../styles/variables';
@@ -21,6 +22,7 @@ $message-time-color: colors.$color-text-grey;
 
 	&-wrapper {
 		display: flex;
+
 		width: 100%;
 		margin-top: 1px;
 

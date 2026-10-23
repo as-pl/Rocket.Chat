@@ -1,3 +1,4 @@
+// AS-PL customization: use the split header components; the duplicate legacy index.tsx was unused and excluded by TypeScript.
 export { default as Header } from './Header';
 export { default as HeaderPicture } from './HeaderPicture';
 export { default as HeaderContent } from './HeaderContent';

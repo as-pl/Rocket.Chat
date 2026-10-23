@@ -1,6 +1,6 @@
+// AS-PL customization: retain the fork footer while restoring the license hooks needed to render it safely.
+import { useLicense, useLicenseName } from '@rocket.chat/ui-client';
 import type { ReactElement } from 'react';
-
-import { links } from '../../lib/links';
 
 export const SidebarFooterWatermark = (): ReactElement | null => {
 	const response = useLicense();
