@@ -4,7 +4,7 @@ DENO_VERSION := $(shell awk '$$1 == "deno" { print $$2 }' .tool-versions)
 # AS-PL customization: candidates are immutable; only gmon may promote the latest channel.
 .DEFAULT_GOAL := packages-build
 .PHONY: guard-candidate docker-build docker-push
-IMAGE_REPOSITORY ?= arturkmera/custom-rc
+IMAGE_REPOSITORY ?= ghcr.io/as-pl/as-pl-monorepo/rocketchat
 # AS-PL customization: expose the upstream base version without changing the application's version for fork releases.
 UPSTREAM_VERSION := $(shell node -p 'require("./package.json").version')
 IMAGE_TAG ?= $(UPSTREAM_VERSION)-aspl-local-$(shell git rev-parse --short=12 HEAD)

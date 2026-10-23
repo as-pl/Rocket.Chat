@@ -17,7 +17,7 @@ The approved release flow replaces the former manual patch increment in Makefile
 2. Run relevant checks before publishing. Makefile accepts IMAGE_REPOSITORY and IMAGE_TAG; never push latest from the build.
 3. The as8.5.1 push dispatcher passes the exact fork SHA to rocketchat-build.yml on monorepo webpage-backend, using existing self-hosted builders.
 4. Require passing checks, immutable candidate publication and metadata with registry digest, workflow/source SHAs and migration fingerprint.
-5. GitOps stays on arturkmera/custom-rc:latest. Only gmon may promote a candidate under the deployment-host lock and perform a controlled rollout.
+5. GitOps stays on ghcr.io/as-pl/as-pl-monorepo/rocketchat:latest. Only gmon may promote a candidate under the deployment-host lock and perform a controlled rollout.
 6. AUTO stays OFF/blocked until scalability, shared storage, continuity and rollback evidence are verified. The user explicitly requires this gate. Never bypass it.
 7. Deployment succeeds only after stable readiness, matching runtime digest and health verification. Uncertain/failed operations stay blocked across restarts; reconcile explicitly. No automatic retry or rollback.
 8. Upstream-version or migration changes require a supervised compatibility/backup/upgrade procedure; do not treat image rollback as database rollback.
