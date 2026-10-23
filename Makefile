@@ -1,7 +1,7 @@
 # AS-PL customization: use the project's Deno version when publishing our custom image so Jitsi can load the bundled dependencies.
 DENO_VERSION := $(shell awk '$$1 == "deno" { print $$2 }' .tool-versions)
 
-# AS-PL customization: candidates are immutable; only gmon may promote the latest channel.
+# AS-PL customization: local builds retain immutable tags; the monorepo workflow publishes latest after checks.
 .DEFAULT_GOAL := packages-build
 .PHONY: guard-candidate docker-build docker-push
 IMAGE_REPOSITORY ?= ghcr.io/as-pl/as-pl-monorepo/rocketchat
@@ -10,7 +10,7 @@ UPSTREAM_VERSION := $(shell node -p 'require("./package.json").version')
 IMAGE_TAG ?= $(UPSTREAM_VERSION)-aspl-local-$(shell git rev-parse --short=12 HEAD)
 
 guard-candidate:
-	@test "$(IMAGE_TAG)" != latest || (echo "latest is managed by gmon" >&2; exit 1)
+	@test "$(IMAGE_TAG)" != latest || (echo "latest is published by the monorepo workflow" >&2; exit 1)
 
 packages-build:
 	yarn turbo build --no-cache

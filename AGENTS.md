@@ -14,10 +14,10 @@ AS-PL customization: keep production chat available while retaining separate cod
 The approved release flow replaces the former manual patch increment in Makefile and GitOps.
 
 1. Inspect Rocket.Chat, as-pl-monorepo and dotfiles/gmon working trees; preserve unrelated changes and stage only task files.
-2. Run relevant checks before publishing. Makefile accepts IMAGE_REPOSITORY and IMAGE_TAG; never push latest from the build.
+2. Run relevant checks before publishing. Makefile accepts IMAGE_REPOSITORY and IMAGE_TAG for local versioned images; the monorepo workflow publishes latest after checks.
 3. The as8.5.1 push dispatcher passes the exact fork SHA to rocketchat-build.yml on monorepo webpage-backend, using existing self-hosted builders.
-4. Require passing checks, immutable candidate publication and metadata with registry digest, workflow/source SHAs and migration fingerprint.
-5. GitOps stays on ghcr.io/as-pl/as-pl-monorepo/rocketchat:latest. Only gmon may promote a candidate under the deployment-host lock and perform a controlled rollout.
+4. Require passing checks, versioned image plus latest publication and metadata with registry digest, workflow/source SHAs and migration fingerprint.
+5. GitOps stays on ghcr.io/as-pl/as-pl-monorepo/rocketchat:latest. The workflow owns latest; gmon only restarts the Deployment and verifies the rollout. It never promotes tags or writes to the registry.
 6. AUTO stays OFF/blocked until scalability, shared storage, continuity and rollback evidence are verified. The user explicitly requires this gate. Never bypass it.
 7. Deployment succeeds only after stable readiness, matching runtime digest and health verification. Uncertain/failed operations stay blocked across restarts; reconcile explicitly. No automatic retry or rollback.
 8. Upstream-version or migration changes require a supervised compatibility/backup/upgrade procedure; do not treat image rollback as database rollback.
