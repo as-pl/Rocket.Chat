@@ -15,6 +15,7 @@ type AgentsListOptions = {
 
 type AgentOption = {
 	_id: string;
+	username?: string;
 	value: string;
 	label: string;
 };
@@ -36,6 +37,8 @@ export const useAgentsList = (options: AgentsListOptions) => {
 
 	const formatAgentItem = (agent: Serialized<ILivechatAgent>) => ({
 		_id: agent._id,
+		// AS-PL customization: forwarding resolves ERP cards by the actual login, never by a display label.
+		username: agent.username,
 		label: `${agent.name || agent._id} (@${agent.username})`,
 		value: agent._id,
 	});

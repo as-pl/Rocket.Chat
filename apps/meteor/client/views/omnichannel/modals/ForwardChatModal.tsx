@@ -6,14 +6,14 @@ import { useCallback, useEffect, useId } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import ForwardChatAgentSelect from './forwardChat/ForwardChatAgentSelect';
 import { LegacyRoomManager } from '../../../lib/LegacyRoomManager';
-import AutoCompleteAgent from '../components/AutoCompleteAgent';
 import AutoCompleteDepartment from '../components/AutoCompleteDepartment';
 
 type ForwardChatModalFormData = {
 	comment: string;
 	department: string;
-	username: string;
+	userId: string;
 };
 
 export type ForwardChatModalProps = {
@@ -25,7 +25,6 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const dispatchToastMessage = useToastMessageDispatch();
-	const getUserData = useEndpoint('GET', '/v1/users.info');
 	const idleAgentsAllowedForForwarding = useSetting('Livechat_enabled_when_agent_idle', true);
 
 	const departmentFieldId = useId();
@@ -45,20 +44,14 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 	}, [setFocus]);
 
 	const department = watch('department');
-	const username = watch('username');
+	const userId = watch('userId');
 
 	const forwardChat = useEndpoint('POST', '/v1/livechat/room.forward');
 
 	const handleForwardChat = useCallback(
-		async ({ department: departmentId, username, comment }: ForwardChatModalFormData) => {
+		// AS-PL customization: the agent selector already returns the ID required by room.forward; avoid a redundant user lookup.
+		async ({ department: departmentId, userId, comment }: ForwardChatModalFormData) => {
 			try {
-				let userId;
-
-				if (username) {
-					const { user } = await getUserData({ username });
-					userId = user?._id;
-				}
-
 				if (departmentId && userId) {
 					return;
 				}
@@ -93,7 +86,7 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 				onCancel();
 			}
 		},
-		[room._id, room.t, getUserData, forwardChat, dispatchToastMessage, t, router, onCancel],
+		[room._id, room.t, forwardChat, dispatchToastMessage, t, router, onCancel],
 	);
 
 	return (
@@ -104,7 +97,7 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 			onCancel={onCancel}
 			onConfirm={handleSubmit(handleForwardChat)}
 			confirmText={t('Forward')}
-			confirmDisabled={!username && !department}
+			confirmDisabled={!userId && !department}
 			confirmLoading={isSubmitting}
 		>
 			<FieldGroup>
@@ -122,7 +115,7 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 									withTitle={false}
 									maxWidth='100%'
 									flexGrow={1}
-									disabled={!!username}
+									disabled={!!userId}
 								/>
 							)}
 						/>
@@ -133,15 +126,14 @@ const ForwardChatModal = ({ room, onCancel }: ForwardChatModalProps) => {
 					<FieldLabel htmlFor={userFieldId}>{t('Forward_to_user')}</FieldLabel>
 					<FieldRow>
 						<Controller
-							name='username'
+							name='userId'
 							control={control}
 							render={({ field: { ref: _ref, ...field } }) => (
-								<AutoCompleteAgent
+								<ForwardChatAgentSelect
 									id={userFieldId}
 									{...field}
 									aria-label={t('Forward_to_user')}
 									withTitle
-									onlyAvailable
 									excludeId={room.servedBy?._id}
 									showIdleAgents={idleAgentsAllowedForForwarding}
 									placeholder={t('Username_name_email')}

@@ -112,29 +112,33 @@ exports[`renders Default without crashing 1`] = `
                   class="rcx-box rcx-box--full rcx-field__row"
                 >
                   <div
-                    aria-label="Forward_to_user"
-                    class="rcx-box rcx-box--full rcx-box--animated rcx-select rcx-css-ue04py"
-                    id="_r_1_"
-                    name="username"
+                    class="rcx-box rcx-box--full rcx-css-1qcz93u"
                   >
                     <div
-                      class="rcx-box rcx-box--full rcx-select__wrapper rcx-css-bpb89k"
+                      aria-label="Forward_to_user"
+                      class="rcx-box rcx-box--full rcx-box--animated rcx-select"
+                      id="_r_1_"
+                      name="userId"
                     >
-                      <input
-                        aria-haspopup="listbox"
-                        class="rcx-box rcx-box--full rcx-box--animated rcx-input-box--undecorated rcx-input-box rcx-select__focus rcx-css-1l0s473"
-                        placeholder="Username_name_email"
-                        value=""
-                      />
                       <div
-                        class="rcx-box rcx-box--full rcx-select__addon rcx-css-x7bl3q rcx-css-6bg1ps"
+                        class="rcx-box rcx-box--full rcx-select__wrapper rcx-css-bpb89k"
                       >
-                        <i
-                          aria-hidden="true"
-                          class="rcx-box rcx-box--full rcx-icon--name-chevron-down rcx-icon rcx-css-4pvxx3"
+                        <input
+                          aria-haspopup="listbox"
+                          class="rcx-box rcx-box--full rcx-box--animated rcx-input-box--undecorated rcx-input-box rcx-select__focus rcx-css-1l0s473"
+                          placeholder="Username_name_email"
+                          value=""
+                        />
+                        <div
+                          class="rcx-box rcx-box--full rcx-select__addon rcx-css-x7bl3q rcx-css-6bg1ps"
                         >
-                          
-                        </i>
+                          <i
+                            aria-hidden="true"
+                            class="rcx-box rcx-box--full rcx-icon--name-chevron-down rcx-icon rcx-css-4pvxx3"
+                          >
+                            
+                          </i>
+                        </div>
                       </div>
                     </div>
                   </div>

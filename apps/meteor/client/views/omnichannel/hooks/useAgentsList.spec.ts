@@ -7,6 +7,8 @@ import { createFakeAgent } from '../../../../tests/mocks/data';
 
 const formatAgentItem = (agent: Serialized<ILivechatAgent>) => ({
 	_id: agent._id,
+	// AS-PL customization: the forwarding card uses the real login while selection keeps the Rocket.Chat ID.
+	username: agent.username,
 	label: `${agent.name || agent._id} (@${agent.username})`,
 	value: agent._id,
 });
