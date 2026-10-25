@@ -10,7 +10,8 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   update-pr:
     runs-on: ubuntu-24.04
-    if: startsWith(github.head_ref, 'release-')
+    # AS-PL customization: upstream automation must not publish or mutate the AS-PL fork.
+    if: github.repository == 'RocketChat/Rocket.Chat' && (startsWith(github.head_ref, 'release-'))
     steps:
       - name: Checkout Repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

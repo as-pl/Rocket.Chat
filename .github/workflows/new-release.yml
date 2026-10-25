@@ -22,6 +22,8 @@ env:
 
 jobs:
   new-release:
+    # AS-PL customization: upstream automation must not publish or mutate the AS-PL fork.
+    if: github.repository == 'RocketChat/Rocket.Chat'
     runs-on: ubuntu-24.04
 
     steps:

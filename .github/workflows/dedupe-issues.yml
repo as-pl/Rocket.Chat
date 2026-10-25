@@ -12,6 +12,8 @@ on:
 
 jobs:
   dedupe-issues:
+    # AS-PL customization: upstream automation must not publish or mutate the AS-PL fork.
+    if: github.repository == 'RocketChat/Rocket.Chat'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

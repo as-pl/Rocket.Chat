@@ -8,6 +8,15 @@
 - Preserve these comments during refactors, upstream merges, and version upgrades so maintainers can distinguish AS-PL behavior from upstream Rocket.Chat behavior.
 - Apply the same marker to regression tests that protect fork-specific behavior.
 
+## Branches
+
+- `aspl` is the permanent default branch; direct pushes and optional PRs are supported.
+- Never force-push or delete `aspl`. Historical tips live in protected `archive/*` tags.
+- `origin` is the AS-PL fork; `upstream` is the official RocketChat/Rocket.Chat repository.
+- Upgrade from a selected stable upstream tag on `codex/upgrade-rocketchat-<version>`,
+  then merge into `aspl` preserving upstream ancestry and AS-PL customizations.
+- Daily work and source/image/runtime identification: monorepo `tools/rocketchat/README.md`.
+
 ## AS-PL release procedure
 
 AS-PL customization: keep production chat available while retaining separate code and GitOps repositories.
@@ -15,7 +24,7 @@ The approved release flow replaces the former manual patch increment in Makefile
 
 1. Inspect Rocket.Chat, as-pl-monorepo and dotfiles/gmon working trees; preserve unrelated changes and stage only task files.
 2. Run relevant checks before publishing. Makefile accepts IMAGE_REPOSITORY and IMAGE_TAG for local versioned images; the monorepo workflow publishes latest after checks.
-3. The as8.5.1 push dispatcher passes the exact fork SHA to rocketchat-build.yml on monorepo webpage-backend, using existing self-hosted builders.
+3. The aspl push dispatcher passes the exact fork SHA to rocketchat-build.yml on monorepo webpage-backend, using existing self-hosted builders.
 4. Require passing checks, versioned image plus latest publication and metadata with registry digest, workflow/source SHAs and migration fingerprint.
 5. GitOps stays on ghcr.io/as-pl/as-pl-monorepo/rocketchat:latest. The workflow owns latest; gmon only restarts the Deployment and verifies the rollout. It never promotes tags or writes to the registry.
 6. AUTO stays OFF/blocked until scalability, shared storage, continuity and rollback evidence are verified. The user explicitly requires this gate. Never bypass it.

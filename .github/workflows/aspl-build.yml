@@ -2,15 +2,20 @@
 name: AS-PL build request
 on:
   push:
-    branches: [as8.5.1]
+    branches: [aspl]
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   dispatch:
-    if: github.repository == 'as-pl/Rocket.Chat' && github.ref == 'refs/heads/as8.5.1'
+    if: github.repository == 'as-pl/Rocket.Chat' && github.ref == 'refs/heads/aspl'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Verify AS-PL workflow boundaries
+        run: node --test .github/tests/aspl-workflows.test.cjs
       - uses: actions/create-github-app-token@v2
         id: app
         with:
