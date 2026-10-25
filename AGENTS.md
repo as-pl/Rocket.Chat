@@ -1,5 +1,14 @@
 # AGENTS.md (AS-PL Rocket.Chat fork)
 
+## Paired workspace with AS-PL monorepo
+
+AS-PL customization: chat changes often span this fork and the ERP/Webpage integration in the adjacent monorepo.
+
+- Treat this repository and `../as-pl-monorepo` as a paired workspace for chat tasks, with separate Git histories. A request made in either repository includes necessary integration changes in the other unless the user explicitly limits the scope.
+- The canonical ownership, discovery and coordinated commit/push rules are in the monorepo's `rules/10-apps/rocketchat.md`, section `Powiazane repozytoria`. Read that section for cross-repository work and `commit & push`; read the partner's `AGENTS.md` before editing it. Resolve the actual checkout first; the monorepo may select this fork through `ROCKETCHAT_DEV_DIR`.
+- `commit & push` includes only agreed task changes in each affected repository. Preserve unrelated work, use separate commits, and push the monorepo before the fork when both changed. Do not switch branches automatically. Ordinary shell `git push` still affects only its own repository.
+- A push to `aspl` triggers image publication, including `latest`; a new production pod may pull that image. Report this effect before pushing. A commit/push request does not authorize manual deployment or production data changes, and does not by itself invoke the full release procedure below.
+
 ## Fork-specific customizations
 
 - Every code block that is specific to the AS-PL fork must be marked with a nearby comment starting with `AS-PL customization:`.
