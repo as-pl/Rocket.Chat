@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { createContext } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useContext, useEffect, useMemo, useState } from 'preact/hooks';
 import { parse } from 'query-string';
 
 import { isActiveSession } from '../../helpers/isActiveSession';
@@ -8,6 +8,7 @@ import { loadConfig } from '../../lib/main';
 import { parentCall } from '../../lib/parentCall';
 import { loadMessages } from '../../lib/room';
 import Triggers from '../../lib/triggers';
+import type { StoreState } from '../../store';
 import { StoreContext } from '../../store';
 
 export type ScreenTheme = {
@@ -30,28 +31,46 @@ export type ScreenContextValue = {
 	minimized: boolean;
 	expanded: boolean;
 	windowed: boolean;
-	sound: {
-		src: string;
-		play: boolean;
-	};
-	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
+	sound:
+		| {
+				src: string;
+				play: boolean;
+		  }
+		| undefined;
+	alerts: StoreState['alerts'];
 	modal: ComponentChildren;
-	nameDefault: string | undefined;
-	emailDefault: string | undefined;
-	departmentDefault: string | undefined;
 	onEnableNotifications: () => unknown;
 	onDisableNotifications: () => unknown;
 	onMinimize: () => unknown;
-	onRestore: () => Promise<void>;
+	onRestore: () => void;
 	onOpenWindow: () => unknown;
-	onDismissAlert: (id: string) => unknown;
+	onDismissAlert: (id?: string) => void;
 	dismissNotification: () => void;
+	// AS-PL customization: retain the Expert Desk opening animation across minimized state changes.
 	wasMinimized: boolean;
 	setWasMinimized: (value: boolean) => void;
 	theme: ScreenTheme;
 };
 
 export const ScreenContext = createContext<ScreenContextValue>({
+	hideWatermark: false,
+	livechatLogo: undefined,
+	notificationsEnabled: true,
+	minimized: true,
+	expanded: false,
+	windowed: false,
+	sound: undefined,
+	alerts: [],
+	modal: null,
+	onEnableNotifications: () => undefined,
+	onDisableNotifications: () => undefined,
+	onMinimize: () => undefined,
+	onRestore: () => undefined,
+	onOpenWindow: () => undefined,
+	onDismissAlert: () => undefined,
+	dismissNotification: () => undefined,
+	wasMinimized: true,
+	setWasMinimized: () => undefined,
 	theme: {
 		color: '',
 		fontColor: '',
@@ -60,38 +79,28 @@ export const ScreenContext = createContext<ScreenContextValue>({
 		hideGuestAvatar: true,
 		hideExpandChat: false,
 	},
-	notificationsEnabled: true,
-	hideWatermark: false,
-	livechatLogo: undefined,
-	minimized: true,
-	expanded: false,
-	windowed: false,
-	sound: { src: '', play: false },
-	alerts: [],
-	modal: null,
-	nameDefault: undefined,
-	emailDefault: undefined,
-	departmentDefault: undefined,
-	onEnableNotifications: () => undefined,
-	onDisableNotifications: () => undefined,
-	onMinimize: () => undefined,
-	onRestore: async () => undefined,
-	onOpenWindow: () => undefined,
-	onDismissAlert: () => undefined,
-	dismissNotification: () => undefined,
-	wasMinimized: true,
-	setWasMinimized: () => undefined,
 });
 
-type ScreenProviderProps = {
+export type ScreenProviderProps = {
 	children: ComponentChildren;
 };
 
 export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 	const store = useContext(StoreContext);
-	const { token, dispatch, config, sound, minimized = true, undocked, expanded = false, alerts, modal, iframe, customFieldsQueue } = store;
-	const { department, name, email } = iframe.guest || {};
-	const { position: configPosition, hideExpandChat } = config.theme || {};
+	const {
+		token,
+		dispatch,
+		config,
+		sound,
+		minimized = true,
+		undocked = false,
+		expanded = false,
+		alerts,
+		modal,
+		iframe,
+		customFieldsQueue,
+	} = store;
+	const { position: configPosition, background, hideExpandChat } = config.theme || {};
 	const { livechatLogo, hideWatermark = false } = config.settings || {};
 
 	const {
@@ -130,19 +139,22 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		setWasMinimized(true);
 	};
 
-	const handleRestore = async () => {
+	const handleRestore = () => {
 		parentCall('restoreWindow');
 
-		if (undocked) {
-			// Cross-tab communication will not work here due cross origin (usually the widget parent and the RC server will have different urls)
-			// So we manually update the widget to get the messages and actions done while undocked
-			await loadConfig();
-			await loadMessages();
-		}
+		void (async () => {
+			if (undocked) {
+				// Cross-tab communication will not work here due cross origin (usually the widget parent and the RC server will have different urls)
+				// So we manually update the widget to get the messages and actions done while undocked
+				await loadConfig();
+				await loadMessages();
+			}
 
-		dispatch({ minimized: false, undocked: false });
-		setWasMinimized(true);
-		Triggers.callbacks?.emit('chat-opened-by-visitor');
+			dispatch({ minimized: false, undocked: false });
+			setWasMinimized(true);
+
+			Triggers.callbacks?.emit('chat-opened-by-visitor');
+		})();
 	};
 
 	const handleOpenWindow = () => {
@@ -150,7 +162,7 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		dispatch({ undocked: true, minimized: false });
 	};
 
-	const handleDismissAlert = (id: string) => {
+	const handleDismissAlert = (id?: string) => {
 		dispatch({ alerts: alerts.filter((alert) => alert.id !== id) });
 	};
 
@@ -165,31 +177,16 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		}
 	}, [dispatch]);
 
-	const screenProps = {
-		theme: {
-			color: customColor || '#e30613',
-			fontColor: customFontColor || '',
-			iconColor: customIconColor || '',
-			position,
-			guestBubbleBackgroundColor,
-			agentBubbleBackgroundColor,
-			background: customBackground,
-			hideAgentAvatar,
-			hideGuestAvatar,
-			hideExpandChat: Boolean(customHideExpandChat || hideExpandChat),
-		},
-		notificationsEnabled: Boolean(sound?.enabled),
-		minimized: !poppedOut && Boolean(minimized || undocked),
+	const screenProps: ScreenContextValue = {
+		hideWatermark,
+		livechatLogo,
+		notificationsEnabled: sound?.enabled ?? true,
+		minimized: !poppedOut && (minimized || undocked),
 		expanded: !minimized && expanded,
 		windowed: poppedOut,
-		livechatLogo,
-		hideWatermark,
-		sound: { src: sound?.src || '', play: Boolean(sound?.play) },
+		sound: useMemo(() => (sound?.src && sound?.play ? { src: sound.src, play: sound.play } : undefined), [sound]),
 		alerts,
 		modal,
-		nameDefault: name,
-		emailDefault: email,
-		departmentDefault: department,
 		onEnableNotifications: handleEnableNotifications,
 		onDisableNotifications: handleDisableNotifications,
 		onMinimize: handleMinimize,
@@ -199,7 +196,20 @@ export const ScreenProvider = ({ children }: ScreenProviderProps) => {
 		dismissNotification,
 		wasMinimized,
 		setWasMinimized,
-	} satisfies ScreenContextValue;
+		theme: {
+			// AS-PL customization: keep the branded fallback color.
+			color: customColor || '#e30613',
+			fontColor: customFontColor || '',
+			iconColor: customIconColor || '',
+			position,
+			guestBubbleBackgroundColor,
+			agentBubbleBackgroundColor,
+			background: customBackground || background,
+			hideAgentAvatar,
+			hideGuestAvatar,
+			hideExpandChat: customHideExpandChat || hideExpandChat || false,
+		},
+	};
 
 	return <ScreenContext.Provider value={screenProps}>{children}</ScreenContext.Provider>;
 };

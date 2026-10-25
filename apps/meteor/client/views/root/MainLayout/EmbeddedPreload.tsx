@@ -1,7 +1,7 @@
 import { getObjectKeys } from '@rocket.chat/tools';
 import { useEndpoint, useMethod, useRouter, useUserId } from '@rocket.chat/ui-contexts';
 import { useQuery } from '@tanstack/react-query';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect, useMemo } from 'react';
 
 import { roomFields } from '../../../../lib/publishFields';
@@ -13,7 +13,9 @@ import { Rooms } from '../../../stores';
 import PageLoading from '../PageLoading';
 import { useMainReady } from '../hooks/useMainReady';
 
-const EmbeddedPreload = ({ children }: { children: ReactNode }): ReactElement => {
+export type EmbeddedPreloadProps = { children: ReactNode };
+
+const EmbeddedPreload = ({ children }: EmbeddedPreloadProps) => {
 	const ready = useMainReady();
 	const router = useRouter();
 	const uid = useUserId();

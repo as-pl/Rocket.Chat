@@ -4,7 +4,7 @@ import type { RefObject } from 'react';
 
 import type { Upload, EncryptedFile } from './Upload';
 import type { ReadStateManager } from './readStateManager';
-import type { FormattingButton } from '../../../app/ui-message/client/messageBox/messageBoxFormatting';
+import type { FormattingButton } from '../messageBoxFormatting';
 
 type Subscribable<T> = {
 	get(): T;
@@ -68,7 +68,7 @@ export type ComposerAPI = {
 
 	readonly formatters: Subscribable<FormattingButton[]>;
 
-	readonly composerRef: RefObject<HTMLElement>;
+	readonly composerRef: RefObject<HTMLElement | null>;
 
 	readonly uploads: UploadsAPI;
 };

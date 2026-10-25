@@ -2,7 +2,7 @@ import styles from './styles.scss';
 import { createClassName } from '../../helpers/createClassName';
 import { Button } from '../Button';
 
-type ChatButtonProps = {
+export type ChatButtonProps = {
 	text: string;
 	minimized: boolean;
 	badge: number | undefined;

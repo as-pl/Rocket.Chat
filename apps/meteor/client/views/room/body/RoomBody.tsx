@@ -2,8 +2,8 @@ import { Box } from '@rocket.chat/fuselage';
 import { isTruthy } from '@rocket.chat/tools';
 import { CustomVirtuaScrollbars, useEmbeddedLayout } from '@rocket.chat/ui-client';
 import { usePermission, useRole, useSetting, useTranslation, useUser, useUserPreference, useRoomToolbox } from '@rocket.chat/ui-contexts';
-import type { MouseEvent, ReactElement } from 'react';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import { useMergedRefsV2 } from '../../../hooks/useMergedRefsV2';
 import { BubbleDate } from '../BubbleDate';
@@ -17,6 +17,7 @@ import UploadProgressIndicator from './UploadProgress';
 import ComposerContainer from '../composer/ComposerContainer';
 import { useFileUpload } from './hooks/useFileUpload';
 import { useGoToHomeOnRemoved } from './hooks/useGoToHomeOnRemoved';
+import { useIsAtBottomRef } from './hooks/useIsAtBottomRef';
 import { useQuoteMessageByUrl } from './hooks/useQuoteMessageByUrl';
 import { useReadMessageWindowEvents } from './hooks/useReadMessageWindowEvents';
 import RoomComposer from '../composer/RoomComposer/RoomComposer';
@@ -33,7 +34,7 @@ import { useHandleUnread } from './hooks/useUnreadMessages';
 import { useKeepAtBottom } from '../MessageList/hooks/useKeepAtBottom';
 import useTryToJumpToThreadMessage from '../MessageList/hooks/useTryToJumpToThreadMessage';
 
-const RoomBody = (): ReactElement => {
+const RoomBody = () => {
 	const chat = useChat();
 	if (!chat) {
 		throw new Error('No ChatContext provided');
@@ -48,8 +49,20 @@ const RoomBody = (): ReactElement => {
 	const subscription = useRoomSubscription();
 
 	const [shouldJumpToBottom, setShouldJumpToBottom] = useState<boolean>(false);
-	const isAtBottom = useRef<boolean>(true);
+	const isAtBottom = useIsAtBottomRef(room._id);
 	const [isJumpingToMessage, setIsJumpingToMessage] = useState<boolean>(false);
+
+	// RoomBody persists across room switches, so this state must be reset per room rather than carried over.
+	const [previousRoomId, setPreviousRoomId] = useState(room._id);
+	if (previousRoomId !== room._id) {
+		setPreviousRoomId(room._id);
+		if (shouldJumpToBottom) {
+			setShouldJumpToBottom(false);
+		}
+		if (isJumpingToMessage) {
+			setIsJumpingToMessage(false);
+		}
+	}
 
 	const retentionPolicy = useRetentionPolicy(room);
 
@@ -171,7 +184,7 @@ const RoomBody = (): ReactElement => {
 					<div className='messages-container-wrapper'>
 						<div className='messages-container-main' {...fileUploadTriggerProps}>
 							<DropTargetOverlay {...fileUploadOverlayProps} />
-							<Box position='absolute' w='full'>
+							<Box position='absolute' width='full'>
 								{isUploading && <UploadProgressIndicator uploads={uploads} />}
 								{Boolean(unread) && (
 									<UnreadMessagesIndicator

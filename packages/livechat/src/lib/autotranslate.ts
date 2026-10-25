@@ -39,5 +39,5 @@ export const prepareMessageForAutoTranslate = <T extends MessageWithTranslations
 	return {
 		...message,
 		...(translation && { msg: translation, translations: { ...message.translations, original: message.msg || '' } }),
-	} as T;
+	};
 };

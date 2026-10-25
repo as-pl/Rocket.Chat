@@ -18,7 +18,7 @@ const isTwoFactorMethod = (method: string): method is TwoFactorMethod => twoFact
 const hasRequiredTwoFactorMethod = (
 	error: MeteorErrorLike,
 ): error is MeteorErrorLike & { details: { method: TwoFactorMethod; emailOrUsername?: string } } => {
-	const details = error.details as unknown;
+	const { details } = error;
 
 	return (
 		typeof details === 'object' &&
@@ -31,7 +31,8 @@ const hasRequiredTwoFactorMethod = (
 function assertModalProps(props: {
 	method: TwoFactorMethod;
 	emailOrUsername?: string;
-}): asserts props is { method: 'totp' } | { method: 'password' } | { method: 'email'; emailOrUsername: string } {
+}): asserts props is
+	{ method: 'totp' | 'password'; invalidAttempt?: boolean } | { method: 'email'; emailOrUsername: string; invalidAttempt?: boolean } {
 	if (props.method === 'email' && typeof props.emailOrUsername !== 'string') {
 		throw new Error('Invalid Two Factor method');
 	}

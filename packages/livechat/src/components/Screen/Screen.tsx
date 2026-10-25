@@ -1,17 +1,18 @@
 import type { ComponentChildren, Ref } from 'preact';
 import { useContext, useLayoutEffect } from 'preact/hooks';
 
-import type { Agent } from '../../definitions/agents';
-import { createClassName } from '../../helpers/createClassName';
-import CloseIcon from '../../icons/close.svg';
-import { Button } from '../Button';
-import { PopoverContainer } from '../Popover';
-import { Sound } from '../Sound';
 import { ChatButton } from './ChatButton';
 import CssVar from './CssVar';
 import ScreenHeader, { type LanguageAction } from './Header';
 import { ScreenContext } from './ScreenProvider';
 import styles from './styles.scss';
+import type { Agent } from '../../definitions/agents';
+import { createClassName } from '../../helpers/createClassName';
+import CloseIcon from '../../icons/close.svg';
+import type { StoreState } from '../../store';
+import { Button } from '../Button';
+import { PopoverContainer } from '../Popover';
+import { Sound } from '../Sound';
 
 type ScreenProps = {
 	title?: string;
@@ -21,7 +22,7 @@ type ScreenProps = {
 	className?: string;
 	unread?: number;
 	triggered?: boolean;
-	queueInfo?: { spot: number };
+	queueInfo?: StoreState['queueInfo'];
 	onSoundStop?: () => void;
 	onChangeDepartment?: () => void;
 	onFinishChat?: () => void;
@@ -49,9 +50,9 @@ export const Screen = ({
 	const {
 		theme,
 		notificationsEnabled,
-		minimized = false,
-		expanded = false,
-		windowed = false,
+		minimized,
+		expanded,
+		windowed,
 		alerts,
 		modal,
 		sound,

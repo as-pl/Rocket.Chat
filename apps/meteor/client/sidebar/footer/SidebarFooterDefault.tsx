@@ -1,24 +1,4 @@
-import type { ReactElement } from 'react';
-
-const SidebarFooterDefault = (): ReactElement => {
-	return (
-		<></>
-		// <Footer>
-		// 	<SidebarDivider />
-		// 	<Box
-		// 		is='footer'
-		// 		pb={12}
-		// 		pi={16}
-		// 		height='x48'
-		// 		width='auto'
-		// 		className={sidebarFooterStyle}
-		// 		dangerouslySetInnerHTML={{
-		// 			__html: DOMPurify.sanitize(logo),
-		// 		}}
-		// 	/>
-		// 	<SidebarFooterWatermark />
-		// </Footer>
-	);
-};
+// AS-PL customization: keep the internal workspace footer hidden in the AS-PL layout.
+const SidebarFooterDefault = () => null;
 
 export default SidebarFooterDefault;

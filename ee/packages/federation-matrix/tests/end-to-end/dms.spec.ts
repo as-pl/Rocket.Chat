@@ -3,7 +3,12 @@ import type { MatrixEvent, Room, RoomEmittedEvents } from 'matrix-js-sdk';
 import { RoomStateEvent } from 'matrix-js-sdk';
 
 import { api } from '../../../../../apps/meteor/tests/data/api-data';
-import { acceptRoomInvite, addUserToRoom, getRoomInfo, getSubscriptionByRoomId } from '../../../../../apps/meteor/tests/data/rooms.helper';
+import {
+	acceptRoomInvite,
+	addUserToRoomViaMethod,
+	getRoomInfo,
+	getSubscriptionByRoomId,
+} from '../../../../../apps/meteor/tests/data/rooms.helper';
 import { getRequestConfig, createUser, deleteUser } from '../../../../../apps/meteor/tests/data/users.helper';
 import type { TestUser, IRequestConfig } from '../../../../../apps/meteor/tests/data/users.helper';
 import { IS_EE } from '../../../../../apps/meteor/tests/e2e/config/constants';
@@ -45,17 +50,6 @@ const waitForRoomEvent = async (
 			federationConfig.rc1.url,
 			federationConfig.rc1.adminUser,
 			federationConfig.rc1.adminPassword,
-		);
-
-		// Create user1 in RC1 using federation config values
-		await createUser(
-			{
-				username: federationConfig.rc1.additionalUser1.username,
-				password: federationConfig.rc1.additionalUser1.password,
-				email: `${federationConfig.rc1.additionalUser1.username}@rocket.chat`,
-				name: federationConfig.rc1.additionalUser1.username,
-			},
-			rc1AdminRequestConfig,
 		);
 
 		// Create admin Synapse client for HS1
@@ -110,7 +104,7 @@ const waitForRoomEvent = async (
 						{
 							username: userDm,
 							password: 'random',
-							email: `${userDm}}@rocket.chat`,
+							email: `${userDm}@rocket.chat`,
 							name: userDmName,
 						},
 						rc1AdminRequestConfig,
@@ -216,7 +210,7 @@ const waitForRoomEvent = async (
 				let subscriptionInvite: ISubscription;
 				let rcRoom: IRoom;
 
-				const userDm = `dm-federation-user-${Date.now()}`;
+				const userDm = `dm-federation-perm-user-${Date.now()}`;
 				const userDmId = `@${userDm}:${federationConfig.rc1.domain}`;
 
 				beforeAll(async () => {
@@ -225,7 +219,7 @@ const waitForRoomEvent = async (
 						{
 							username: userDm,
 							password: 'random',
-							email: `${userDm}}@rocket.chat`,
+							email: `${userDm}@rocket.chat`,
 							name: `DM Federation User ${Date.now()}`,
 						},
 						rc1AdminRequestConfig,
@@ -527,7 +521,7 @@ const waitForRoomEvent = async (
 					{
 						username: userDm1,
 						password: 'random',
-						email: `${userDm1}}@rocket.chat`,
+						email: `${userDm1}@rocket.chat`,
 						name: userDm1Name,
 					},
 					rc1AdminRequestConfig,
@@ -539,7 +533,7 @@ const waitForRoomEvent = async (
 					{
 						username: userDm2,
 						password: 'random',
-						email: `${userDm2}}@rocket.chat`,
+						email: `${userDm2}@rocket.chat`,
 						name: userDm2Name,
 					},
 					rc1AdminRequestConfig,
@@ -680,7 +674,7 @@ const waitForRoomEvent = async (
 						{
 							username: userDm3,
 							password: 'random',
-							email: `${userDm3}}@rocket.chat`,
+							email: `${userDm3}@rocket.chat`,
 							name: userDm3Name,
 						},
 						rc1AdminRequestConfig,
@@ -689,7 +683,7 @@ const waitForRoomEvent = async (
 
 				// TODO maybe we should allow it
 				it('should fail if a user from rc try to add another user to the group DM', async () => {
-					const response = await addUserToRoom({
+					const response = await addUserToRoomViaMethod({
 						usernames: [userDmId3],
 						rid: rcRoom1._id,
 						config: rcUserConfig1,
@@ -1121,7 +1115,7 @@ const waitForRoomEvent = async (
 						{
 							username: userDm3,
 							password: 'random',
-							email: `${userDm3}}@rocket.chat`,
+							email: `${userDm3}@rocket.chat`,
 							name: userDm3Name,
 						},
 						rc1AdminRequestConfig,
@@ -1180,7 +1174,7 @@ const waitForRoomEvent = async (
 
 				// TODO maybe we should allow it
 				it('should fail if a user from rc try to add another user to the group DM', async () => {
-					const response = await addUserToRoom({
+					const response = await addUserToRoomViaMethod({
 						usernames: [rcUser3.username],
 						rid: rcRoom._id,
 						config: rcUserConfig2,
@@ -1751,7 +1745,7 @@ const waitForRoomEvent = async (
 					expect(dmCreate.body).toHaveProperty('success', true);
 					expect(dmCreate.body).toHaveProperty('room');
 
-					const response = await addUserToRoom({
+					const response = await addUserToRoomViaMethod({
 						usernames: [federationConfig.hs1.additionalUser1.matrixUserId],
 						rid: dmCreate.body.room._id,
 						config: rcUser1.config,
@@ -1802,7 +1796,7 @@ const waitForRoomEvent = async (
 
 				it('should send an invite to another Synapse user', async () => {
 					// invite from rocket.chat
-					const response = await addUserToRoom({
+					const response = await addUserToRoomViaMethod({
 						usernames: [federationConfig.hs1.additionalUser1.matrixUserId],
 						rid: rcRoom._id,
 						config: rcUser1.config,

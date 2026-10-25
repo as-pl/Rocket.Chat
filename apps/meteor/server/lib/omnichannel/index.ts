@@ -1,0 +1,27 @@
+import './livechat';
+import './startup';
+import '../../hooks/omnichannel/leadCapture';
+import '../../hooks/omnichannel/markRoomResponded';
+import '../../hooks/omnichannel/offlineMessage';
+import '../../hooks/omnichannel/offlineMessageToChannel';
+import '../../hooks/omnichannel/saveAnalyticsData';
+import '../../hooks/omnichannel/sendToCRM';
+import '../../hooks/omnichannel/processRoomAbandonment';
+import '../../hooks/omnichannel/saveLastVisitorMessageTs';
+import '../../hooks/omnichannel/markRoomNotResponded';
+import '../../hooks/omnichannel/sendEmailTranscriptOnClose';
+import '../../hooks/omnichannel/saveLastMessageToInquiry';
+import '../../hooks/omnichannel/afterUserActions';
+import '../../hooks/omnichannel/afterAgentRemoved';
+import '../../hooks/omnichannel/afterSaveOmnichannelMessage';
+import './QueueManager';
+import './RoutingManager';
+import './routing/External';
+import './routing/ManualSelection';
+import './routing/AutoSelection';
+import './stream/agentStatus';
+import './sendMessageBySMS';
+import '../../api/v1/omnichannel';
+
+// AS-PL customization: translate queued visitor messages before an agent accepts the conversation.
+import '../../hooks/omnichannel/autoTranslateAgentMessages';

@@ -3,9 +3,9 @@ import { mockAppRoot } from '@rocket.chat/mock-providers';
 import { renderHook } from '@testing-library/react';
 
 import { useAutoTranslate } from './useAutoTranslate';
-import { AutoTranslate } from '../../../../../app/autotranslate/client';
+import { AutoTranslate } from '../../../../lib/autotranslate';
 
-jest.mock('../../../../../app/autotranslate/client', () => ({
+jest.mock('../../../../lib/autotranslate', () => ({
 	AutoTranslate: {
 		getLanguage: jest.fn(() => 'en'),
 	},

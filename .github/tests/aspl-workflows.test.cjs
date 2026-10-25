@@ -18,9 +18,7 @@ test('dispatcher sends the exact aspl push SHA to the existing monorepo builder'
 });
 
 // AS-PL customization: changing the default branch must not activate upstream releases or issue bots.
-for (const file of ['ci.yml', 'ci-deploy-gh-pages.yml', 'new-release.yml', 'publish-release.yml',
-  'release-candidate.yml', 'update-version-durability.yml', 'auto-close-duplicates.yml',
-  'dedupe-issues.yml', 'pr-update-description.yml', 'stale.yml', 'todo.yml']) {
+for (const file of fs.readdirSync(directory).filter(file => /\.ya?ml$/.test(file) && file !== 'aspl-build.yml')) {
   test(`${file} excludes AS-PL from every upstream automation job`, () => {
     const source = fs.readFileSync(path.join(directory, file), 'utf8').split('\njobs:\n')[1];
     const jobs = source.split(/(?=^  [\w-]+:\s*$)/m).filter(block => block.trim());

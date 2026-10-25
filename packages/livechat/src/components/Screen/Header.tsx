@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { useRef } from 'preact/hooks';
-import { useTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import styles from './styles.scss';
 import { MenuGroup, MenuItem, MenuPopover } from '../Menu';
@@ -16,6 +16,7 @@ import FinishIcon from '../../icons/finish.svg';
 import KebabIcon from '../../icons/kebab.svg';
 import OpenWindowIcon from '../../icons/newWindow.svg';
 import RemoveIcon from '../../icons/remove.svg';
+import type { StoreState } from '../../store';
 import Alert from '../Alert';
 import { Header, HeaderAction, HeaderActions, HeaderContent, HeaderPicture, HeaderPost, HeaderSubTitle, HeaderTitle } from '../Header';
 import { TooltipContainer, TooltipTrigger } from '../Tooltip';
@@ -27,7 +28,7 @@ export type LanguageAction = {
 	onClick: () => void;
 };
 
-type ScreenHeaderProps = {
+export type ScreenHeaderProps = {
 	alerts: { id: string; children: ComponentChildren; [key: string]: unknown }[];
 	agent?: Partial<Agent> | null;
 	notificationsEnabled: boolean;
@@ -40,9 +41,7 @@ type ScreenHeaderProps = {
 	onMinimize: () => unknown;
 	onRestore: ScreenContextValue['onRestore'];
 	onOpenWindow: () => unknown;
-	queueInfo?: {
-		spot: number;
-	};
+	queueInfo?: StoreState['queueInfo'];
 	title?: string;
 	hideExpandChat?: boolean;
 	onChangeDepartment: any;
@@ -222,4 +221,4 @@ const ScreenHeader = ({
 	);
 };
 
-export default withTranslation()(ScreenHeader);
+export default ScreenHeader;

@@ -9,7 +9,8 @@ export type Agent = {
 	username: string;
 	avatar?: {
 		description: string;
-		src: string;
+		// AS-PL customization: the shared avatar resolver returns null when avatars are disabled.
+		src: string | null;
 	};
 	ts: number;
 	[key: string]: unknown;
