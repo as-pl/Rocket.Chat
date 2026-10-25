@@ -290,6 +290,12 @@ $max-lines: 12;
 @media (max-width: 767px) {
 	.screen {
 		padding: 0;
+
+		// AS-PL customization: the minimized iframe is only 208px wide, even on desktop;
+		// retain its gutter so the unread badge and launcher shadow are not clipped.
+		&--minimized {
+			padding: $screen-padding;
+		}
 	}
 
 	.screen__inner {

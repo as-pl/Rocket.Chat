@@ -147,9 +147,13 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 		devServer: {
 			hot: true,
 			port: livechatPort,
-			host: '0.0.0.0',
-			allowedHosts: 'all',
-			open: true,
+			// AS-PL customization: the local launcher owns this server; F5 must fetch
+			// current assets without exposing the dev server or opening a browser.
+			host: '127.0.0.1',
+			// AS-PL customization: the embed loader opens HMR from Webpage's web.as.dev origin.
+			allowedHosts: ['localhost', '127.0.0.1', 'as.dev', 'web.as.dev'],
+			open: false,
+			headers: { 'Cache-Control': 'no-store' },
 			devMiddleware: {
 				publicPath: args.mode === 'production' ? 'livechat/' : '/',
 				stats: 'normal',
@@ -171,6 +175,9 @@ const config = (_env: any, args: webpack.WebpackOptionsNormalized): webpack.Conf
 		entry: {
 			'rocketchat-livechat.min': _('./src/widget.ts'),
 		} as webpack.Entry,
+		// AS-PL customization: Webpage injects one loader script; the dev-server client
+		// must not push its dependencies into an additional, unloaded vendor chunk.
+		optimization: args.mode === 'production' ? common(args).optimization : { ...common(args).optimization, splitChunks: false },
 		output: {
 			path: _('./dist'),
 			publicPath: args.mode === 'production' ? 'livechat/' : '/',
