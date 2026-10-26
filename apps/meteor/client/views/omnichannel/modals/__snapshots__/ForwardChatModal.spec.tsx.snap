@@ -112,11 +112,11 @@ exports[`renders Default without crashing 1`] = `
                   class="rcx-box rcx-box--full rcx-field__row"
                 >
                   <div
-                    class="rcx-box rcx-box--full rcx-css-1qcz93u"
+                    class="rcx-box rcx-box--full rcx-css-9zob54"
                   >
                     <div
                       aria-label="Forward_to_user"
-                      class="rcx-box rcx-box--full rcx-box--animated rcx-select"
+                      class="rcx-box rcx-box--full rcx-box--animated rcx-select rcx-css-692fh"
                       id="_r_1_"
                       name="userId"
                     >
