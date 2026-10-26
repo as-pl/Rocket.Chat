@@ -10,7 +10,7 @@ import { formatDate } from '../../../../lib/utils/dateFormat';
 import type { AutoCompleteAgentProps } from '../../components/AutoCompleteAgent';
 import { useAgentsList } from '../../hooks/useAgentsList';
 
-// AS-PL customization: keep forwarding agents readable with full-width rows and planned availability, without department clutter.
+// AS-PL customization: show one login per forwarding agent, with ERP department and availability in readable full-width rows.
 const ForwardChatAgentSelect = ({
 	value,
 	onChange,
@@ -52,6 +52,11 @@ const ForwardChatAgentSelect = ({
 						style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}
 					>
 						<Box fontScale='p2m'>{label}</Box>
+						{card?.department && (
+							<Box fontScale='c1' color='hint' marginBlockStart={4}>
+								{card.department}
+							</Box>
+						)}
 						{card?.workHours && (
 							<Box fontScale='c1' color='hint' marginBlockStart={4}>
 								{t('ASPL_Forward_work_hours', { hours: card.workHours })}
@@ -83,7 +88,7 @@ const ForwardChatAgentSelect = ({
 				disabled={disabled}
 				filter={filter}
 				setFilter={setFilter as (value: string | number | undefined) => void}
-				options={agents}
+				options={agents.map((agent) => ({ ...agent, label: agent.username || agent.label }))}
 				renderItem={renderItem}
 				endReached={() => {
 					if (hasNextPage && !isFetchingNextPage) void fetchNextPage();

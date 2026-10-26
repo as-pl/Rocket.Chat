@@ -57,7 +57,9 @@ it('forwards to the selected agent without looking up an ID as a username', asyn
 	);
 	const user = userEvent.setup();
 	await user.click(screen.getByPlaceholderText('Username_name_email'));
-	await user.click(await screen.findByText('Anna (@anna)'));
+	await user.click(await screen.findByText('anna'));
+	expect(screen.queryByText('Anna (@anna)')).not.toBeInTheDocument();
+	expect(screen.getByText('anna')).toBeInTheDocument();
 	await user.click(screen.getByRole('button', { name: 'Forward' }));
 	await waitFor(() => expect(forward).toHaveBeenCalledWith(expect.objectContaining({ roomId: 'test-room', userId: 'target-id' })));
 	expect(lookup).not.toHaveBeenCalled();
