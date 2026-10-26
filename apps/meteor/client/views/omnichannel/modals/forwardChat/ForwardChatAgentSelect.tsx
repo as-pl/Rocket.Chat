@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 import { EmployeeCardsError } from './employeeCards';
 import { useEmployeeCards } from './useEmployeeCards';
+import { formatDate } from '../../../../lib/utils/dateFormat';
 import type { AutoCompleteAgentProps } from '../../components/AutoCompleteAgent';
 import { useAgentsList } from '../../hooks/useAgentsList';
 
-// AS-PL customization: show ERP departments and planned availability only when choosing a chat's next agent.
+// AS-PL customization: keep forwarding agents readable with full-width rows and planned availability, without department clutter.
 const ForwardChatAgentSelect = ({
 	value,
 	onChange,
@@ -39,18 +40,29 @@ const ForwardChatAgentSelect = ({
 	const renderItem: ComponentProps<typeof PaginatedSelectFiltered>['renderItem'] = ({ value, label, ...optionProps }) => {
 		const agent = agents.find((agent) => agent.value === value);
 		const card = agent?.username ? cards.get(agent.username) : undefined;
-		const details = [card?.department];
-		if (card?.workHours) details.push(t('ASPL_Forward_work_hours', { hours: card.workHours }));
-		if (card?.absence) details.push(t(`ASPL_Forward_${card.absence.kind}`, { from: card.absence.from, to: card.absence.to }));
 		return (
 			<Option
 				{...optionProps}
 				label={
-					<Box display='flex' flexDirection='column' minWidth={0}>
-						<Box>{label}</Box>
-						{details.some(Boolean) && (
-							<Box fontScale='c1' color='hint' style={{ whiteSpace: 'normal' }}>
-								{details.filter(Boolean).join(' · ')}
+					<Box
+						display='flex'
+						flexDirection='column'
+						minWidth={0}
+						paddingBlock={4}
+						style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}
+					>
+						<Box fontScale='p2m'>{label}</Box>
+						{card?.workHours && (
+							<Box fontScale='c1' color='hint' marginBlockStart={4}>
+								{t('ASPL_Forward_work_hours', { hours: card.workHours })}
+							</Box>
+						)}
+						{card?.absence && (
+							<Box fontScale='c1' color='hint' marginBlockStart={2}>
+								{t(`ASPL_Forward_${card.absence.kind}`, {
+									from: formatDate(card.absence.from, 'L'),
+									to: formatDate(card.absence.to, 'L'),
+								})}
 							</Box>
 						)}
 					</Box>
@@ -59,9 +71,13 @@ const ForwardChatAgentSelect = ({
 		);
 	};
 	return (
-		<Box width='100%'>
+		<Box width='100%' minWidth={0}>
 			<PaginatedSelectFiltered
 				{...props}
+				width='100%'
+				maxWidth='100%'
+				flexShrink={0}
+				withTitle={false}
 				value={value}
 				onChange={onChange}
 				disabled={disabled}
